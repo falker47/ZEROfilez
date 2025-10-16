@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEROfilez Cloud Decryptor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 ZEROfilez Cloud Decryptor</h1>
+            <p>Secure system to manage encrypted files</p>
+        </header>
+
+        <main>
+            <div class="row two-col">
+                <!-- Sezione User Key -->
+                <section class="key-section">
+                    <h2>🔑 User Key</h2>
+                    <div class="input-group">
+                        <label for="userKeyFile">Upload User Key (.bin):</label>
+                        <input type="file" id="userKeyFile" accept=".bin,.key">
+                    </div>
+                    <div class="status" id="keyStatus"></div>
+                </section>
+
+                <!-- Sezione Package -->
+                <section class="package-section">
+                    <h2>📦 Encrypted Package</h2>
+                    <div class="input-group">
+                        <label for="packageFile">Upload packages.json.enc:</label>
+                        <input type="file" id="packageFile" accept=".enc">
+                    </div>
+                    <div class="status" id="packageStatus"></div>
+                </section>
+            </div>
+
+            <!-- Sezione File List -->
+            <section class="files-section" id="filesSection">
+                <h2>📁 Your Files</h2>
+                <div class="input-group">
+                    <div class="input-row">
+                        <span class="input-icon" aria-hidden="true">🔎</span>
+                        <input type="text" id="searchInput" placeholder="Type to filter files..." />
+                    </div>
+                </div>
+                <div class="files-list" id="filesList" data-placeholder="No files to show yet. Upload an encrypted package to see your files."></div>
+            </section>
+
+            <!-- Sezione Download -->
+            <section class="download-section" id="downloadSection" style="display: none;">
+                <h2>⬇️ Download in Progress</h2>
+                <div class="download-info" id="downloadInfo"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer id="appFooter">
+            <p>🔒 All encryption happens locally in your browser. No sensitive data is sent to external servers.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

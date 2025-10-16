@@ -1,0 +1,166 @@
+# ZEROfilez Cloud Decryptor - GitIgnore
+# Include tutti i file tranne html, css, js e README.md
+
+# File Python
+*.py
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ps1
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# File di configurazione e dati
+*.json
+*.enc
+*.bin
+*.key
+*.pem
+*.p12
+*.pfx
+
+# File di testo e documentazione
+*.txt
+*.md
+!README.md
+*.pdf
+*.doc
+*.docx
+*.rtf
+
+# File multimediali
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.ico
+*.webp
+*.mp3
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+*.webm
+*.ogg
+*.wav
+*.flac
+*.aac
+
+# File di archivio
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.bz2
+*.xz
+
+# Directory specifiche
+/originals/
+/blobs/
+/backup/
+/temp/
+/tmp/
+
+# File di sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# File di ambiente virtuale
+.venv/
+venv/
+env/
+ENV/
+
+# File IDE
+.vscode/
+.idea/
+*.sublime-*
+.atom/
+.brackets.json
+
+# File di log
+*.log
+logs/
+
+# File temporanei
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# File di configurazione locale
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# File di test
+test_*
+*_test.py
+tests/
+
+# File di build
+build/
+dist/
+out/
+
+# File di cache
+.cache/
+cache/
+*.cache
+
+# File di lock
+package-lock.json
+yarn.lock
+Pipfile.lock
+
+# File di database
+*.db
+*.sqlite
+*.sqlite3
+
+# File di configurazione specifici
+config.json
+settings.json
+secrets.json
+credentials.json
+
+# File di backup e chiavi
+key.bin
+key_backup_qr.png
+CHIAVE_LOCALE.md
+READMEforMe.md
+forCursor.md
+mapping.json
+packages_plain.json
+clean_system.py
+encrypt-mapping.ps1
+quick-process.ps1
+process_all.py
+add_file_and_update_package.py
