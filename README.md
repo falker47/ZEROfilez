@@ -6,7 +6,6 @@ Sistema personale per gestire file criptati su GitHub con crittografia client-si
 
 ZEROfilez Cloud Decryptor è un sistema che ti permette di:
 - Criptare file localmente con chiavi personalizzate
-- Caricare solo i file criptati su GitHub
 - Gestire una lista centralizzata dei tuoi file tramite web app
 - Scaricare e decriptare automaticamente i file dal browser
 
@@ -26,32 +25,12 @@ ZEROfilez Cloud Decryptor è un sistema che ti permette di:
 ├── script.js               # Logica JavaScript
 ├── add_file_and_update_package.py  # Script Python per aggiungere file
 ├── packages.json.enc        # File criptato con lista dei file
-├── blobs/                  # File criptati (.enc)
-├── originals/              # File originali
 └── README.md               # Questa documentazione
 ```
 
-## 🔧 Utilizzo Base
-
-### Aggiungere un File
-1. Metti il file nella cartella `originals/`
-2. Esegui lo script Python con le tue chiavi
-3. Carica il file criptato su GitHub
-4. Inserisci l'URL quando richiesto
-
-### Utilizzare la Web App
-1. Apri GitHub Pages del repository
-2. Inserisci la tua user key
-3. Carica il file `packages.json.enc`
-4. Scarica i file dalla lista
-
-## 🧪 Test
-
-È incluso un file di esempio `originals/hello.txt` per testare il sistema.
-
 ## 📄 Licenza
 
-Questo progetto è per uso personale. Tutti i file sono forniti "così come sono" senza garanzie.
+Questo progetto è per uso personale per motivi di privacy nascondo i miei script per criptare ma siete liberi di usare questo codice a vostro piacimento ed implementare le vostre tecniche crittografiche.
 
 ---
 
