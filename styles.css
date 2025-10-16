@@ -80,6 +80,8 @@ section {
     border-radius: 8px;
     border: 1px solid #404040;
     transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Reduce vertical padding specifically for key and package sections */
@@ -153,13 +155,14 @@ section h2 {
 .input-group input[type="password"],
 .input-group input[type="text"],
 .input-group input[type="file"] {
-    padding: 8px 12px;
+    padding: 8px 4;
     border: 1px solid #555555;
     border-radius: 4px;
     font-size: 1em;
     transition: border-color 0.3s ease;
     background: #1a1a1a;
     color: #e0e0e0;
+    touch-action: manipulation;
 }
 
 .input-group input[type="password"]:focus,
@@ -174,6 +177,7 @@ section h2 {
     background: #1a1a1a;
     cursor: pointer;
     color: #a0a0a0;
+    touch-action: manipulation;
 }
 
 .input-group input[type="file"]:hover {
@@ -224,13 +228,16 @@ section h2 {
 }
 
 .files-list {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 6px;
-    row-gap: 6px;              /* fixed vertical spacing */
-    grid-auto-rows: 44px;      /* fixed row height to match item */
-    height: 230px; /* fixed height */
-    overflow: auto;
-    padding-right: 6px;
+    height: 230px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .files-list:empty::before,
@@ -251,7 +258,26 @@ section h2 {
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease;
-    height: 100%;           /* fill grid row height */
+    height: 44px;           /* fixed height */
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Desktop: filename 70%, actions 30% (considerando padding e gap) */
+.file-info {
+    flex: 0 0 70%;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.file-actions {
+    flex: 0 0 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .file-item:hover {
@@ -259,21 +285,15 @@ section h2 {
     background: #222222;
 }
 
-.file-info {
-    flex: 1;
-}
-
-.file-actions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
 
 .file-name {
     font-weight: 400;
     color: #ffffff;
     font-size: 0.95em;
     margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .file-size {
@@ -309,12 +329,15 @@ section h2 {
     background: #404040;
     color: #e0e0e0;
     border: 1px solid #555555;
-    padding: 4px 8px;
+    padding: 3px 6px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 400;
-    font-size: 0.85em;
+    font-size: 0.8em;
     transition: all 0.3s ease;
+    touch-action: manipulation;
+    min-height: 32px; /* Ridotta altezza */
+    line-height: 1.2;
 }
 
 .download-btn:hover {
@@ -410,29 +433,252 @@ footer p {
 /* Responsive */
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 8px;
+    }
+    
+    header {
+        padding: 12px 16px;
+        margin-bottom: 12px;
     }
     
     header h1 {
-        font-size: 1.6em;
+        font-size: 1.8em;
+        margin-bottom: 6px;
     }
     
     header p {
-        font-size: 1em;
+        font-size: 0.95em;
+    }
+    
+    main {
+        gap: 8px;
     }
     
     section {
-        padding: 20px;
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    
+    section h2 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+    }
+    
+    /* Mobile: mantieni layout orizzontale ma ridimensionato */
+    .key-section .input-group, .package-section .input-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .key-section .input-group input, .package-section .input-group input {
+        width: 100%;
+        max-width: 60%;
+        min-width: 40%;
+        font-size: 0.9em;
+        padding: 6px 8px;
+    }
+    
+    /* Mobile: status sulla stessa riga ma più piccolo */
+    .key-section .status, .package-section .status {
+        margin-top: 0;
+        margin-left: 0;
+        font-size: 0.7em;
+        padding: 4px 6px;
+        flex-shrink: 0;
+        max-width: 35%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Mobile: input-row nella files-section */
+    #filesSection .input-row {
+        width: 90%;
+        box-sizing: border-box;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    
+    #filesSection .input-icon {
+        font-size: 1.2em;
+    }
+    
+    #filesSection .input-row input#searchInput {
+        width: 90%;
+        box-sizing: border-box;
+    }
+    
+    /* Mobile: files list più alta */
+    .files-list {
+        height: 250px;
+        max-height: 250px;
+        min-height: 250px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 0;
+    }
+    
+    /* Mobile: files-section specifica */
+    .files-section {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    /* Mobile: filename 50%, actions 50% (considerando padding e gap) */
+    .file-info {
+        flex: 0 0 50%;
+        overflow: hidden;
+        min-width: 0;
+    }
+    
+    .file-actions {
+        flex: 0 0 50%;
+        justify-content: flex-end;
+        min-width: 0;
+        overflow: hidden;
     }
     
     .file-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+        padding: 8px;
+        height: auto;
+        min-height: 50px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .file-name {
+        font-size: 0.9em;
+        margin-bottom: 2px;
+    }
+    
+    .file-size {
+        font-size: 0.75em;
     }
     
     .download-btn {
+        padding: 4px 8px;
+        font-size: 0.75em;
+        min-height: 28px;
+    }
+    
+    /* Mobile: progress bar più alta */
+    .progress-bar {
+        height: 16px;
+    }
+    
+    /* Mobile: footer più compatto */
+    #appFooter {
+        padding: 8px 12px;
+        margin-top: 12px;
+    }
+    
+    footer p {
+        font-size: 0.8em;
+    }
+}
+
+/* Mobile molto piccolo */
+@media (max-width: 480px) {
+    .container {
+        padding: 6px;
+    }
+    
+    header h1 {
+        font-size: 1.5em;
+    }
+    
+    header p {
+        font-size: 0.9em;
+    }
+    
+    section {
+        padding: 8px;
+    }
+    
+    /* Mobile molto piccolo: padding ancora più ridotto per key e package */
+    .key-section, .package-section {
+        padding: 1px 8px;
+    }
+    
+    section h2 {
+        font-size: 1em;
+    }
+    
+    /* Schermi molto piccoli: input ancora più compatto */
+    .key-section .input-group input, .package-section .input-group input {
+        max-width: 55%;
+        min-width: 35%;
+        font-size: 0.8em;
+        padding: 4px 6px;
+    }
+    
+    .key-section .status, .package-section .status {
+        font-size: 0.65em;
+        padding: 3px 4px;
+        max-width: 40%;
+    }
+    
+    /* Mobile molto piccolo: input-row ancora più compatto */
+    #filesSection .input-row {
+        gap: 4px;
+        width: 85%;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    
+    #filesSection .input-row .input-icon {
+        font-size: 1em;
+    }
+    
+    #filesSection .input-row input#searchInput {
+        font-size: 0.9em;
+        padding: 6px 8px;
+    }
+    
+    .files-list {
+        height: 200px;
+        max-height: 200px;
+        min-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 0;
+    }
+    
+    .files-section {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    /* Mobile molto piccolo: proporzioni mantenute ma più compatte */
+    .file-item {
+        padding: 6px;
+        min-height: 45px;
+    }
+    
+    .file-name {
+        font-size: 0.85em;
+    }
+    
+    .file-size {
+        font-size: 0.7em;
+    }
+    
+    .download-btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+        min-height: 26px;
     }
 }
 
