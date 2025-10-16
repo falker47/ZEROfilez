@@ -362,7 +362,11 @@ class CloudDecryptor {
         filesList.innerHTML = '';
         filesList.classList.add('empty');
 
-        const fileIds = Object.keys(this.packages);
+        const fileIds = Object.keys(this.packages).sort((a, b) => {
+            const an = (this.packages[a].originalName || '').toLowerCase();
+            const bn = (this.packages[b].originalName || '').toLowerCase();
+            return an.localeCompare(bn);
+        });
         
         if (fileIds.length === 0) {
             filesList.innerHTML = '<p class="text-center">No files found in the package</p>';

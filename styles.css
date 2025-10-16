@@ -276,6 +276,12 @@ section h2 {
     font-size: 0.8em;
 }
 
+/* Bold size in file list boxes */
+.file-actions .file-size {
+    font-weight: 600;
+    color: #cfcfcf;
+}
+
 .file-hosting {
     font-size: 0.8em;
     padding: 2px 6px;
