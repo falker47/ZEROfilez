@@ -84,7 +84,7 @@ section {
 
 /* Reduce vertical padding specifically for key and package sections */
 .key-section, .package-section {
-    padding: 10px 14px;
+    padding: 5px 14px;
 }
 
 section:hover {
@@ -119,6 +119,13 @@ section h2 {
     align-items: center;
     flex-direction: row; /* same row */
     gap: 8px;
+}
+
+/* Allinea status sulla stessa riga dell'input */
+.key-section .status, .package-section .status {
+    margin-top: 0;
+    margin-left: 8px;
+    flex-shrink: 0;
 }
 .key-section .input-group label, .package-section .input-group label {
     margin: 0; /* inline with input */
@@ -221,9 +228,7 @@ section h2 {
     gap: 6px;
     row-gap: 6px;              /* fixed vertical spacing */
     grid-auto-rows: 44px;      /* fixed row height to match item */
-    height: 200px; /* fixed height */
-    max-height: 200px;
-    min-height: 200px;
+    height: 230px; /* fixed height */
     overflow: auto;
     padding-right: 6px;
 }
