@@ -3,6 +3,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    margin: 0 auto 6px auto;
+    width: 95%;
 }
 
 .input-icon {
@@ -144,6 +146,7 @@ section h2 {
     width: 100%;
     max-width: 100%;
     min-width: 95%;
+    padding: 12px 10px;
 }
 
 .input-group label {
@@ -495,10 +498,12 @@ footer p {
     
     /* Mobile: input-row nella files-section */
     #filesSection .input-row {
-        width: 90%;
+        width: 100%;
         box-sizing: border-box;
         margin: 0 auto;
         justify-content: center;
+        display: flex;
+        align-items: center;
     }
     
     #filesSection .input-icon {
@@ -628,9 +633,11 @@ footer p {
     /* Mobile molto piccolo: input-row ancora più compatto */
     #filesSection .input-row {
         gap: 4px;
-        width: 85%;
+        width: 100%;
         margin: 0 auto;
         justify-content: center;
+        display: flex;
+        align-items: center;
     }
     
     #filesSection .input-row .input-icon {
