@@ -19,6 +19,12 @@
     box-sizing: border-box;
 }
 
+:root {
+    /* Centralized file list heights */
+    --filelist-height-desktop: 280px;
+    --filelist-height-mobile: 180px;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #1a1a1a;
@@ -38,23 +44,30 @@ body {
 
 header {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     background: #2d2d2d;
-    padding: 7px 16px; /* reduced vertical padding */
+    padding: 4px 12px; /* tighter vertical padding */
     border-radius: 8px;
     border: 1px solid #404040;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 header h1 {
-    font-size: 2.5em;
+    font-size: 2.3em; /* slightly larger for emphasis */
     color: #ffffff;
-    margin-bottom: 4px; /* tighter spacing to subtitle */
-    font-weight: 300;
+    margin-bottom: 2px; /* tighter spacing to subtitle */
+    font-weight: 600; /* stronger weight for prominence */
+    letter-spacing: 0.3px;
+    line-height: 1.1; /* reduce vertical height */
+    white-space: nowrap; /* keep on one line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.05);
 }
 
 header p {
-    font-size: 1.2em;
-    color: #a0a0a0;
+    font-size: 1.05em; /* slightly smaller */
+    color: #b0b0b0;
     font-weight: 300;
 }
 
@@ -80,7 +93,8 @@ section {
     background: #2d2d2d;
     padding: 6px;
     border-radius: 8px;
-    border: 1px solid #404040;
+    border: 1px solid #2f2f2f; /* card border a bit darker */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.045), 0 6px 18px rgba(0,0,0,0.35);
     transition: border-color 0.3s ease;
     width: 100%;
     box-sizing: border-box;
@@ -88,11 +102,12 @@ section {
 
 /* Reduce vertical padding specifically for key and package sections */
 .key-section, .package-section {
-    padding: 5px 14px;
+    padding: 6px 12px; /* slightly increased vertical padding */
 }
 
 section:hover {
-    border-color: #555555;
+    border-color: #777777;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.45);
 }
 
 section h2 {
@@ -102,6 +117,14 @@ section h2 {
     font-weight: 600; /* bold headings */
     border-bottom: 1px solid #404040;
     padding-bottom: 6px;
+}
+
+/* Denser titles for key and package sections specifically */
+.key-section h2, .package-section h2 {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    line-height: 1.15;
 }
 
 .files-section h2 {
@@ -124,12 +147,21 @@ section h2 {
     flex-direction: row; /* same row */
     gap: 8px;
 }
+/* Remove extra bottom space inside key/package sections */
+.key-section .input-group,
+.package-section .input-group {
+    margin-bottom: 0;
+}
 
 /* Allinea status sulla stessa riga dell'input */
 .key-section .status, .package-section .status {
     margin-top: 0;
     margin-left: 8px;
     flex-shrink: 0;
+    white-space: nowrap;           /* keep on one line */
+    overflow: hidden;              /* hide overflow */
+    text-overflow: ellipsis;       /* show ellipsis if needed */
+    width: 26ch;                   /* fixed width for up to ~24 chars (+emoji) */
 }
 .key-section .input-group label, .package-section .input-group label {
     margin: 0; /* inline with input */
@@ -230,11 +262,17 @@ section h2 {
     border: 1px solid #2a4a5a;
 }
 
+.status.waiting {
+    background: #2a2a2a;
+    color: #cfcfcf;
+    border: 1px dashed #555555;
+}
+
 .files-list {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    height: 230px;
+    height: var(--filelist-height-desktop); /* desktop height */
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0;
@@ -308,6 +346,7 @@ section h2 {
 .file-actions .file-size {
     font-weight: 600;
     color: #cfcfcf;
+    white-space: nowrap; /* prevent wrap */
 }
 
 .file-hosting {
@@ -332,7 +371,7 @@ section h2 {
     background: #404040;
     color: #e0e0e0;
     border: 1px solid #555555;
-    padding: 3px 6px;
+    padding: 3px 5px; /* slightly narrower to give space to size */
     border-radius: 4px;
     cursor: pointer;
     font-weight: 400;
@@ -386,36 +425,7 @@ section h2 {
     border-radius: 4px;
 }
 
-#appFooter, footer, .footer {
-    text-align: center;
-    margin-top: 16px;
-    padding: 12px;
-    background: #2d2d2d;
-    border-radius: 8px;
-    border: 1px solid #404040;
-}
-
-/* Footer states */
-#appFooter.downloading {
-    background: #1f2a33;
-    border-color: #345266;
-}
-
-#appFooter.success {
-    background: #114623;
-    border-color: #2f6a45;
-}
-
-#appFooter.error {
-    background: #801212;
-    border-color: #663434;
-}
-
-footer p {
-    color: #a0a0a0;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-}
+/* footer removed */
 
 /* Animazioni */
 @keyframes fadeIn {
@@ -440,17 +450,25 @@ footer p {
     }
     
     header {
-        padding: 12px 16px;
-        margin-bottom: 12px;
+        padding: 6px 12px;
+        margin-bottom: 10px;
     }
     
     header h1 {
-        font-size: 1.8em;
-        margin-bottom: 6px;
+        font-size: 1.6em;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     header p {
-        font-size: 0.95em;
+        font-size: 0.9em;
+    }
+    
+    /* Slightly smaller download info text on mobile */
+    .download-info {
+        font-size: 0.9em;
     }
     
     main {
@@ -490,7 +508,8 @@ footer p {
         font-size: 0.7em;
         padding: 4px 6px;
         flex-shrink: 0;
-        max-width: 35%;
+        width: 24ch;              /* compact fixed width on mobile */
+        max-width: none;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -515,11 +534,11 @@ footer p {
         box-sizing: border-box;
     }
     
-    /* Mobile: files list più alta */
+    /* Mobile: files list fixed via variable */
     .files-list {
-        height: 250px;
-        max-height: 250px;
-        min-height: 250px;
+        height: var(--filelist-height-mobile);
+        max-height: var(--filelist-height-mobile);
+        min-height: var(--filelist-height-mobile);
         overflow-y: auto;
         overflow-x: hidden;
         width: 100%;
@@ -578,15 +597,7 @@ footer p {
         height: 16px;
     }
     
-    /* Mobile: footer più compatto */
-    #appFooter {
-        padding: 8px 12px;
-        margin-top: 12px;
-    }
-    
-    footer p {
-        font-size: 0.8em;
-    }
+    /* footer removed */
 }
 
 /* Mobile molto piccolo */
@@ -650,9 +661,9 @@ footer p {
     }
     
     .files-list {
-        height: 200px;
-        max-height: 200px;
-        min-height: 200px;
+        height: var(--filelist-height-mobile);
+        max-height: var(--filelist-height-mobile);
+        min-height: var(--filelist-height-mobile);
         overflow-y: auto;
         overflow-x: hidden;
         width: 100%;

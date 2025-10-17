@@ -5,6 +5,8 @@
 
 // Embedded key che deve essere sostituita con quella generata
 const EMBEDDED_KEY_B64 = "cibwPVciXDNtJaKPnSA2nNpIsY1ExGTuuGEyuBrNbWI=";
+// Max length for download info messages (including filename)
+const DOWNLOAD_INFO_MAX_LEN = 75;
 
 class CloudDecryptor {
     constructor() {
@@ -43,16 +45,16 @@ class CloudDecryptor {
             const userKeyBytes = new Uint8Array(arrayBuffer);
             
             if (userKeyBytes.length !== 32) {
-                throw new Error('Il file user key deve essere di 32 byte');
+                throw new Error('User key file must be 32 bytes');
             }
 
             this.userKey = userKeyBytes;
             this.kek = await this.deriveKEK(userKeyBytes, EMBEDDED_KEY_B64);
             
             
-            this.updateKeyStatus('✅ User key loaded - KEK derived', 'success');
+            this.updateKeyStatus('✅ Key OK, KEK OK', 'success');
         } catch (error) {
-            this.updateKeyStatus(`❌ Error loading user key file: ${error.message}`, 'error');
+            this.updateKeyStatus(`❌ Error loading user key: ${error.message}`, 'error');
             this.kek = null;
         }
     }
@@ -61,7 +63,7 @@ class CloudDecryptor {
         if (!file) return;
 
         if (!this.kek) {
-            this.updatePackageStatus('❌ Prima inserisci una user key valida', 'error');
+            this.updatePackageStatus('❌ Load the key first', 'error');
             return;
         }
 
@@ -76,12 +78,12 @@ class CloudDecryptor {
             const packagesJson = JSON.parse(new TextDecoder().decode(decryptedData));
             
             this.packages = packagesJson;
-            this.updatePackageStatus('✅ Package decrypted successfully', 'success');
+            this.updatePackageStatus('✅ Package decrypted!', 'success');
             this.displayFiles();
             
         } catch (error) {
             console.error('Detailed error:', error);
-            this.updatePackageStatus(`❌ Error decrypting package: ${error.message}`, 'error');
+            this.updatePackageStatus(`❌ Package decryption error: ${error.message}`, 'error');
             this.packages = null;
         }
     }
@@ -112,12 +114,12 @@ class CloudDecryptor {
             return kek;
 
         } catch (error) {
-            throw new Error(`Errore nella derivazione della KEK: ${error.message}`);
+            throw new Error(`Error deriving KEK: ${error.message}`);
         }
     }
 
     async hkdf(ikm, salt, info, length) {
-        // HKDF-SHA256 implementation corretta secondo RFC 5869
+        // HKDF-SHA256 implementation per RFC 5869
         // Step 1: Extract - PRK = HMAC-SHA256(salt, IKM)
         const extractKey = await crypto.subtle.importKey(
             'raw',
@@ -138,16 +140,16 @@ class CloudDecryptor {
         for (let i = 0; i < iterations; i++) {
             const counter = new Uint8Array([i + 1]);
             
-            // Per HKDF-Expand: T(i) = HMAC-Hash(PRK, T(i-1) || info || i)
-            // T(0) è vuoto, quindi per i=0: T(1) = HMAC-Hash(PRK, info || 1)
+            // HKDF-Expand: T(i) = HMAC-Hash(PRK, T(i-1) || info || i)
+            // T(0) is empty, so for i=0: T(1) = HMAC-Hash(PRK, info || 1)
             let input;
             if (i === 0) {
-                // Prima iterazione: solo info || counter
+                // First iteration: only info || counter
                 input = new Uint8Array(info.length + counter.length);
                 input.set(info, 0);
                 input.set(counter, info.length);
             } else {
-                // Iterazioni successive: T(i-1) || info || counter
+                // Next iterations: T(i-1) || info || counter
                 const prevT = okm.slice((i-1) * hashLen, i * hashLen);
                 input = new Uint8Array(prevT.length + info.length + counter.length);
                 input.set(prevT, 0);
@@ -204,8 +206,8 @@ class CloudDecryptor {
             return new Uint8Array(decryptedData);
 
         } catch (error) {
-            console.error('Errore nella decrittografia:', error);
-            throw new Error(`Errore nella decrittografia: ${error.message}`);
+            console.error('Decryption error:', error);
+            throw new Error(`Decryption error: ${error.message}`);
         }
     }
 
@@ -214,19 +216,19 @@ class CloudDecryptor {
             const wrappedDek = this.base64ToUint8Array(wrappedDekB64);
             return await this.decryptData(wrappedDek, kek);
         } catch (error) {
-            throw new Error(`Errore nell'unwrapping della DEK: ${error.message}`);
+            throw new Error(`Error unwrapping DEK: ${error.message}`);
         }
     }
 
     convertGoogleDriveLink(shareLink) {
         /**
-         * Converte un link di condivisione Google Drive in link diretto download
+         * Convert a Google Drive share link to a direct download link
          * Input:  https://drive.google.com/file/d/FILE_ID/view?usp=sharing
          * Output: https://drive.google.com/uc?export=download&id=FILE_ID
          */
         try {
             if (shareLink.includes("drive.google.com/file/d/")) {
-                // Estrae FILE_ID dal link di condivisione
+                // Extract FILE_ID from the share link
                 const start = shareLink.indexOf("/file/d/") + 8;
                 let end = shareLink.indexOf("/", start);
                 if (end === -1) {
@@ -238,45 +240,90 @@ class CloudDecryptor {
                 
                 const fileId = shareLink.substring(start, end);
                 
-                // Costruisce il link diretto
+                // Build the direct link
                 const directLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
                 return directLink;
             } else {
-                throw new Error("Link Google Drive non valido");
+                throw new Error("Invalid Google Drive link");
             }
         } catch (error) {
-            console.error("Errore nella conversione del link Google Drive:", error);
+            console.error("Error converting Google Drive link:", error);
             throw error;
         }
     }
 
+    handleGoogleDriveDownload(fileInfo) {
+        // For Google Drive, provide user-friendly options
+        this.updateDownloadInfo(this.buildDownloadMessage('🔗 Google Drive: ', fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
+        this.updateProgress(50);
+        
+        // Show available options
+        this.showGoogleDriveOptions(fileInfo);
+    }
+
+    showGoogleDriveOptions(fileInfo) {
+        const downloadInfo = document.getElementById('downloadInfo');
+        downloadInfo.innerHTML = `
+            <div style="text-align: center; margin: 10px 0;">
+                <h3>📁 ${fileInfo.originalName}</h3>
+                <p>Google Drive file - manual download required (${this.formatFileSize(fileInfo.size)})</p>
+                <div style="margin: 15px 0;">
+                    <button class="download-btn" onclick="window.open('${fileInfo.url}', '_blank')" style="margin: 5px;">
+                        🌐 Open Google Drive
+                    </button>
+                    <button class="download-btn" onclick="navigator.clipboard.writeText('${fileInfo.url}').then(() => alert('Link copied!'))" style="margin: 5px;">
+                        📋 Copy Link
+                    </button>
+                </div>
+                <p style="font-size: 0.9em; color: #a0a0a0;">
+                    💡 Google Drive requires manual download to avoid CORS errors. Download the file, then decrypt it here.
+                </p>
+                <button class="download-btn" onclick="this.parentElement.parentElement.querySelector('.manual-decrypt').style.display='block'; this.style.display='none';" style="margin: 10px;">
+                    🔓 Manual Decryption
+                </button>
+                <div class="manual-decrypt" style="display: none; margin-top: 15px;">
+                    <p>Select the .enc file downloaded from Google Drive:</p>
+                    <input type="file" id="manualFileInput" accept=".enc" style="margin: 10px;">
+                    <button class="download-btn" onclick="handleManualDecryption('${fileInfo.id}')">
+                        ✅ Decrypt Selected File
+                    </button>
+                </div>
+            </div>
+        `;
+        this.updateProgress(100);
+    }
+
+
     async downloadAndDecryptFile(fileId) {
         if (!this.packages || !this.packages[fileId]) {
-            throw new Error('File non trovato nei packages');
+            throw new Error('File not found in packages');
         }
 
         const fileInfo = this.packages[fileId];
         
         try {
-            // Mostra sezione download
+            // Show download section
             this.showDownloadSection();
-            this.updateDownloadInfo(`Downloading: ${fileInfo.originalName}`);
+            this.updateDownloadInfo(this.buildDownloadMessage('⬇️ Downloading: ', fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
 
-            // Determina l'URL corretto in base al tipo di hosting
-            let downloadUrl = fileInfo.url;
+            // Special handling for Google Drive
             if (fileInfo.hosting === 'google_drive') {
-                // Normalizza sempre il link Google Drive in usercontent per evitare CORS/interstitial
-                const idMatch = downloadUrl.match(/drive\.google\.com\/file\/d\/([^/?#]+)/) || downloadUrl.match(/[?&]id=([^&]+)/);
-                if (idMatch && idMatch[1]) {
-                    downloadUrl = `https://drive.usercontent.google.com/download?id=${idMatch[1]}&export=download`;
-                }
+                this.handleGoogleDriveDownload(fileInfo);
+                return;
             }
 
-            // Scarica il file criptato
+            // Determine URL for non-Google Drive hosting
+            let downloadUrl = fileInfo.url;
+
+            // Download the encrypted file
             this.updateProgress(10);
-            const footer = document.getElementById('appFooter');
-            if (footer) footer.classList.add('downloading');
-            const response = await fetch(downloadUrl, { redirect: 'follow', credentials: 'omit', referrerPolicy: 'no-referrer' });
+            // footer removed
+            
+            const response = await fetch(downloadUrl, { 
+                redirect: 'follow', 
+                credentials: 'omit', 
+                referrerPolicy: 'no-referrer'
+            });
             
             if (!response.ok) {
                 throw new Error(`Download error: ${response.status} ${response.statusText}`);
@@ -285,27 +332,23 @@ class CloudDecryptor {
             this.updateProgress(30);
             const encryptedFileData = new Uint8Array(await response.arrayBuffer());
 
-            // Unwrappa la DEK
+            // Unwrap DEK
             this.updateProgress(50);
             const dek = await this.unwrapDEK(fileInfo.wrappedDekB64, this.kek);
 
-            // Decripta il file
+            // Decrypt file
             this.updateProgress(70);
             const decryptedData = await this.decryptData(encryptedFileData, dek);
 
-            // Scarica il file
+            // Download file
             this.updateProgress(90);
             this.downloadFile(decryptedData, fileInfo.originalName);
 
             this.updateProgress(100);
             this.updateDownloadInfo(`✅ File downloaded: ${fileInfo.originalName}`);
-            if (footer) {
-                footer.classList.remove('downloading');
-                footer.classList.add('success');
-                setTimeout(() => footer.classList.remove('success'), 1500);
-            }
+            // footer removed
 
-            // Nasconde la sezione download dopo 2 secondi
+            // Mantieni visibile la sezione download, resetta dopo 2 secondi
             setTimeout(() => {
                 this.hideDownloadSection();
                 this.keepFilesSectionOpen();
@@ -313,12 +356,7 @@ class CloudDecryptor {
 
         } catch (error) {
             this.updateDownloadInfo(`❌ Error: ${error.message}`);
-            const footerErr = document.getElementById('appFooter');
-            if (footerErr) {
-                footerErr.classList.remove('downloading');
-                footerErr.classList.add('error');
-                setTimeout(() => footerErr.classList.remove('error'), 2000);
-            }
+            // footer removed
             throw error;
         }
     }
@@ -424,7 +462,7 @@ class CloudDecryptor {
 
         const downloadBtn = document.createElement('button');
         downloadBtn.className = 'download-btn';
-        downloadBtn.textContent = 'Decrypt & Download';
+        downloadBtn.textContent = 'Download';
         downloadBtn.addEventListener('click', async () => {
             downloadBtn.disabled = true;
             downloadBtn.textContent = 'Downloading...';
@@ -437,7 +475,7 @@ class CloudDecryptor {
             } finally {
                 setTimeout(() => {
                     downloadBtn.disabled = false;
-                    downloadBtn.textContent = 'Decrypt & Download';
+                    downloadBtn.textContent = 'Download';
                 }, 3000);
             }
         });
@@ -453,29 +491,51 @@ class CloudDecryptor {
 
     formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
-        
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        const i = Math.min(sizes.length - 1, Math.floor(Math.log(bytes) / Math.log(k)));
+        const value = bytes / Math.pow(k, i);
+
+        // Truncate to 3 significant digits (not rounding), then format and use comma as decimal separator
+        const truncated = this.truncateToSignificantDigits(value, 3);
+        const formatted = this.formatWithFixedSigDigits(truncated, 3).replace('.', ',');
+        return `${formatted} ${sizes[i]}`;
+    }
+
+    truncateToSignificantDigits(value, sigDigits) {
+        if (!isFinite(value) || value === 0) return 0;
+        const absVal = Math.abs(value);
+        const exponent = Math.floor(Math.log10(absVal));
+        const decimalPlaces = Math.max(0, sigDigits - 1 - exponent);
+        const factor = Math.pow(10, decimalPlaces);
+        const truncated = Math.trunc(value * factor) / factor;
+        return truncated;
+    }
+
+    formatWithFixedSigDigits(value, sigDigits) {
+        if (!isFinite(value) || value === 0) return '0';
+        const absVal = Math.abs(value);
+        const exponent = Math.floor(Math.log10(absVal));
+        const decimalPlaces = Math.max(0, sigDigits - 1 - exponent);
+        // Ensure fixed decimals to keep trailing zeros to reach 3 significant digits
+        return value.toFixed(decimalPlaces);
     }
 
     updateKeyStatus(message, type) {
         const status = document.getElementById('keyStatus');
-        status.textContent = message;
-        status.className = `status ${type}`;
+        status.textContent = this.shortenStatus(message);
+        status.className = `status ${type || 'waiting'}`;
     }
 
     updatePackageStatus(message, type) {
         const status = document.getElementById('packageStatus');
-        status.textContent = message;
-        status.className = `status ${type}`;
+        status.textContent = this.shortenStatus(message);
+        status.className = `status ${type || 'waiting'}`;
     }
 
     updateDownloadInfo(message) {
         const info = document.getElementById('downloadInfo');
-        info.textContent = message;
+        info.textContent = this.clampText(message, DOWNLOAD_INFO_MAX_LEN);
     }
 
     updateProgress(percentage) {
@@ -487,12 +547,72 @@ class CloudDecryptor {
         const section = document.getElementById('downloadSection');
         section.style.display = 'block';
         section.classList.add('fade-in');
+        // title removed
     }
 
     hideDownloadSection() {
-        const section = document.getElementById('downloadSection');
-        section.style.display = 'none';
+        // Keep section always visible; just reset to placeholder and progress 0
         this.updateProgress(0);
+        const info = document.getElementById('downloadInfo');
+        if (info) {
+            info.textContent = '🔒 Encryption happens locally in your browser. No data is sent to any server.';
+        }
+        // title removed
+    }
+
+    clampText(text, maxLen) {
+        try {
+            const s = String(text || '');
+            if (s.length <= maxLen) return s;
+            return s.slice(0, Math.max(0, maxLen - 1)) + '…';
+        } catch (_) {
+            return '';
+        }
+    }
+
+    truncateFilenameKeepExt(filename, maxLen) {
+        try {
+            const s = String(filename || '');
+            if (s.length <= maxLen) return s;
+            const lastDot = s.lastIndexOf('.');
+            if (lastDot <= 0 || lastDot === s.length - 1) {
+                // no extension or trailing dot — fallback to generic clamp
+                return this.clampText(s, maxLen);
+            }
+            const name = s.slice(0, lastDot);
+            const ext = s.slice(lastDot); // includes the dot
+            const budget = Math.max(0, maxLen - ext.length - 3); // 3 for '...'
+            if (budget <= 0) {
+                // cannot keep even minimal name, return just ext with ellipsis prefix
+                return '...' + ext.slice(-Math.max(0, maxLen - 3));
+            }
+            const truncatedName = name.slice(0, budget);
+            return truncatedName + '...' + ext;
+        } catch (_) {
+            return filename;
+        }
+    }
+
+    buildDownloadMessage(prefix, filename, totalMaxLen = 100) {
+        try {
+            const p = String(prefix || '');
+            const name = String(filename || '');
+            const remaining = Math.max(0, totalMaxLen - p.length);
+            const safeName = this.truncateFilenameKeepExt(name, remaining);
+            return p + safeName;
+        } catch (_) {
+            return String(prefix || '') + String(filename || '');
+        }
+    }
+
+    shortenStatus(text) {
+        try {
+            const str = String(text || '');
+            if (str.length <= 24) return str;
+            return str.slice(0, 21) + '...';
+        } catch (_) {
+            return '';
+        }
     }
 
     base64ToUint8Array(base64) {
@@ -505,11 +625,81 @@ class CloudDecryptor {
     }
 }
 
-// Inizializza l'applicazione quando il DOM è caricato
-document.addEventListener('DOMContentLoaded', () => {
-    new CloudDecryptor();
+// Global function to handle manual decryption
+window.handleManualDecryption = async function(fileId) {
+    const input = document.getElementById('manualFileInput');
+    const file = input.files[0];
     
-    // Verifica se l'embedded key è stata sostituita
+    if (!file) {
+        alert('Please select a file first!');
+        return;
+    }
+    
+    try {
+        // Get decryptor instance
+        const decryptor = window.cloudDecryptor;
+        if (!decryptor) {
+            alert('Error: Decryptor not initialized');
+            return;
+        }
+        
+        // Get file info
+        const fileInfo = decryptor.packages[fileId];
+        if (!fileInfo) {
+            alert('Error: File not found');
+            return;
+        }
+        
+        // Update interface
+        decryptor.updateDownloadInfo(decryptor.buildDownloadMessage('🔄 Decrypting: ', file.name, DOWNLOAD_INFO_MAX_LEN));
+        decryptor.updateProgress(70);
+        
+        // Read selected file
+        const arrayBuffer = await file.arrayBuffer();
+        const encryptedData = new Uint8Array(arrayBuffer);
+        
+        // Unwrap DEK
+        decryptor.updateProgress(80);
+        const dek = await decryptor.unwrapDEK(fileInfo.wrappedDekB64, decryptor.kek);
+        
+        // Decrypt file
+        decryptor.updateProgress(90);
+        const decryptedData = await decryptor.decryptData(encryptedData, dek);
+        
+        // Download decrypted file
+        decryptor.updateProgress(100);
+        decryptor.downloadFile(decryptedData, fileInfo.originalName);
+        
+        decryptor.updateDownloadInfo(`✅ File decrypted: ${fileInfo.originalName}`);
+        
+        // Keep download section visible; reset after 2 seconds
+        setTimeout(() => {
+            decryptor.hideDownloadSection();
+            decryptor.keepFilesSectionOpen();
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Manual decryption error:', error);
+        alert(`❌ Decryption error: ${error.message}`);
+    }
+};
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.cloudDecryptor = new CloudDecryptor();
+    // Initialize waiting statuses explicitly on load
+    const keyStatus = document.getElementById('keyStatus');
+    if (keyStatus) {
+        keyStatus.textContent = '⏳ Waiting for key';
+        keyStatus.className = 'status waiting';
+    }
+    const packageStatus = document.getElementById('packageStatus');
+    if (packageStatus) {
+        packageStatus.textContent = '⏳ Waiting for package';
+        packageStatus.className = 'status waiting';
+    }
+    
+    // Check if embedded key has been replaced
     if (EMBEDDED_KEY_B64 === "REPLACE_WITH_YOUR_EMBEDDED_KEY_BASE64") {
         console.warn('⚠️ WARNING: Replace EMBEDDED_KEY_B64 in script.js with your generated key!');
     }
