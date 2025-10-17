@@ -22,7 +22,7 @@
 :root {
     /* Centralized file list heights */
     --filelist-height-desktop: 280px;
-    --filelist-height-mobile: 180px;
+    --filelist-height-mobile: 200px;
 }
 
 body {
