@@ -156,7 +156,8 @@ section h2 {
 /* Allinea status sulla stessa riga dell'input */
 .key-section .status, .package-section .status {
     margin-top: 0;
-    margin-left: 8px;
+    margin-left: 0;
+    margin-right: 8px;          /* spacing to the right after order swap */
     flex-shrink: 0;
     white-space: nowrap;           /* keep on one line */
     overflow: hidden;              /* hide overflow */
@@ -171,6 +172,7 @@ section h2 {
     width: 100%;
     max-width: 70%;
     min-width: 50%;
+    margin-right: 0; /* remove right margin */
 }
 
 /* Widen search input in files section */
@@ -505,6 +507,7 @@ section h2 {
     .key-section .status, .package-section .status {
         margin-top: 0;
         margin-left: 0;
+        margin-right: 6px;        /* mobile spacing on the right */
         font-size: 0.7em;
         padding: 4px 6px;
         flex-shrink: 0;
@@ -513,6 +516,11 @@ section h2 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    
+    /* Ensure input aligns cleanly with the right edge */
+    .key-section .input-group input, .package-section .input-group input {
+        margin-right: 0;
     }
     
     /* Mobile: input-row nella files-section */
