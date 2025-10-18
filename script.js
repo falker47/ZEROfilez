@@ -33,6 +33,11 @@ class CloudDecryptor {
         document.getElementById('packageFile').addEventListener('change', (e) => {
             this.handlePackageFile(e.target.files[0]);
         });
+
+        // Window resize listener for filename truncation
+        window.addEventListener('resize', () => {
+            this.updateFilenamesOnResize();
+        });
     }
 
     // Rimosso input manuale: si usa solo il file key
@@ -440,16 +445,35 @@ class CloudDecryptor {
         });
     }
 
+    updateFilenamesOnResize() {
+        // Update all existing filename elements when screen size changes
+        const filesList = document.getElementById('filesList');
+        if (!filesList || !this.packages) return;
+
+        const fileItems = filesList.querySelectorAll('.file-item');
+        fileItems.forEach(fileItem => {
+            const fileNameEl = fileItem.querySelector('.file-name');
+            if (fileNameEl) {
+                // Get the original filename from the packages data
+                const fileId = fileItem.dataset.fileId;
+                if (fileId && this.packages[fileId]) {
+                    fileNameEl.textContent = this.truncateFilenameForFileItem(this.packages[fileId].originalName);
+                }
+            }
+        });
+    }
+
     createFileItem(fileInfo) {
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
+        fileItem.dataset.fileId = fileInfo.id;
 
         const fileInfoDiv = document.createElement('div');
         fileInfoDiv.className = 'file-info';
         
         const fileName = document.createElement('div');
         fileName.className = 'file-name';
-        fileName.textContent = fileInfo.originalName;
+        fileName.textContent = this.truncateFilenameForFileItem(fileInfo.originalName);
         
         fileInfoDiv.appendChild(fileName);
 
@@ -587,7 +611,34 @@ class CloudDecryptor {
                 return '...' + ext.slice(-Math.max(0, maxLen - 3));
             }
             const truncatedName = name.slice(0, budget);
-            return truncatedName + '...' + ext;
+            return truncatedName + '..' + ext;
+        } catch (_) {
+            return filename;
+        }
+    }
+
+    truncateFilenameForFileItem(filename) {
+        try {
+            const s = String(filename || '');
+            // Determine max length based on screen width
+            const isMobile = window.innerWidth <= 768;
+            const maxLen = isMobile ? 25 : 90;
+            
+            if (s.length <= maxLen) return s;
+            const lastDot = s.lastIndexOf('.');
+            if (lastDot <= 0 || lastDot === s.length - 1) {
+                // no extension or trailing dot — fallback to generic clamp
+                return this.clampText(s, maxLen);
+            }
+            const name = s.slice(0, lastDot);
+            const ext = s.slice(lastDot); // includes the dot
+            const budget = Math.max(0, maxLen - ext.length - 3); // 3 for '...'
+            if (budget <= 0) {
+                // cannot keep even minimal name, return just ext with ellipsis prefix
+                return '..' + ext.slice(-Math.max(0, maxLen - 3));
+            }
+            const truncatedName = name.slice(0, budget);
+            return truncatedName + '..' + ext;
         } catch (_) {
             return filename;
         }
@@ -609,7 +660,7 @@ class CloudDecryptor {
         try {
             const str = String(text || '');
             if (str.length <= 24) return str;
-            return str.slice(0, 21) + '...';
+            return str.slice(0, 21) + '..';
         } catch (_) {
             return '';
         }
