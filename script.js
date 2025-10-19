@@ -622,7 +622,7 @@ class CloudDecryptor {
             const s = String(filename || '');
             // Determine max length based on screen width
             const isMobile = window.innerWidth <= 768;
-            const maxLen = isMobile ? 25 : 90;
+            const maxLen = isMobile ? 32 : 90;
             
             if (s.length <= maxLen) return s;
             const lastDot = s.lastIndexOf('.');
