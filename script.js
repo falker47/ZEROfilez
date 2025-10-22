@@ -13,10 +13,19 @@ class CloudDecryptor {
         this.userKey = null;
         this.kek = null;
         this.packages = null;
+        this.currentMode = 'startup'; // 'decryptor' or 'startup'
         this.initializeEventListeners();
     }
 
     initializeEventListeners() {
+        // Mode toggle
+        const modeToggle = document.getElementById('modeToggle');
+        if (modeToggle) {
+            modeToggle.addEventListener('change', (e) => {
+                this.toggleMode(e.target.checked);
+            });
+        }
+
         // File user key
         document.getElementById('userKeyFile').addEventListener('change', (e) => {
             this.handleUserKeyFile(e.target.files[0]);
@@ -38,6 +47,165 @@ class CloudDecryptor {
         window.addEventListener('resize', () => {
             this.updateFilenamesOnResize();
         });
+
+        // Quick Startup page event listeners
+        this.initializeQuickStartupListeners();
+    }
+
+    // Mode toggle functionality
+    toggleMode(isDecryptorMode) {
+        this.currentMode = isDecryptorMode ? 'decryptor' : 'startup';
+        
+        const cloudDecryptorPage = document.getElementById('cloudDecryptorPage');
+        const quickStartupPage = document.getElementById('quickStartupPage');
+        const mainTitle = document.getElementById('mainTitle');
+        const mainSubtitle = document.getElementById('mainSubtitle');
+        const toggleIconLeft = document.querySelector('.toggle-icon-left');
+        const toggleIconRight = document.querySelector('.toggle-icon-right');
+        
+        if (isDecryptorMode) {
+            // Switch to Cloud Decryptor
+            quickStartupPage.classList.add('hidden');
+            cloudDecryptorPage.classList.remove('hidden');
+            mainTitle.textContent = 'ZEROfilez Cloud Decryptor';
+            mainSubtitle.textContent = 'Secure system to manage encrypted files';
+            // Highlight right icon (Cloud Decryptor)
+            toggleIconLeft.style.opacity = '0.4';
+            toggleIconRight.style.opacity = '1';
+        } else {
+            // Switch to Quick Startup
+            cloudDecryptorPage.classList.add('hidden');
+            quickStartupPage.classList.remove('hidden');
+            mainTitle.textContent = 'ZEROfilez Quick Startup';
+            mainSubtitle.textContent = 'Download useful files for free';
+            // Highlight left icon (Quick Startup)
+            toggleIconLeft.style.opacity = '1';
+            toggleIconRight.style.opacity = '0.4';
+        }
+    }
+
+    // Initialize Quick Startup page event listeners
+    initializeQuickStartupListeners() {
+        // Main tab switching
+        const mainTabButtons = document.querySelectorAll('.main-tab-btn');
+        mainTabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tabId = e.target.dataset.tab;
+                this.switchMainTab(tabId);
+            });
+        });
+
+        // Download buttons
+        const downloadButtons = document.querySelectorAll('#quickStartupPage .download-btn');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                this.handleQuickStartupDownload(e.target);
+            });
+        });
+    }
+
+    // Switch between main tabs
+    switchMainTab(tabId) {
+        const tabButtons = document.querySelectorAll('.main-tab-btn');
+        const tabSections = document.querySelectorAll('.downloads-section');
+        
+        // Update active tab
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.tab === tabId) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Show/hide sections
+        tabSections.forEach(section => {
+            if (section.id === `${tabId}-tab`) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        });
+    }
+
+    // Smart Play Store opener with device detection
+    openPlayStore(appId, appName) {
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (isAndroid) {
+            // Try Android intent first (opens Play Store app directly)
+            const intentUrl = `intent://play.google.com/store/apps/details?id=${appId}#Intent;scheme=https;package=com.android.vending;end`;
+            
+            // Fallback URL for browser
+            const fallbackUrl = `https://play.google.com/store/apps/details?id=${appId}`;
+            
+            // Try intent
+            window.location.href = intentUrl;
+            
+            // Check if app opened successfully after 1 second
+            setTimeout(() => {
+                if (document.hidden || document.visibilityState === 'hidden') {
+                    // App opened successfully, do nothing
+                    return;
+                }
+                // Fallback: open in browser
+                window.open(fallbackUrl, '_blank', 'noopener,noreferrer');
+            }, 1000);
+            
+        } else if (isIOS) {
+            // For iOS, show informative message
+            alert(`📱 Per scaricare ${appName}, cerca "${appName}" nell'App Store di Apple.`);
+            
+        } else {
+            // Desktop: open Play Store in browser
+            window.open(`https://play.google.com/store/apps/details?id=${appId}`, '_blank', 'noopener,noreferrer');
+        }
+    }
+
+    // Handle downloads from Quick Startup page
+    handleQuickStartupDownload(button) {
+        if (button.disabled) return;
+        
+        const fileCard = button.closest('.file-card');
+        const fileName = fileCard.querySelector('h3').textContent;
+        const platform = button.dataset.platform;
+        const downloadUrl = button.dataset.url;
+        const appId = button.dataset.appId;
+        const appName = button.dataset.appName;
+        const originalText = button.textContent;
+        
+        // Show feedback
+        button.disabled = true;
+        button.textContent = 'Opening...';
+        
+        if (platform === 'android' && appId) {
+            // Use smart Play Store opener for Android apps
+            this.openPlayStore(appId, appName || fileName);
+            
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = originalText;
+            }, 2000);
+            
+        } else if (downloadUrl) {
+            // Regular URL opening for PC downloads
+            window.open(downloadUrl, '_blank', 'noopener,noreferrer');
+            
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = originalText;
+            }, 1000);
+            
+        } else {
+            // Fallback for buttons without URLs
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = originalText;
+                
+                // Show a simple alert for demo purposes
+                alert(`Download started for: ${fileName} (${platform.toUpperCase()})\n\nNote: This is a demo. Replace with actual download URLs.`);
+            }, 1500);
+        }
     }
 
     // Rimosso input manuale: si usa solo il file key
@@ -225,78 +393,8 @@ class CloudDecryptor {
         }
     }
 
-    convertGoogleDriveLink(shareLink) {
-        /**
-         * Convert a Google Drive share link to a direct download link
-         * Input:  https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-         * Output: https://drive.google.com/uc?export=download&id=FILE_ID
-         */
-        try {
-            if (shareLink.includes("drive.google.com/file/d/")) {
-                // Extract FILE_ID from the share link
-                const start = shareLink.indexOf("/file/d/") + 8;
-                let end = shareLink.indexOf("/", start);
-                if (end === -1) {
-                    end = shareLink.indexOf("?", start);
-                }
-                if (end === -1) {
-                    end = shareLink.length;
-                }
-                
-                const fileId = shareLink.substring(start, end);
-                
-                // Build the direct link
-                const directLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                return directLink;
-            } else {
-                throw new Error("Invalid Google Drive link");
-            }
-        } catch (error) {
-            console.error("Error converting Google Drive link:", error);
-            throw error;
-        }
-    }
 
-    handleGoogleDriveDownload(fileInfo) {
-        // For Google Drive, provide user-friendly options
-        this.updateDownloadInfo(this.buildDownloadMessage('🔗 Google Drive: ', fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
-        this.updateProgress(50);
-        
-        // Show available options
-        this.showGoogleDriveOptions(fileInfo);
-    }
 
-    showGoogleDriveOptions(fileInfo) {
-        const downloadInfo = document.getElementById('downloadInfo');
-        downloadInfo.innerHTML = `
-            <div style="text-align: center; margin: 10px 0;">
-                <h3>📁 ${fileInfo.originalName}</h3>
-                <p>Google Drive file - manual download required (${this.formatFileSize(fileInfo.size)})</p>
-                <div style="margin: 15px 0;">
-                    <button class="download-btn" onclick="window.open('${fileInfo.url}', '_blank')" style="margin: 5px;">
-                        🌐 Open Google Drive
-                    </button>
-                    <button class="download-btn" onclick="navigator.clipboard.writeText('${fileInfo.url}').then(() => alert('Link copied!'))" style="margin: 5px;">
-                        📋 Copy Link
-                    </button>
-                </div>
-                <p style="font-size: 0.9em; color: #a0a0a0;">
-                    💡 Google Drive requires manual download to avoid CORS errors. Download the file, then decrypt it here.
-                </p>
-                <button class="download-btn" onclick="this.parentElement.parentElement.querySelector('.manual-decrypt').style.display='block'; this.style.display='none';" style="margin: 10px;">
-                    🔓 Manual Decryption
-                </button>
-                <div class="manual-decrypt" style="display: none; margin-top: 15px;">
-                    <p>Select the .enc file downloaded from Google Drive:</p>
-                    <input type="file" id="manualFileInput" accept=".enc" style="margin: 10px;">
-                    <button class="download-btn" onclick="handleManualDecryption('${fileInfo.id}')">
-                        ✅ Decrypt Selected File
-                    </button>
-                </div>
-            </div>
-        `;
-        this.updateProgress(100);
-    }
 
 
     async downloadAndDecryptFile(fileId) {
@@ -311,13 +409,7 @@ class CloudDecryptor {
             this.showDownloadSection();
             this.updateDownloadInfo(this.buildDownloadMessage('⬇️ Downloading: ', fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
 
-            // Special handling for Google Drive
-            if (fileInfo.hosting === 'google_drive') {
-                this.handleGoogleDriveDownload(fileInfo);
-                return;
-            }
-
-            // Determine URL for non-Google Drive hosting
+            // Determine URL for hosting
             let downloadUrl = fileInfo.url;
 
             // Download the encrypted file
@@ -374,8 +466,95 @@ class CloudDecryptor {
         }
     }
 
+    getMimeType(filename) {
+        const extension = filename.toLowerCase().split('.').pop();
+        const mimeTypes = {
+            // Game ROMs
+            'gba': 'application/octet-stream',
+            'gb': 'application/octet-stream',
+            'gbc': 'application/octet-stream',
+            'nds': 'application/octet-stream',
+            '3ds': 'application/octet-stream',
+            'n64': 'application/octet-stream',
+            'z64': 'application/octet-stream',
+            'v64': 'application/octet-stream',
+            'sfc': 'application/octet-stream',
+            'smc': 'application/octet-stream',
+            'nes': 'application/octet-stream',
+            'rom': 'application/octet-stream',
+            'iso': 'application/octet-stream',
+            'bin': 'application/octet-stream',
+            'cue': 'application/octet-stream',
+            
+            // Archives
+            'zip': 'application/zip',
+            'rar': 'application/x-rar-compressed',
+            '7z': 'application/x-7z-compressed',
+            'tar': 'application/x-tar',
+            'gz': 'application/gzip',
+            
+            // Documents
+            'pdf': 'application/pdf',
+            'doc': 'application/msword',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'txt': 'text/plain',
+            'rtf': 'application/rtf',
+            
+            // Images
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'bmp': 'image/bmp',
+            'webp': 'image/webp',
+            'svg': 'image/svg+xml',
+            
+            // Audio
+            'mp3': 'audio/mpeg',
+            'wav': 'audio/wav',
+            'ogg': 'audio/ogg',
+            'flac': 'audio/flac',
+            'aac': 'audio/aac',
+            
+            // Video
+            'mp4': 'video/mp4',
+            'avi': 'video/x-msvideo',
+            'mkv': 'video/x-matroska',
+            'mov': 'video/quicktime',
+            'wmv': 'video/x-ms-wmv',
+            
+            // Applications
+            'exe': 'application/x-msdownload',
+            'msi': 'application/x-msdownload',
+            'apk': 'application/vnd.android.package-archive',
+            'deb': 'application/x-debian-package',
+            'rpm': 'application/x-rpm',
+            
+            // Code
+            'js': 'application/javascript',
+            'html': 'text/html',
+            'css': 'text/css',
+            'json': 'application/json',
+            'xml': 'application/xml',
+            'py': 'text/x-python',
+            'java': 'text/x-java-source',
+            'cpp': 'text/x-c++src',
+            'c': 'text/x-csrc',
+            'h': 'text/x-chdr',
+            
+            // Other
+            'dat': 'application/octet-stream',
+            'db': 'application/octet-stream',
+            'sqlite': 'application/x-sqlite3',
+            'log': 'text/plain'
+        };
+        
+        return mimeTypes[extension] || 'application/octet-stream';
+    }
+
     downloadFile(data, filename) {
-        const blob = new Blob([data]);
+        const mimeType = this.getMimeType(filename);
+        const blob = new Blob([data], { type: mimeType });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement('a');
@@ -738,6 +917,15 @@ window.handleManualDecryption = async function(fileId) {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.cloudDecryptor = new CloudDecryptor();
+    
+    // Initialize toggle icons (default state: Quick Startup)
+    const toggleIconLeft = document.querySelector('.toggle-icon-left');
+    const toggleIconRight = document.querySelector('.toggle-icon-right');
+    if (toggleIconLeft && toggleIconRight) {
+        toggleIconLeft.style.opacity = '1';
+        toggleIconRight.style.opacity = '0.4';
+    }
+    
     // Initialize waiting statuses explicitly on load
     const keyStatus = document.getElementById('keyStatus');
     if (keyStatus) {

@@ -34,7 +34,7 @@ body {
 }
 
 .container {
-    max-width: 1030px; /* +20% width */
+    max-width: 1200px; /* Increased width for better horizontal space utilization */
     margin: 0 auto;
     padding: 12px;
     min-height: 100vh;
@@ -43,13 +43,104 @@ body {
 }
 
 header {
-    text-align: center;
     margin-bottom: 12px;
     background: #2d2d2d;
-    padding: 4px 12px; /* tighter vertical padding */
+    padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid #404040;
     box-shadow: 0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.title-section {
+    flex: 1;
+    text-align: center;
+}
+
+.toggle-section {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-icon-left,
+.toggle-icon-right {
+    font-size: 1.2em;
+    transition: opacity 0.3s ease;
+    user-select: none;
+}
+
+.toggle-icon-left {
+    opacity: 1;
+}
+
+.toggle-icon-right {
+    opacity: 0.4;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #404040;
+    transition: .3s;
+    border-radius: 24px;
+    border: 1px solid #555555;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #e0e0e0;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: #FF6B35;
+    border-color: #FF8C42;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.toggle-label {
+    color: #b0b0b0;
+    font-size: 0.9em;
+    font-weight: 400;
+    white-space: nowrap;
 }
 
 header h1 {
@@ -708,6 +799,415 @@ section h2 {
     }
 }
 
+/* Quick Startup Page Styles */
+.page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.main-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    justify-content: center;
+}
+
+.main-tab-btn {
+    padding: 12px 20px;
+    background: #404040;
+    color: #e0e0e0;
+    border: 1px solid #555555;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 200px;
+}
+
+.main-tab-btn:hover {
+    background: #4a4a4a;
+    border-color: #666666;
+    transform: translateY(-2px);
+}
+
+.main-tab-btn.active {
+    background: #FF6B35;
+    border-color: #FF8C42;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.downloads-section {
+    background: #2d2d2d;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #2f2f2f;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.045), 0 6px 18px rgba(0,0,0,0.35);
+    transition: border-color 0.3s ease;
+}
+
+.downloads-section:hover {
+    border-color: #777777;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.45);
+}
+
+.downloads-section h2 {
+    color: #ffffff;
+    margin-bottom: 12px;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-bottom: 1px solid #404040;
+    padding-bottom: 6px;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tab-btn {
+    padding: 6px 12px;
+    background: #404040;
+    color: #e0e0e0;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    font-weight: 400;
+}
+
+.tab-btn:hover {
+    background: #4a4a4a;
+    border-color: #666666;
+}
+
+.tab-btn.active {
+    background: #FF6B35;
+    border-color: #FF8C42;
+    color: #ffffff;
+}
+
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 12px;
+    max-height: 450px;
+    overflow-y: auto;
+    padding: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #555555 #2d2d2d;
+}
+
+.files-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.files-grid::-webkit-scrollbar-track {
+    background: #2d2d2d;
+    border-radius: 4px;
+}
+
+.files-grid::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 4px;
+}
+
+.files-grid::-webkit-scrollbar-thumb:hover {
+    background: #666666;
+}
+
+.file-card {
+    background: #1a1a1a;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    height: 90px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.file-card:hover {
+    border-color: #555555;
+    background: #222222;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.file-icon {
+    font-size: 2em;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+}
+
+.file-card .file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+    height: 100%;
+    justify-content: center;
+}
+
+.file-card .file-info h3 {
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-card .file-info p {
+    color: #b0b0b0;
+    font-size: 0.8em;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-card .file-info .file-size {
+    color: #a0a0a0;
+    font-size: 0.75em;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.file-card .download-btn {
+    background: #404040;
+    color: #e0e0e0;
+    border: 1px solid #555555;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    min-width: 70px;
+}
+
+.dual-buttons {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.dual-buttons .download-btn {
+    min-width: 50px;
+    padding: 6px 8px;
+    font-size: 0.75em;
+}
+
+.pc-btn {
+    background: #2d4a6b;
+    border-color: #3a5a7a;
+}
+
+.pc-btn:hover {
+    background: #3a5a7a;
+    border-color: #4a6a8a;
+}
+
+.android-btn {
+    background: #2d5a2d;
+    border-color: #3a6a3a;
+}
+
+.android-btn:hover {
+    background: #3a6a3a;
+    border-color: #4a7a4a;
+}
+
+.download-btn.disabled {
+    background: #2a2a2a;
+    color: #666666;
+    border-color: #333333;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.file-card .download-btn:hover {
+    background: #4a4a4a;
+    border-color: #666666;
+}
+
+.file-card .download-btn:active {
+    background: #353535;
+}
+
+/* Responsive adjustments for Quick Startup */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        position: static;
+    }
+    
+    .toggle-section {
+        position: static;
+        transform: none;
+        justify-content: center;
+    }
+    
+    .main-tabs {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .main-tab-btn {
+        padding: 10px 16px;
+        font-size: 0.9em;
+        max-width: none;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        max-height: 400px;
+        padding: 2px;
+    }
+    
+    .file-card {
+        height: 80px;
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .file-icon {
+        font-size: 1.5em;
+        width: 30px;
+    }
+    
+    .file-card .file-info h3 {
+        font-size: 0.9em;
+    }
+    
+    .file-card .file-info p {
+        font-size: 0.75em;
+    }
+    
+    .file-card .download-btn {
+        padding: 4px 8px;
+        font-size: 0.75em;
+        min-width: 60px;
+    }
+    
+    .dual-buttons .download-btn {
+        min-width: 40px;
+        padding: 4px 6px;
+        font-size: 0.7em;
+    }
+    
+    .category-tabs {
+        justify-content: center;
+    }
+    
+    .tab-btn {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+    
+    .downloads-section {
+        padding: 8px;
+    }
+    
+    .downloads-section h2 {
+        font-size: 1.1em;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-tab-btn {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
+        max-height: 350px;
+        gap: 6px;
+        padding: 1px;
+    }
+    
+    .file-card {
+        height: 75px;
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .file-icon {
+        font-size: 1.3em;
+        width: 25px;
+    }
+    
+    .file-card .file-info h3 {
+        font-size: 0.85em;
+    }
+    
+    .file-card .file-info p {
+        font-size: 0.7em;
+    }
+    
+    .file-card .download-btn {
+        padding: 3px 6px;
+        font-size: 0.7em;
+        min-width: 50px;
+    }
+    
+    .dual-buttons .download-btn {
+        min-width: 35px;
+        padding: 3px 4px;
+        font-size: 0.65em;
+    }
+    
+    .downloads-section {
+        padding: 6px;
+    }
+    
+    .downloads-section h2 {
+        font-size: 1em;
+        margin-bottom: 6px;
+    }
+    
+    .category-tabs {
+        gap: 4px;
+    }
+    
+    .tab-btn {
+        padding: 3px 6px;
+        font-size: 0.75em;
+    }
+    
+    footer {
+        margin-top: 16px;
+        padding: 10px 0;
+    }
+    
+    footer p {
+        font-size: 0.8em;
+    }
+}
+
 /* Utility classes */
 .hidden {
     display: none !important;
@@ -723,4 +1223,30 @@ section h2 {
 
 .mt-20 {
     margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    padding: 12px 0;
+    text-align: center;
+    border-top: 1px solid #404040;
+    background: #1a1a1a;
+}
+
+footer p {
+    margin: 0;
+    color: #a0a0a0;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #FF6B35;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #FF8C42;
+    text-decoration: underline;
 }

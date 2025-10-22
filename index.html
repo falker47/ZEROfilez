@@ -9,51 +9,261 @@
 <body>
     <div class="container">
         <header>
-            <h1>ZEROfilez Cloud Decryptor</h1>
-            <p>Secure system to manage encrypted files</p>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 id="mainTitle">ZEROfilez Quick Startup</h1>
+                    <p id="mainSubtitle">Download useful files for free</p>
+                </div>
+                <div class="toggle-section">
+                    <span class="toggle-icon-left">🎮</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="modeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-icon-right">🔐</span>
+                </div>
+            </div>
         </header>
 
         <main>
-            <div class="row two-col">
-                <!-- User Key Section -->
-                <section class="key-section">
-                    <h2>🔑 User Key</h2>
+            <!-- Cloud Decryptor Page -->
+            <div id="cloudDecryptorPage" class="page-content hidden">
+                <div class="row two-col">
+                    <!-- User Key Section -->
+                    <section class="key-section">
+                        <h2>🔑 User Key</h2>
+                        <div class="input-group">
+                            <div class="status waiting" id="keyStatus">⏳ Waiting for key</div>
+                            <input type="file" id="userKeyFile" accept=".bin,.key">
+                        </div>
+                    </section>
+
+                    <!-- Package Section -->
+                    <section class="package-section">
+                        <h2>📦 Encrypted Package</h2>
+                        <div class="input-group">
+                            <div class="status waiting" id="packageStatus">⏳ Waiting for package</div>
+                            <input type="file" id="packageFile" accept=".enc">
+                        </div>
+                    </section>
+                </div>
+
+                <!-- File List Section -->
+                <section class="files-section" id="filesSection">
+                    <h2>📁 Your Files</h2>
                     <div class="input-group">
-                        <div class="status waiting" id="keyStatus">⏳ Waiting for key</div>
-                        <input type="file" id="userKeyFile" accept=".bin,.key">
+                        <div class="input-row">
+                            <span class="input-icon" aria-hidden="true">🔎</span>
+                            <input type="text" id="searchInput" placeholder="Type to filter files..." />
+                        </div>
                     </div>
+                    <div class="files-list" id="filesList" data-placeholder="No files to show yet. Upload an encrypted package to see your files."></div>
                 </section>
 
-                <!-- Package Section -->
-                <section class="package-section">
-                    <h2>📦 Encrypted Package</h2>
-                    <div class="input-group">
-                        <div class="status waiting" id="packageStatus">⏳ Waiting for package</div>
-                        <input type="file" id="packageFile" accept=".enc">
+                <!-- Download Section -->
+                <section class="download-section" id="downloadSection">
+                    <div class="download-info" id="downloadInfo">🔒 Encryption happens locally in your browser. No data is sent to any server.</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </section>
             </div>
 
-            <!-- File List Section -->
-            <section class="files-section" id="filesSection">
-                <h2>📁 Your Files</h2>
-                <div class="input-group">
-                    <div class="input-row">
-                        <span class="input-icon" aria-hidden="true">🔎</span>
-                        <input type="text" id="searchInput" placeholder="Type to filter files..." />
-                    </div>
+            <!-- Quick Startup Page -->
+            <div id="quickStartupPage" class="page-content">
+                <!-- Main Tabs -->
+                <div class="main-tabs">
+                    <button class="main-tab-btn active" data-tab="emulators">🎮 Emulators</button>
+                    <button class="main-tab-btn" data-tab="pc-programs">💻 PC Programs</button>
+                    <button class="main-tab-btn" data-tab="apk-files">📱 APK Files</button>
                 </div>
-                <div class="files-list" id="filesList" data-placeholder="No files to show yet. Upload an encrypted package to see your files."></div>
-            </section>
 
-            <!-- Download Section -->
-            <section class="download-section" id="downloadSection">
-                <div class="download-info" id="downloadInfo">🔒 Encryption happens locally in your browser. No data is sent to any server.</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </section>
+                <!-- Emulators Section -->
+                <section class="downloads-section" id="emulators-tab">
+                    <div class="files-grid">
+                        <div class="file-card">
+                            <div class="file-icon">📱</div>
+                            <div class="file-info">
+                                <h3>Nintendo DS</h3>
+                                <p>MelonDS</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc" data-url="https://melonds.kuribo64.net/downloads/melonDS-windows-x86_64(1).zip">PC</button>
+                                <button class="download-btn android-btn" data-platform="android" data-url="https://play.google.com/store/apps/details?id=me.magnum.melonds&pcampaignid=web_share" data-app-id="me.magnum.melonds" data-app-name="melonDS">Android</button>
+                            </div>
+                        </div>
+                        <div class="file-card">
+                            <div class="file-icon">🎯</div>
+                            <div class="file-info">
+                                <h3>Game Boy Advance</h3>
+                                <p>💻: mGBA</p>
+                                <p>📱: Pizza Boy GBA Basic</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc" data-url="https://github.com/mgba-emu/mgba/releases/download/0.10.5/mGBA-0.10.5-win64-installer.exe">PC</button>
+                                <button class="download-btn android-btn" data-platform="android" data-url="https://play.google.com/store/search?q=pizza%20boy%20a&c=apps&hl" data-app-id="it.dbtecno.pizzaboygba.basic" data-app-name="Pizza Boy GBA Basic">Android</button>
+                            </div>
+                        </div>
+                        <div class="file-card">
+                            <div class="file-icon">🎪</div>
+                            <div class="file-info">
+                                <h3>GameCube & Wii</h3>
+                                <p>Dolphin Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc" data-url="https://dl.dolphin-emu.org/releases/2509/dolphin-2509-x64.7z">PC</button>
+                                <button class="download-btn android-btn" data-platform="android" data-url="https://play.google.com/store/apps/details?id=org.dolphinemu.dolphinemu&hl" data-app-id="org.dolphinemu.dolphinemu" data-app-name="Dolphin Emulator">Android</button>
+                            </div>
+                        </div>
+                        <div class="file-card">
+                            <div class="file-icon">📱</div>
+                            <div class="file-info">
+                                <h3>Nintendo 3DS</h3>
+                                <p>Citra Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc" data-url="https://archive.org/download/citra-emu_202403/citra-windows-msvc-20240303-0ff3440_nightly.zip">PC</button>
+                                <button class="download-btn android-btn" data-platform="android" data-url="https://github.com/PabloMK7/citra/releases/download/r608383e/citra-android-universal-20240927-608383e.apk">Android</button>
+                            </div>
+                        </div>
+                        <!-- PlayStation 2 - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎯</div>
+                            <div class="file-info">
+                                <h3>PlayStation 2</h3>
+                                <p>PCSX2 Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn disabled" data-platform="android" disabled>N/A</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- PlayStation 3 - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎯</div>
+                            <div class="file-info">
+                                <h3>PlayStation 3</h3>
+                                <p>RPCS3 Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn disabled" data-platform="android" disabled>N/A</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- Nintendo Switch (Yuzu) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>Nintendo Switch</h3>
+                                <p>Yuzu Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn disabled" data-platform="android" disabled>N/A</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- Nintendo Switch (Ryujinx) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>Nintendo Switch</h3>
+                                <p>Ryujinx Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn disabled" data-platform="android" disabled>N/A</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- Multi-System (RetroArch) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>Multi-System</h3>
+                                <p>RetroArch Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn" data-platform="android">Android</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- PlayStation Portable (PPSSPP) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>PlayStation Portable</h3>
+                                <p>PPSSPP Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn" data-platform="pc">PC</button>
+                                <button class="download-btn android-btn" data-platform="android">Android</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- PlayStation (ePSXe) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>PlayStation</h3>
+                                <p>ePSXe Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn disabled" data-platform="pc" disabled>N/A</button>
+                                <button class="download-btn android-btn" data-platform="android">Android</button>
+                            </div>
+                        </div>
+                        -->
+                        <!-- Nintendo 64 (Mupen64Plus) - Commented out for later modification -->
+                        <!--
+                        <div class="file-card">
+                            <div class="file-icon">🎮</div>
+                            <div class="file-info">
+                                <h3>Nintendo 64</h3>
+                                <p>Mupen64Plus Emulator</p>
+                            </div>
+                            <div class="dual-buttons">
+                                <button class="download-btn pc-btn disabled" data-platform="pc" disabled>N/A</button>
+                                <button class="download-btn android-btn" data-platform="android">Android</button>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </section>
+
+                <!-- PC Programs Section -->
+                <section class="downloads-section hidden" id="pc-programs-tab">
+                    <div class="coming-soon-placeholder">
+                        <div class="coming-soon-icon">🚧</div>
+                        <h2>Coming Soon</h2>
+                        <p>PC Programs section is under development</p>
+                    </div>
+                </section>
+
+                <!-- APK Section -->
+                <section class="downloads-section hidden" id="apk-files-tab">
+                    <div class="coming-soon-placeholder">
+                        <div class="coming-soon-icon">🚧</div>
+                        <h2>Coming Soon</h2>
+                        <p>APK Files section is under development</p>
+                    </div>
+                </section>
+            </div>
         </main>
+        
+        <footer>
+            <p> <a href="https://falker47.github.io/Nexus-portfolio/" target="_blank" rel="noopener noreferrer">&copy; 2025 Maurizio Falconi - falker47</a></p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
