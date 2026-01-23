@@ -7,6 +7,7 @@ class App {
         this.cloudDecryptor = new CloudDecryptor();
         this.currentMode = 'startup'; // 'decryptor' or 'startup'
         this.initializeModeToggle();
+        this.updateFooterYear();
     }
 
     initializeModeToggle() {
@@ -15,6 +16,13 @@ class App {
             modeToggle.addEventListener('change', (e) => {
                 this.toggleMode(e.target.checked);
             });
+        }
+    }
+
+    updateFooterYear() {
+        const yearSpan = document.getElementById('currentYear');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
         }
     }
 
