@@ -1,1252 +1,1285 @@
 .input-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin: 0 auto 6px auto;
-    width: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 6px auto;
+  width: 95%;
 }
 
 .input-icon {
-    font-size: 1.8em;
-    line-height: 1;
+  font-size: 1.8em;
+  line-height: 1;
 }
 /* ZEROfilez Cloud Decryptor - Dark Theme */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    /* Centralized file list heights */
-    --filelist-height-desktop: 280px;
-    --filelist-height-mobile: 200px;
+  /* Centralized file list heights */
+  --filelist-height-desktop: 280px;
+  --filelist-height-mobile: 200px;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #1a1a1a;
-    min-height: 100vh;
-    color: #e0e0e0;
-    line-height: 1.6;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #1a1a1a;
+  min-height: 100vh;
+  color: #e0e0e0;
+  line-height: 1.6;
 }
 
 .container {
-    max-width: 1200px; /* Increased width for better horizontal space utilization */
-    margin: 0 auto;
-    padding: 12px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  max-width: 1200px; /* Increased width for better horizontal space utilization */
+  margin: 0 auto;
+  padding: 12px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
-    margin-bottom: 12px;
-    background: #2d2d2d;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #404040;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+  margin-bottom: 12px;
+  background: #2d2d2d;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #404040;
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .header-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  position: relative;
 }
 
 .title-section {
-    flex: 1;
-    text-align: center;
+  flex: 1;
+  text-align: center;
 }
 
 .toggle-section {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toggle-icon-left,
 .toggle-icon-right {
-    font-size: 1.2em;
-    transition: opacity 0.3s ease;
-    user-select: none;
+  font-size: 1.2em;
+  transition: opacity 0.3s ease;
+  user-select: none;
 }
 
 .toggle-icon-left {
-    opacity: 1;
+  opacity: 1;
 }
 
 .toggle-icon-right {
-    opacity: 0.4;
+  opacity: 0.4;
 }
 
 .toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
 }
 
 .toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #404040;
-    transition: .3s;
-    border-radius: 24px;
-    border: 1px solid #555555;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #404040;
+  transition: 0.3s;
+  border-radius: 24px;
+  border: 1px solid #555555;
 }
 
 .toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 2px;
-    bottom: 2px;
-    background-color: #e0e0e0;
-    transition: .3s;
-    border-radius: 50%;
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #e0e0e0;
+  transition: 0.3s;
+  border-radius: 50%;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-    background-color: #FF6B35;
-    border-color: #FF8C42;
+  background-color: #ff6b35;
+  border-color: #ff8c42;
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
-    transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 .toggle-label {
-    color: #b0b0b0;
-    font-size: 0.9em;
-    font-weight: 400;
-    white-space: nowrap;
+  color: #b0b0b0;
+  font-size: 0.9em;
+  font-weight: 400;
+  white-space: nowrap;
 }
 
 header h1 {
-    font-size: 2.3em; /* slightly larger for emphasis */
-    color: #ffffff;
-    margin-bottom: 2px; /* tighter spacing to subtitle */
-    font-weight: 600; /* stronger weight for prominence */
-    letter-spacing: 0.3px;
-    line-height: 1.1; /* reduce vertical height */
-    white-space: nowrap; /* keep on one line */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.05);
+  font-size: 2.3em; /* slightly larger for emphasis */
+  color: #ffffff;
+  margin-bottom: 2px; /* tighter spacing to subtitle */
+  font-weight: 600; /* stronger weight for prominence */
+  letter-spacing: 0.3px;
+  line-height: 1.1; /* reduce vertical height */
+  white-space: nowrap; /* keep on one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 header p {
-    font-size: 1.05em; /* slightly smaller */
-    color: #b0b0b0;
-    font-weight: 300;
+  font-size: 1.05em; /* slightly smaller */
+  color: #b0b0b0;
+  font-weight: 300;
 }
 
 main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .row.two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 @media (max-width: 768px) {
-    .row.two-col {
-        grid-template-columns: 1fr;
-    }
+  .row.two-col {
+    grid-template-columns: 1fr;
+  }
 }
 
 section {
-    background: #2d2d2d;
-    padding: 6px;
-    border-radius: 8px;
-    border: 1px solid #2f2f2f; /* card border a bit darker */
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.045), 0 6px 18px rgba(0,0,0,0.35);
-    transition: border-color 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
+  background: #2d2d2d;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #2f2f2f; /* card border a bit darker */
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Reduce vertical padding specifically for key and package sections */
-.key-section, .package-section {
-    padding: 6px 12px; /* slightly increased vertical padding */
+.key-section,
+.package-section {
+  padding: 6px 12px; /* slightly increased vertical padding */
 }
 
 section:hover {
-    border-color: #777777;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.45);
+  border-color: #ff6b35;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 107, 53, 0.1),
+    0 10px 24px rgba(0, 0, 0, 0.45);
 }
 
 section h2 {
-    color: #ffffff;
-    margin-bottom: 10px;
-    font-size: 1.3em;
-    font-weight: 600; /* bold headings */
-    border-bottom: 1px solid #404040;
-    padding-bottom: 6px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  font-weight: 600; /* bold headings */
+  border-bottom: 1px solid #404040;
+  padding-bottom: 6px;
 }
 
 /* Denser titles for key and package sections specifically */
-.key-section h2, .package-section h2 {
-    font-size: 1.1em;
-    margin-bottom: 6px;
-    padding-bottom: 4px;
-    line-height: 1.15;
+.key-section h2,
+.package-section h2 {
+  font-size: 1.1em;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  line-height: 1.15;
 }
 
 .files-section h2 {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 .input-group {
-    margin-bottom: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 /* Allinea al centro le sezioni chiave e package */
-.key-section, .package-section {
-    text-align: center;
+.key-section,
+.package-section {
+  text-align: center;
 }
-.key-section .input-group, .package-section .input-group {
-    align-items: center;
-    flex-direction: row; /* same row */
-    gap: 8px;
+.key-section .input-group,
+.package-section .input-group {
+  align-items: center;
+  flex-direction: row; /* same row */
+  gap: 8px;
 }
 /* Remove extra bottom space inside key/package sections */
 .key-section .input-group,
 .package-section .input-group {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Allinea status sulla stessa riga dell'input */
-.key-section .status, .package-section .status {
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 8px;          /* spacing to the right after order swap */
-    flex-shrink: 0;
-    white-space: nowrap;           /* keep on one line */
-    overflow: hidden;              /* hide overflow */
-    text-overflow: ellipsis;       /* show ellipsis if needed */
-    width: 26ch;                   /* fixed width for up to ~24 chars (+emoji) */
+.key-section .status,
+.package-section .status {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 8px; /* spacing to the right after order swap */
+  flex-shrink: 0;
+  white-space: nowrap; /* keep on one line */
+  overflow: hidden; /* hide overflow */
+  text-overflow: ellipsis; /* show ellipsis if needed */
+  width: 26ch; /* fixed width for up to ~24 chars (+emoji) */
 }
-.key-section .input-group label, .package-section .input-group label {
-    margin: 0; /* inline with input */
-    white-space: nowrap;
+.key-section .input-group label,
+.package-section .input-group label {
+  margin: 0; /* inline with input */
+  white-space: nowrap;
 }
-.key-section .input-group input, .package-section .input-group input {
-    width: 100%;
-    max-width: 70%;
-    min-width: 50%;
-    margin-right: 0; /* remove right margin */
+.key-section .input-group input,
+.package-section .input-group input {
+  width: 100%;
+  max-width: 70%;
+  min-width: 50%;
+  margin-right: 0; /* remove right margin */
 }
 
 /* Widen search input in files section */
 #filesSection .input-group input#searchInput {
-    width: 100%;
-    max-width: 100%;
-    min-width: 95%;
-    padding: 12px 10px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 95%;
+  padding: 12px 10px;
 }
 
 .input-group label {
-    font-weight: 400;
-    color: #c0c0c0;
-    font-size: 1em;
+  font-weight: 400;
+  color: #c0c0c0;
+  font-size: 1em;
 }
 
 .input-group input[type="password"],
 .input-group input[type="text"],
 .input-group input[type="file"] {
-    padding: 8px 4;
-    border: 1px solid #555555;
-    border-radius: 4px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
-    background: #1a1a1a;
-    color: #e0e0e0;
-    touch-action: manipulation;
+  padding: 8px 4;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  touch-action: manipulation;
 }
 
 .input-group input[type="password"]:focus,
 .input-group input[type="text"]:focus {
-    outline: none;
-    border-color: #666666;
+  outline: none;
+  border-color: #666666;
 }
 
 .input-group input[type="file"] {
-    padding: 8px;
-    border: 1px dashed #555555;
-    background: #1a1a1a;
-    cursor: pointer;
-    color: #a0a0a0;
-    touch-action: manipulation;
+  padding: 8px;
+  border: 1px dashed #555555;
+  background: #1a1a1a;
+  cursor: pointer;
+  color: #a0a0a0;
+  touch-action: manipulation;
 }
 
 .input-group input[type="file"]:hover {
-    border-color: #666666;
+  border-color: #666666;
 }
 
 .input-group button {
-    padding: 6px 10px;
-    background: #404040;
-    color: #e0e0e0;
-    border: 1px solid #555555;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    align-self: flex-start;
+  padding: 6px 10px;
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
 }
 
 .input-group button:hover {
-    background: #4a4a4a;
+  background: #4a4a4a;
 }
 
 .status {
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-weight: 400;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-    font-size: 0.8em;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-weight: 400;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  font-size: 0.8em;
 }
 
 .status.success {
-    background: #1a3a1a;
-    color: #90ee90;
-    border: 1px solid #2a5a2a;
+  background: #1a3a1a;
+  color: #90ee90;
+  border: 1px solid #2a5a2a;
 }
 
 .status.error {
-    background: #3a1a1a;
-    color: #ff9999;
-    border: 1px solid #5a2a2a;
+  background: #3a1a1a;
+  color: #ff9999;
+  border: 1px solid #5a2a2a;
 }
 
 .status.info {
-    background: #1a2a3a;
-    color: #99ccff;
-    border: 1px solid #2a4a5a;
+  background: #1a2a3a;
+  color: #99ccff;
+  border: 1px solid #2a4a5a;
 }
 
 .status.waiting {
-    background: #2a2a2a;
-    color: #cfcfcf;
-    border: 1px dashed #555555;
+  background: #2a2a2a;
+  color: #cfcfcf;
+  border: 1px dashed #555555;
 }
 
 .files-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    height: var(--filelist-height-desktop); /* desktop height */
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: var(--filelist-height-desktop); /* desktop height */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .files-list:empty::before,
 .files-list.empty::before {
-    content: attr(data-placeholder);
-    display: block;
-    color: #a0a0a0;
-    text-align: center;
-    padding: 12px 0;
+  content: attr(data-placeholder);
+  display: block;
+  color: #a0a0a0;
+  text-align: center;
+  padding: 12px 0;
 }
 
 .file-item {
-    background: #1a1a1a;
-    border: 1px solid #404040;
-    border-radius: 4px;
-    padding: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-    height: 44px;           /* fixed height */
-    box-sizing: border-box;
-    flex-shrink: 0;
+  background: #1a1a1a;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  padding: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  height: 44px; /* fixed height */
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* Desktop: filename 70%, actions 30% (considerando padding e gap) */
 .file-info {
-    flex: 0 0 70%;
-    overflow: hidden;
-    min-width: 0;
+  flex: 0 0 70%;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .file-actions {
-    flex: 0 0 30%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-    min-width: 0;
-    overflow: hidden;
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .file-item:hover {
-    border-color: #555555;
-    background: #222222;
+  border-color: #ff6b35;
+  background: #222222;
 }
 
-
 .file-name {
-    font-weight: 400;
-    color: #ffffff;
-    font-size: 0.95em;
-    margin-bottom: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-weight: 400;
+  color: #ffffff;
+  font-size: 0.95em;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-size {
-    color: #a0a0a0;
-    font-size: 0.8em;
+  color: #a0a0a0;
+  font-size: 0.8em;
 }
 
 /* Bold size in file list boxes */
 .file-actions .file-size {
-    font-weight: 600;
-    color: #cfcfcf;
-    white-space: nowrap; /* prevent wrap */
+  font-weight: 600;
+  color: #cfcfcf;
+  white-space: nowrap; /* prevent wrap */
 }
 
 .file-hosting {
-    font-size: 0.8em;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: 500;
-    margin-top: 4px;
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-top: 4px;
 }
 
 .file-hosting.github {
-    background-color: #24292e;
-    color: #f6f8fa;
+  background-color: #24292e;
+  color: #f6f8fa;
 }
 
 .file-hosting.google_drive {
-    background-color: #4285f4;
-    color: white;
+  background-color: #4285f4;
+  color: white;
 }
 
 .download-btn {
-    background: #404040;
-    color: #e0e0e0;
-    border: 1px solid #555555;
-    padding: 3px 5px; /* slightly narrower to give space to size */
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 400;
-    font-size: 0.8em;
-    transition: all 0.3s ease;
-    touch-action: manipulation;
-    min-height: 32px; /* Ridotta altezza */
-    line-height: 1.2;
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555555;
+  padding: 3px 5px; /* slightly narrower to give space to size */
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 0.8em;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+  min-height: 32px; /* Ridotta altezza */
+  line-height: 1.2;
 }
 
 .download-btn:hover {
-    background: #4a4a4a;
-    border-color: #666666;
+  background: #4a4a4a;
+  border-color: #666666;
 }
 
 .download-btn:active {
-    background: #353535;
+  background: #353535;
 }
 
 .download-btn:disabled {
-    background: #2a2a2a;
-    color: #666666;
-    cursor: not-allowed;
-    border-color: #333333;
+  background: #2a2a2a;
+  color: #666666;
+  cursor: not-allowed;
+  border-color: #333333;
 }
 
 .download-section {
-    text-align: center;
+  text-align: center;
 }
 
 .download-info {
-    margin-bottom: 12px;
-    font-size: 1em;
-    color: #e0e0e0;
+  margin-bottom: 12px;
+  font-size: 1em;
+  color: #e0e0e0;
 }
 
 .progress-bar {
-    width: 100%;
-    height: 12px;
-    background: #1a1a1a;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #404040;
+  width: 100%;
+  height: 12px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #404040;
 }
 
 .progress-fill {
-    height: 100%;
-    background: #555555;
-    width: 0%;
-    transition: width 0.3s ease;
-    border-radius: 4px;
+  height: 100%;
+  background: #555555;
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
 }
 
 /* footer removed */
 
 /* Animazioni */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-in {
-    animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .container {
-        padding: 8px;
-    }
-    
-    header {
-        padding: 6px 12px;
-        margin-bottom: 10px;
-    }
-    
-    header h1 {
-        font-size: 1.6em;
-        margin-bottom: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    header p {
-        font-size: 0.9em;
-    }
-    
-    /* Slightly smaller download info text on mobile */
-    .download-info {
-        font-size: 0.9em;
-    }
-    
-    main {
-        gap: 8px;
-    }
-    
-    section {
-        padding: 12px;
-        margin-bottom: 8px;
-    }
-    
-    section h2 {
-        font-size: 1.1em;
-        margin-bottom: 8px;
-        padding-bottom: 4px;
-    }
-    
-    /* Mobile: mantieni layout orizzontale ma ridimensionato */
-    .key-section .input-group, .package-section .input-group {
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-    }
-    
-    .key-section .input-group input, .package-section .input-group input {
-        width: 100%;
-        max-width: 60%;
-        min-width: 40%;
-        font-size: 0.9em;
-        padding: 6px 8px;
-    }
-    
-    /* Mobile: status sulla stessa riga ma più piccolo */
-    .key-section .status, .package-section .status {
-        margin-top: 0;
-        margin-left: 0;
-        margin-right: 6px;        /* mobile spacing on the right */
-        font-size: 0.7em;
-        padding: 4px 6px;
-        flex-shrink: 0;
-        width: 24ch;              /* compact fixed width on mobile */
-        max-width: none;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    /* Ensure input aligns cleanly with the right edge */
-    .key-section .input-group input, .package-section .input-group input {
-        margin-right: 0;
-    }
-    
-    /* Mobile: input-row nella files-section */
-    #filesSection .input-row {
-        width: 100%;
-        box-sizing: border-box;
-        margin: 0 auto;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-    }
-    
-    #filesSection .input-icon {
-        font-size: 1.2em;
-    }
-    
-    #filesSection .input-row input#searchInput {
-        width: 90%;
-        box-sizing: border-box;
-    }
-    
-    /* Mobile: files list fixed via variable */
-    .files-list {
-        height: var(--filelist-height-mobile);
-        max-height: var(--filelist-height-mobile);
-        min-height: var(--filelist-height-mobile);
-        overflow-y: auto;
-        overflow-x: hidden;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        padding: 0;
-    }
-    
-    /* Mobile: files-section specifica */
-    .files-section {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    
-    /* Mobile: filename 50%, actions 50% (considerando padding e gap) */
-    .file-info {
-        flex: 0 0 50%;
-        overflow: hidden;
-        min-width: 0;
-    }
-    
-    .file-actions {
-        flex: 0 0 50%;
-        justify-content: flex-end;
-        min-width: 0;
-        overflow: hidden;
-    }
-    
-    .file-item {
-        padding: 8px;
-        height: auto;
-        min-height: 50px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .file-name {
-        font-size: 0.9em;
-        margin-bottom: 2px;
-    }
-    
-    .file-size {
-        font-size: 0.75em;
-    }
-    
-    .download-btn {
-        padding: 4px 8px;
-        font-size: 0.75em;
-        min-height: 28px;
-    }
-    
-    /* Mobile: progress bar più alta */
-    .progress-bar {
-        height: 16px;
-    }
-    
-    /* footer removed */
+  .container {
+    padding: 8px;
+  }
+
+  header {
+    padding: 6px 12px;
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  header p {
+    font-size: 0.9em;
+  }
+
+  /* Slightly smaller download info text on mobile */
+  .download-info {
+    font-size: 0.9em;
+  }
+
+  main {
+    gap: 8px;
+  }
+
+  section {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  section h2 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+  }
+
+  /* Mobile: mantieni layout orizzontale ma ridimensionato */
+  .key-section .input-group,
+  .package-section .input-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .key-section .input-group input,
+  .package-section .input-group input {
+    width: 100%;
+    max-width: 60%;
+    min-width: 40%;
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  /* Mobile: status sulla stessa riga ma più piccolo */
+  .key-section .status,
+  .package-section .status {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 6px; /* mobile spacing on the right */
+    font-size: 0.7em;
+    padding: 4px 6px;
+    flex-shrink: 0;
+    width: 24ch; /* compact fixed width on mobile */
+    max-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Ensure input aligns cleanly with the right edge */
+  .key-section .input-group input,
+  .package-section .input-group input {
+    margin-right: 0;
+  }
+
+  /* Mobile: input-row nella files-section */
+  #filesSection .input-row {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  #filesSection .input-icon {
+    font-size: 1.2em;
+  }
+
+  #filesSection .input-row input#searchInput {
+    width: 90%;
+    box-sizing: border-box;
+  }
+
+  /* Mobile: files list fixed via variable */
+  .files-list {
+    height: var(--filelist-height-mobile);
+    max-height: var(--filelist-height-mobile);
+    min-height: var(--filelist-height-mobile);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  /* Mobile: files-section specifica */
+  .files-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Mobile: filename 50%, actions 50% (considerando padding e gap) */
+  .file-info {
+    flex: 0 0 50%;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .file-actions {
+    flex: 0 0 50%;
+    justify-content: flex-end;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .file-item {
+    padding: 8px;
+    height: auto;
+    min-height: 50px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .file-name {
+    font-size: 0.9em;
+    margin-bottom: 2px;
+  }
+
+  .file-size {
+    font-size: 0.75em;
+  }
+
+  .download-btn {
+    padding: 4px 8px;
+    font-size: 0.75em;
+    min-height: 28px;
+  }
+
+  /* Mobile: progress bar più alta */
+  .progress-bar {
+    height: 16px;
+  }
+
+  /* footer removed */
 }
 
 /* Mobile molto piccolo */
 @media (max-width: 480px) {
-    .container {
-        padding: 6px;
-    }
-    
-    header h1 {
-        font-size: 1.5em;
-    }
-    
-    header p {
-        font-size: 0.9em;
-    }
-    
-    section {
-        padding: 8px;
-    }
-    
-    /* Mobile molto piccolo: padding ancora più ridotto per key e package */
-    .key-section, .package-section {
-        padding: 1px 8px;
-    }
-    
-    section h2 {
-        font-size: 1em;
-    }
-    
-    /* Schermi molto piccoli: input ancora più compatto */
-    .key-section .input-group input, .package-section .input-group input {
-        max-width: 55%;
-        min-width: 35%;
-        font-size: 0.8em;
-        padding: 4px 6px;
-    }
-    
-    .key-section .status, .package-section .status {
-        font-size: 0.65em;
-        padding: 3px 4px;
-        max-width: 40%;
-    }
-    
-    /* Mobile molto piccolo: input-row ancora più compatto */
-    #filesSection .input-row {
-        gap: 4px;
-        width: 100%;
-        margin: 0 auto;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-    }
-    
-    #filesSection .input-row .input-icon {
-        font-size: 1em;
-    }
-    
-    #filesSection .input-row input#searchInput {
-        font-size: 0.9em;
-        padding: 6px 8px;
-    }
-    
-    .files-list {
-        height: var(--filelist-height-mobile);
-        max-height: var(--filelist-height-mobile);
-        min-height: var(--filelist-height-mobile);
-        overflow-y: auto;
-        overflow-x: hidden;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        padding: 0;
-    }
-    
-    .files-section {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
-    
-    /* Mobile molto piccolo: proporzioni mantenute ma più compatte */
-    .file-item {
-        padding: 6px;
-        min-height: 45px;
-    }
-    
-    .file-name {
-        font-size: 0.85em;
-    }
-    
-    .file-size {
-        font-size: 0.7em;
-    }
-    
-    .download-btn {
-        padding: 3px 6px;
-        font-size: 0.7em;
-        min-height: 26px;
-    }
+  .container {
+    padding: 6px;
+  }
+
+  header h1 {
+    font-size: 1.5em;
+  }
+
+  header p {
+    font-size: 0.9em;
+  }
+
+  section {
+    padding: 8px;
+  }
+
+  /* Mobile molto piccolo: padding ancora più ridotto per key e package */
+  .key-section,
+  .package-section {
+    padding: 1px 8px;
+  }
+
+  section h2 {
+    font-size: 1em;
+  }
+
+  /* Schermi molto piccoli: input ancora più compatto */
+  .key-section .input-group input,
+  .package-section .input-group input {
+    max-width: 55%;
+    min-width: 35%;
+    font-size: 0.8em;
+    padding: 4px 6px;
+  }
+
+  .key-section .status,
+  .package-section .status {
+    font-size: 0.65em;
+    padding: 3px 4px;
+    max-width: 40%;
+  }
+
+  /* Mobile molto piccolo: input-row ancora più compatto */
+  #filesSection .input-row {
+    gap: 4px;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  #filesSection .input-row .input-icon {
+    font-size: 1em;
+  }
+
+  #filesSection .input-row input#searchInput {
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  .files-list {
+    height: var(--filelist-height-mobile);
+    max-height: var(--filelist-height-mobile);
+    min-height: var(--filelist-height-mobile);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .files-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Mobile molto piccolo: proporzioni mantenute ma più compatte */
+  .file-item {
+    padding: 6px;
+    min-height: 45px;
+  }
+
+  .file-name {
+    font-size: 0.85em;
+  }
+
+  .file-size {
+    font-size: 0.7em;
+  }
+
+  .download-btn {
+    padding: 3px 6px;
+    font-size: 0.7em;
+    min-height: 26px;
+  }
 }
 
 /* Quick Startup Page Styles */
 .page-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .main-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-    justify-content: center;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  justify-content: center;
 }
 
 .main-tab-btn {
-    padding: 12px 20px;
-    background: #404040;
-    color: #e0e0e0;
-    border: 1px solid #555555;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    flex: 1;
-    max-width: 200px;
+  padding: 12px 20px;
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555555;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+  max-width: 200px;
 }
 
 .main-tab-btn:hover {
-    background: #4a4a4a;
-    border-color: #666666;
-    transform: translateY(-2px);
+  background: #4a4a4a;
+  border-color: #ff6b35;
+  transform: translateY(-2px);
 }
 
 .main-tab-btn.active {
-    background: #FF6B35;
-    border-color: #FF8C42;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  background: #ff6b35;
+  border-color: #ff8c42;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
 }
 
 .downloads-section {
-    background: #2d2d2d;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #2f2f2f;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.045), 0 6px 18px rgba(0,0,0,0.35);
-    transition: border-color 0.3s ease;
+  background: #2d2d2d;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ff6b35;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease;
 }
 
 .downloads-section:hover {
-    border-color: #777777;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.45);
+  border-color: #ff6b35;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 107, 53, 0.1),
+    0 10px 24px rgba(0, 0, 0, 0.45);
 }
 
 .downloads-section h2 {
-    color: #ffffff;
-    margin-bottom: 12px;
-    font-size: 1.3em;
-    font-weight: 600;
-    border-bottom: 1px solid #404040;
-    padding-bottom: 6px;
+  color: #ffffff;
+  margin-bottom: 12px;
+  font-size: 1.3em;
+  font-weight: 600;
+  border-bottom: 1px solid #404040;
+  padding-bottom: 6px;
 }
 
 .category-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .tab-btn {
-    padding: 6px 12px;
-    background: #404040;
-    color: #e0e0e0;
-    border: 1px solid #555555;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
-    font-weight: 400;
+  padding: 6px 12px;
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  font-weight: 400;
 }
 
 .tab-btn:hover {
-    background: #4a4a4a;
-    border-color: #666666;
+  background: #4a4a4a;
+  border-color: #666666;
 }
 
 .tab-btn.active {
-    background: #FF6B35;
-    border-color: #FF8C42;
-    color: #ffffff;
+  background: #ff6b35;
+  border-color: #ff8c42;
+  color: #ffffff;
 }
 
 .files-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 12px;
-    max-height: 450px;
-    overflow-y: auto;
-    padding: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: #555555 #2d2d2d;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 12px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #555555 #2d2d2d;
 }
 
 .files-grid::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .files-grid::-webkit-scrollbar-track {
-    background: #2d2d2d;
-    border-radius: 4px;
+  background: #2d2d2d;
+  border-radius: 4px;
 }
 
 .files-grid::-webkit-scrollbar-thumb {
-    background: #555555;
-    border-radius: 4px;
+  background: #555555;
+  border-radius: 4px;
 }
 
 .files-grid::-webkit-scrollbar-thumb:hover {
-    background: #666666;
+  background: #666666;
 }
 
 .file-card {
-    background: #1a1a1a;
-    border: 1px solid #404040;
-    border-radius: 6px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: all 0.3s ease;
-    height: 90px;
-    box-sizing: border-box;
-    overflow: hidden;
+  background: #1a1a1a;
+  border: 1px solid #404040;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  height: 90px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .file-card:hover {
-    border-color: #555555;
-    background: #222222;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-color: #ff6b35;
+  background: #222222;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .file-icon {
-    font-size: 2em;
-    flex-shrink: 0;
-    width: 40px;
-    text-align: center;
+  font-size: 2em;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 40px;
 }
 
 .file-card .file-info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    overflow: hidden;
-    height: 100%;
-    justify-content: center;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  height: 100%;
+  justify-content: center;
 }
 
 .file-card .file-info h3 {
-    color: #ffffff;
-    font-size: 1em;
-    font-weight: 600;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  color: #ffffff;
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-card .file-info p {
-    color: #b0b0b0;
-    font-size: 0.8em;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  color: #b0b0b0;
+  font-size: 0.8em;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-card .file-info .file-size {
-    color: #a0a0a0;
-    font-size: 0.75em;
-    font-weight: 500;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
+  color: #a0a0a0;
+  font-size: 0.75em;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .file-card .download-btn {
-    background: #404040;
-    color: #e0e0e0;
-    border: 1px solid #555555;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 400;
-    font-size: 0.8em;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-    min-width: 70px;
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555555;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 0.8em;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  min-width: 70px;
 }
 
 .dual-buttons {
-    display: flex;
-    gap: 6px;
-    flex-shrink: 0;
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .dual-buttons .download-btn {
-    min-width: 50px;
-    padding: 6px 8px;
-    font-size: 0.75em;
+  min-width: 50px;
+  padding: 6px 8px;
+  font-size: 0.75em;
 }
 
 .pc-btn {
-    background: #2d4a6b;
-    border-color: #3a5a7a;
+  background: #2d4a6b;
+  border-color: #3a5a7a;
 }
 
 .pc-btn:hover {
-    background: #3a5a7a;
-    border-color: #4a6a8a;
+  background: #3a5a7a;
+  border-color: #4a6a8a;
 }
 
 .android-btn {
-    background: #2d5a2d;
-    border-color: #3a6a3a;
+  background: #2d5a2d;
+  border-color: #3a6a3a;
 }
 
 .android-btn:hover {
-    background: #3a6a3a;
-    border-color: #4a7a4a;
+  background: #3a6a3a;
+  border-color: #4a7a4a;
 }
 
 .download-btn.disabled {
-    background: #2a2a2a;
-    color: #666666;
-    border-color: #333333;
-    cursor: not-allowed;
-    opacity: 0.6;
+  background: #2a2a2a;
+  color: #666666;
+  border-color: #333333;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .file-card .download-btn:hover {
-    background: #4a4a4a;
-    border-color: #666666;
+  background: #4a4a4a;
+  border-color: #666666;
 }
 
 .file-card .download-btn:active {
-    background: #353535;
+  background: #353535;
 }
 
 /* Responsive adjustments for Quick Startup */
 @media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-        position: static;
-    }
-    
-    .toggle-section {
-        position: static;
-        transform: none;
-        justify-content: center;
-    }
-    
-    .main-tabs {
-        flex-direction: column;
-        gap: 6px;
-    }
-    
-    .main-tab-btn {
-        padding: 10px 16px;
-        font-size: 0.9em;
-        max-width: none;
-    }
-    
-    .files-grid {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        max-height: 400px;
-        padding: 2px;
-    }
-    
-    .file-card {
-        height: 80px;
-        padding: 10px;
-        gap: 10px;
-    }
-    
-    .file-icon {
-        font-size: 1.5em;
-        width: 30px;
-    }
-    
-    .file-card .file-info h3 {
-        font-size: 0.9em;
-    }
-    
-    .file-card .file-info p {
-        font-size: 0.75em;
-    }
-    
-    .file-card .download-btn {
-        padding: 4px 8px;
-        font-size: 0.75em;
-        min-width: 60px;
-    }
-    
-    .dual-buttons .download-btn {
-        min-width: 40px;
-        padding: 4px 6px;
-        font-size: 0.7em;
-    }
-    
-    .category-tabs {
-        justify-content: center;
-    }
-    
-    .tab-btn {
-        padding: 4px 8px;
-        font-size: 0.8em;
-    }
-    
-    .downloads-section {
-        padding: 8px;
-    }
-    
-    .downloads-section h2 {
-        font-size: 1.1em;
-        margin-bottom: 8px;
-    }
+  .header-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    position: static;
+  }
+
+  .toggle-section {
+    position: static;
+    transform: none;
+    justify-content: center;
+  }
+
+  .main-tabs {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .main-tab-btn {
+    padding: 10px 16px;
+    font-size: 0.9em;
+    max-width: none;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    max-height: 400px;
+    padding: 2px;
+  }
+
+  .file-card {
+    height: 80px;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .file-icon {
+    font-size: 1.5em;
+    width: 30px;
+  }
+
+  .file-card .file-info h3 {
+    font-size: 0.9em;
+  }
+
+  .file-card .file-info p {
+    font-size: 0.75em;
+  }
+
+  .file-card .download-btn {
+    padding: 4px 8px;
+    font-size: 0.75em;
+    min-width: 60px;
+  }
+
+  .dual-buttons .download-btn {
+    min-width: 40px;
+    padding: 4px 6px;
+    font-size: 0.7em;
+  }
+
+  .category-tabs {
+    justify-content: center;
+  }
+
+  .tab-btn {
+    padding: 4px 8px;
+    font-size: 0.8em;
+  }
+
+  .downloads-section {
+    padding: 8px;
+  }
+
+  .downloads-section h2 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
 }
 
 @media (max-width: 480px) {
-    .main-tab-btn {
-        padding: 8px 12px;
-        font-size: 0.8em;
-    }
-    
-    .files-grid {
-        grid-template-columns: 1fr;
-        max-height: 350px;
-        gap: 6px;
-        padding: 1px;
-    }
-    
-    .file-card {
-        height: 75px;
-        padding: 8px;
-        gap: 8px;
-    }
-    
-    .file-icon {
-        font-size: 1.3em;
-        width: 25px;
-    }
-    
-    .file-card .file-info h3 {
-        font-size: 0.85em;
-    }
-    
-    .file-card .file-info p {
-        font-size: 0.7em;
-    }
-    
-    .file-card .download-btn {
-        padding: 3px 6px;
-        font-size: 0.7em;
-        min-width: 50px;
-    }
-    
-    .dual-buttons .download-btn {
-        min-width: 35px;
-        padding: 3px 4px;
-        font-size: 0.65em;
-    }
-    
-    .downloads-section {
-        padding: 6px;
-    }
-    
-    .downloads-section h2 {
-        font-size: 1em;
-        margin-bottom: 6px;
-    }
-    
-    .category-tabs {
-        gap: 4px;
-    }
-    
-    .tab-btn {
-        padding: 3px 6px;
-        font-size: 0.75em;
-    }
-    
-    footer {
-        margin-top: 16px;
-        padding: 10px 0;
-    }
-    
-    footer p {
-        font-size: 0.8em;
-    }
+  .main-tab-btn {
+    padding: 8px 12px;
+    font-size: 0.8em;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+    max-height: 350px;
+    gap: 6px;
+    padding: 1px;
+  }
+
+  .file-card {
+    height: 75px;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .file-icon {
+    font-size: 1.3em;
+    width: 25px;
+  }
+
+  .file-card .file-info h3 {
+    font-size: 0.85em;
+  }
+
+  .file-card .file-info p {
+    font-size: 0.7em;
+  }
+
+  .file-card .download-btn {
+    padding: 3px 6px;
+    font-size: 0.7em;
+    min-width: 50px;
+  }
+
+  .dual-buttons .download-btn {
+    min-width: 35px;
+    padding: 3px 4px;
+    font-size: 0.65em;
+  }
+
+  .downloads-section {
+    padding: 6px;
+  }
+
+  .downloads-section h2 {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+
+  .category-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 3px 6px;
+    font-size: 0.75em;
+  }
+
+  footer {
+    margin-top: 16px;
+    padding: 10px 0;
+  }
+
+  footer p {
+    font-size: 0.8em;
+  }
 }
 
 /* Utility classes */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .mb-20 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .mt-20 {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* Footer */
 footer {
-    margin-top: 20px;
-    padding: 12px 0;
-    text-align: center;
-    border-top: 1px solid #404040;
-    background: #1a1a1a;
+  margin-top: 20px;
+  padding: 12px 0;
+  text-align: center;
+  border-top: 1px solid #404040;
+  background: #1a1a1a;
 }
 
 footer p {
-    margin: 0;
-    color: #a0a0a0;
-    font-size: 0.9em;
+  margin: 0;
+  color: #a0a0a0;
+  font-size: 0.9em;
 }
 
 footer a {
-    color: #FF6B35;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  color: #ff6b35;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 footer a:hover {
-    color: #FF8C42;
-    text-decoration: underline;
+  color: #ff8c42;
+  text-decoration: underline;
 }
