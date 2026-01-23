@@ -81,6 +81,9 @@ header {
   font-size: 1.2em;
   transition: opacity 0.3s ease;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toggle-icon-left {
@@ -844,6 +847,10 @@ section h2 {
   transition: all 0.3s ease;
   flex: 1;
   max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Standardize gap here instead of margin on img */
 }
 
 .main-tab-btn:hover {
@@ -1102,7 +1109,7 @@ section h2 {
   }
 
   .main-tabs {
-    flex-direction: column;
+    flex-direction: row;
     gap: 6px;
   }
 
