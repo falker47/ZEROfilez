@@ -1122,7 +1122,7 @@ section h2 {
   .files-grid {
     grid-template-columns: 1fr;
     gap: 8px;
-    max-height: 400px;
+    max-height: 65vh;
     padding: 2px;
   }
 
@@ -1184,7 +1184,7 @@ section h2 {
 
   .files-grid {
     grid-template-columns: 1fr;
-    max-height: 350px;
+    max-height: 60vh;
     gap: 6px;
     padding: 1px;
   }
