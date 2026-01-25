@@ -1,5 +1,6 @@
 import { StartupManager } from './startup.js';
 import { CloudDecryptor } from './decryptor.js';
+import { ICONS } from './data.js';
 
 class App {
     constructor() {
@@ -8,6 +9,16 @@ class App {
         this.currentMode = 'startup'; // 'decryptor' or 'startup'
         this.initializeModeToggle();
         this.updateFooterYear();
+        this.initializeIcons();
+    }
+
+    initializeIcons() {
+        const inputIcons = document.querySelectorAll('.input-icon');
+        inputIcons.forEach(icon => {
+            if (icon.textContent.includes('🔎')) {
+                icon.innerHTML = `<img src="${ICONS.search}" alt="Search" style="width: 1em; height: 1em;">`;
+            }
+        });
     }
 
     initializeModeToggle() {

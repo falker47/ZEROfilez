@@ -46,7 +46,29 @@ export class StartupManager {
         });
 
         tabSections.forEach(section => {
-            section.classList.toggle('hidden', section.id !== `${tabId}-tab`);
+            const isTarget = section.id === `${tabId}-tab`;
+            section.classList.toggle('hidden', !isTarget);
+
+            if (isTarget) {
+                // Fix for empty APK section: check if grid is populated
+                const grid = section.querySelector('.files-grid, #pc-programs-list, #apk-files-list, #emulators-list');
+                // Use the ID inside the section or the section itself if it contains the list directly
+                const listContainerId = section.querySelector('[id$="-list"]')?.id;
+
+                if (listContainerId && (!grid || grid.children.length === 0)) {
+                    // Map list ID back to data key
+                    const validKeys = ['emulators', 'pc-programs', 'apk-files'];
+                    const dataKey = validKeys.find(key => listContainerId.startsWith(key));
+
+                    if (dataKey) {
+                        if (dataKey === 'emulators') {
+                            this.renderEmulatorsSection(dataKey, listContainerId);
+                        } else {
+                            this.renderSearchableSection(dataKey, listContainerId);
+                        }
+                    }
+                }
+            }
         });
     }
 

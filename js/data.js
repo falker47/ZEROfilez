@@ -1,3 +1,7 @@
+export const ICONS = {
+    search: 'https://api.iconify.design/line-md:search-twotone.svg?color=white'
+};
+
 export const startupData = {
     "emulators": [
         {
