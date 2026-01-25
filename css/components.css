@@ -85,7 +85,7 @@
 .input-group input[type="password"],
 .input-group input[type="text"],
 .input-group input[type="file"] {
-  padding: 8px 4;
+  padding: 10px 6px;
   border: 1px solid #555555;
   border-radius: 4px;
   font-size: 1em;
