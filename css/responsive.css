@@ -1,0 +1,422 @@
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 8px;
+  }
+
+  header {
+    padding: 6px 12px;
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  header p {
+    font-size: 0.9em;
+  }
+
+  /* Slightly smaller download info text on mobile */
+  .download-info {
+    font-size: 0.9em;
+  }
+
+  main {
+    gap: 8px;
+  }
+
+  section {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  section h2 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+  }
+
+  /* Mobile: mantieni layout orizzontale ma ridimensionato */
+  .key-section .input-group,
+  .package-section .input-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .key-section .input-group input,
+  .package-section .input-group input {
+    width: 100%;
+    max-width: 60%;
+    min-width: 40%;
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  /* Mobile: status sulla stessa riga ma più piccolo */
+  .key-section .status,
+  .package-section .status {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 6px; /* mobile spacing on the right */
+    font-size: 0.7em;
+    padding: 4px 6px;
+    flex-shrink: 0;
+    width: 24ch; /* compact fixed width on mobile */
+    max-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Ensure input aligns cleanly with the right edge */
+  .key-section .input-group input,
+  .package-section .input-group input {
+    margin-right: 0;
+  }
+
+  /* Mobile: input-row nella files-section */
+  #filesSection .input-row {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  #filesSection .input-icon {
+    font-size: 1.2em;
+  }
+
+  #filesSection .input-row input#searchInput {
+    width: 90%;
+    box-sizing: border-box;
+  }
+
+  /* Mobile: files list fixed via variable */
+  .files-list {
+    height: var(--filelist-height-mobile);
+    max-height: var(--filelist-height-mobile);
+    min-height: var(--filelist-height-mobile);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  /* Mobile: files-section specifica */
+  .files-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Mobile: filename 50%, actions 50% (considerando padding e gap) */
+  .file-info {
+    flex: 0 0 50%;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .file-actions {
+    flex: 0 0 50%;
+    justify-content: flex-end;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .file-item {
+    padding: 8px;
+    height: auto;
+    min-height: 50px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .file-name {
+    font-size: 0.9em;
+    margin-bottom: 2px;
+  }
+
+  .file-size {
+    font-size: 0.75em;
+  }
+
+  .download-btn {
+    padding: 4px 8px;
+    font-size: 0.75em;
+    min-height: 28px;
+  }
+
+  /* Mobile: progress bar più alta */
+  .progress-bar {
+    height: 16px;
+  }
+}
+
+/* Mobile molto piccolo */
+@media (max-width: 480px) {
+  .container {
+    padding: 6px;
+  }
+
+  header h1 {
+    font-size: 1.5em;
+  }
+
+  header p {
+    font-size: 0.9em;
+  }
+
+  section {
+    padding: 8px;
+  }
+
+  /* Mobile molto piccolo: padding ancora più ridotto per key e package */
+  .key-section,
+  .package-section {
+    padding: 1px 8px;
+  }
+
+  section h2 {
+    font-size: 1em;
+  }
+
+  /* Schermi molto piccoli: input ancora più compatto */
+  .key-section .input-group input,
+  .package-section .input-group input {
+    max-width: 55%;
+    min-width: 35%;
+    font-size: 0.8em;
+    padding: 4px 6px;
+  }
+
+  .key-section .status,
+  .package-section .status {
+    font-size: 0.65em;
+    padding: 3px 4px;
+    max-width: 40%;
+  }
+
+  /* Mobile molto piccolo: input-row ancora più compatto */
+  #filesSection .input-row {
+    gap: 4px;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  #filesSection .input-row .input-icon {
+    font-size: 1em;
+  }
+
+  #filesSection .input-row input#searchInput {
+    font-size: 0.9em;
+    padding: 6px 8px;
+  }
+
+  .files-list {
+    height: var(--filelist-height-mobile);
+    max-height: var(--filelist-height-mobile);
+    min-height: var(--filelist-height-mobile);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .files-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Mobile molto piccolo: proporzioni mantenute ma più compatte */
+  .file-item {
+    padding: 6px;
+    min-height: 45px;
+  }
+
+  .file-name {
+    font-size: 0.85em;
+  }
+
+  .file-size {
+    font-size: 0.7em;
+  }
+
+  .download-btn {
+    padding: 3px 6px;
+    font-size: 0.7em;
+    min-height: 26px;
+  }
+}
+
+/* Responsive adjustments for Quick Startup */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    position: static;
+  }
+
+  .toggle-section {
+    position: static;
+    transform: none;
+    justify-content: center;
+  }
+
+  .main-tabs {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .main-tab-btn {
+    padding: 10px 16px;
+    font-size: 0.9em;
+    max-width: none;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    max-height: 65vh;
+    padding: 2px;
+  }
+
+  .file-card {
+    height: 80px;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .file-icon {
+    font-size: 1.5em;
+    width: 30px;
+  }
+
+  .file-card .file-info h3 {
+    font-size: 0.9em;
+  }
+
+  .file-card .file-info p {
+    font-size: 0.75em;
+  }
+
+  .file-card .download-btn {
+    padding: 4px 8px;
+    font-size: 0.75em;
+    min-width: 60px;
+  }
+
+  .dual-buttons .download-btn {
+    min-width: 40px;
+    padding: 4px 6px;
+    font-size: 0.7em;
+  }
+
+  .category-tabs {
+    justify-content: center;
+  }
+
+  .tab-btn {
+    padding: 4px 8px;
+    font-size: 0.8em;
+  }
+
+  .downloads-section {
+    padding: 8px;
+  }
+
+  .downloads-section h2 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-tab-btn {
+    padding: 8px 12px;
+    font-size: 0.8em;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr;
+    max-height: 60vh;
+    gap: 6px;
+    padding: 1px;
+  }
+
+  .file-card {
+    height: 75px;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .file-icon {
+    font-size: 1.3em;
+    width: 25px;
+  }
+
+  .file-card .file-info h3 {
+    font-size: 0.85em;
+  }
+
+  .file-card .file-info p {
+    font-size: 0.7em;
+  }
+
+  .file-card .download-btn {
+    padding: 3px 6px;
+    font-size: 0.7em;
+    min-width: 50px;
+  }
+
+  .dual-buttons .download-btn {
+    min-width: 35px;
+    padding: 3px 4px;
+    font-size: 0.65em;
+  }
+
+  .downloads-section {
+    padding: 6px;
+  }
+
+  .downloads-section h2 {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+
+  .category-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 3px 6px;
+    font-size: 0.75em;
+  }
+
+  footer {
+    margin-top: 16px;
+    padding: 10px 0;
+  }
+
+  footer p {
+    font-size: 0.8em;
+  }
+}

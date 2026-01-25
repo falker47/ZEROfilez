@@ -1,0 +1,5 @@
+:root {
+  /* Centralized file list heights */
+  --filelist-height-desktop: 280px;
+  --filelist-height-mobile: 200px;
+}
