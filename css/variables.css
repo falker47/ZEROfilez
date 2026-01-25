@@ -4,9 +4,9 @@
   --filelist-height-mobile: 200px;
 
   /* --- Primitives --- */
-  --orange-500: #ffa500;
-  --orange-400: #ffb74d;
-  --orange-600: #cc8400;
+  --orange-500: #ff5500;
+  --orange-400: #ff7733;
+  --orange-600: #cc4400;
   
   --gray-900: #1a1a1a; /* Darkest (Body, Card, Inputs) */
   --gray-850: #222222; /* Hover on darkest */
@@ -27,8 +27,8 @@
   --accent-color: var(--orange-500);
   --accent-hover: var(--orange-400);
   --accent-active: var(--orange-600);
-  --accent-shadow: rgba(255, 165, 0, 0.3);
-  --accent-shadow-hover: rgba(255, 165, 0, 0.1);
+  --accent-shadow: rgba(255, 85, 0, 0.3);
+  --accent-shadow-hover: rgba(255, 85, 0, 0.1);
 
   /* Backgrounds */
   --bg-base:      var(--gray-900);
