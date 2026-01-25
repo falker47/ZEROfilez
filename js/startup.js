@@ -1,11 +1,24 @@
-import { startupData } from './data.js';
+import { ITEMS } from './data.js';
+import { ORDER } from './array.js';
+import { ICONS } from './icons.js';
 
 export class StartupManager {
     constructor() {
-        this.data = startupData;
+        this.data = this.buildData();
         this.initialize();
     }
 
+    buildData() {
+        const builtData = {};
+        for (const [category, ids] of Object.entries(ORDER)) {
+            if (ITEMS[category]) {
+                builtData[category] = ids.map(id => ITEMS[category][id]).filter(item => item !== undefined);
+            } else {
+                builtData[category] = [];
+            }
+        }
+        return builtData;
+    }
     initialize() {
         this.initializeTabs();
         this.renderAllSections();
@@ -16,7 +29,7 @@ export class StartupManager {
         const mainTabButtons = document.querySelectorAll('.main-tab-btn');
         mainTabButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                const tabId = e.target.dataset.tab;
+                const tabId = e.currentTarget.dataset.tab;
                 this.switchMainTab(tabId);
             });
         });
@@ -150,9 +163,9 @@ export class StartupManager {
     // Fallback chain configuration
     getFallbackChain(category) {
         const chain = {
-            'emulators': ['https://cdn.simpleicons.org/nintendo/white', '🎮'],
-            'pc-programs': ['https://cdn.simpleicons.org/windows/white', '💻'],
-            'apk-files': ['https://cdn.simpleicons.org/android/white', '📱']
+            'emulators': [ICONS.nintendoFallback, '🎮'],
+            'pc-programs': [ICONS.windowsFallback, `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`],
+            'apk-files': [ICONS.androidFallback, '📱']
         };
         return chain[category] || [null, '📂'];
     }
@@ -201,30 +214,61 @@ export class StartupManager {
 
         const type = dataKey === 'apk-files' ? 'android' : 'pc';
 
-        // Handle icon (URL vs emoji/fallback)
-        let iconHtml;
+        // Icon Container
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'file-icon';
+
         if (item.icon && item.icon.startsWith('http')) {
             const [fallbackImg, fallbackEmoji] = this.getFallbackChain(dataKey);
-            // Same chained logic
-            const onErrorLogic = `this.onerror=null; this.src='${fallbackImg}'; this.onerror=function(){ this.outerHTML='${fallbackEmoji}'; };`;
-            iconHtml = `<img src="${item.icon}" alt="${item.name}" class="file-icon-img" onerror="${onErrorLogic}">`;
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            img.className = 'file-icon-img';
+
+            img.onerror = function () {
+                this.onerror = null;
+                this.src = fallbackImg;
+                this.onerror = function () {
+                    // Check if fallbackEmoji is an HTML tag string
+                    if (fallbackEmoji.trim().startsWith('<')) {
+                        const temp = document.createElement('div');
+                        temp.innerHTML = fallbackEmoji;
+                        if (temp.firstElementChild) {
+                            this.replaceWith(temp.firstElementChild);
+                        } else {
+                            this.outerHTML = fallbackEmoji;
+                        }
+                    } else {
+                        this.replaceWith(document.createTextNode(fallbackEmoji));
+                    }
+                };
+            };
+            iconDiv.appendChild(img);
         } else {
-            const fallbackIcon = dataKey === 'apk-files' ? '📱' : '💻';
-            iconHtml = item.icon || fallbackIcon;
+            const fallbackIcon = dataKey === 'apk-files' ? '📱' : `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`;
+            iconDiv.innerHTML = item.icon || fallbackIcon;
         }
 
-        card.innerHTML = `
-            <div class="file-icon">${iconHtml}</div>
-            <div class="file-info">
-                <h3>${item.name}</h3>
-            </div>
-            <div class="dual-buttons">
-                <button class="download-btn ${type}-btn">Download</button>
-            </div>
-        `;
+        // Info Container
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'file-info';
+        const h3 = document.createElement('h3');
+        h3.textContent = item.name;
+        infoDiv.appendChild(h3);
 
-        const btn = card.querySelector('.download-btn');
+        // Buttons Container
+        const btnDiv = document.createElement('div');
+        btnDiv.className = 'dual-buttons';
+        const btn = document.createElement('button');
+        btn.className = `download-btn ${type}-btn`;
+        btn.textContent = 'Download';
         btn.addEventListener('click', (e) => this.handleSimpleDownload(e.target, item));
+        btnDiv.appendChild(btn);
+
+        card.appendChild(iconDiv);
+        card.appendChild(infoDiv);
+        card.appendChild(btnDiv);
 
         return card;
     }

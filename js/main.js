@@ -1,6 +1,6 @@
 import { StartupManager } from './startup.js';
 import { CloudDecryptor } from './decryptor.js';
-import { ICONS } from './data.js';
+import { ICONS } from './icons.js';
 
 class App {
     constructor() {
