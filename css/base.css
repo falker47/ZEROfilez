@@ -6,10 +6,16 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #1a1a1a;
+  background: var(--bg-body);
   min-height: 100vh;
-  color: #e0e0e0;
+  color: var(--text-main);
   line-height: 1.6;
+}
+
+@media (min-width: 769px) {
+  body {
+    zoom: 0.8;
+  }
 }
 
 /* Utility classes */

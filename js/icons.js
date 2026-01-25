@@ -15,6 +15,9 @@ export const ICONS = {
     switch: 'https://api.iconify.design/streamline-logos:nintendo-switch-logo-block.svg?color=white',
     wii: 'https://api.iconify.design/cib:wii.svg?color=white',
     nintendo3ds: 'https://api.iconify.design/cib:nintendo-3ds.svg?color=white',
+    psp: 'https://cdn.simpleicons.org/playstationportable/white',
+    ps1: 'https://cdn.simpleicons.org/playstation/white',
+    ps2: 'https://cdn.simpleicons.org/playstation2/white',
 
     // Browsers
     brave: 'https://cdn.simpleicons.org/brave/white',

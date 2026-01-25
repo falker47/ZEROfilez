@@ -79,6 +79,44 @@ export const ITEMS = {
             "android": {
                 "url": "https://github.com/PabloMK7/citra/releases/download/r608383e/citra-android-universal-20240927-608383e.apk"
             }
+        },
+        "psp": {
+            "id": "psp",
+            "name": "PlayStation Portable",
+            "icon": ICONS.psp,
+            "subtext": "PPSSPP",
+            "pc": {
+                "url": "https://www.ppsspp.org/files/1_19_3/PPSSPPSetup.exe"
+            },
+            "android": {
+                "appId": "org.ppsspp.ppsspp",
+                "appName": "PPSSPP",
+                "url": "https://play.google.com/store/apps/details?id=org.ppsspp.ppsspp"
+            }
+        },
+        "ps1": {
+            "id": "ps1",
+            "name": "PlayStation 1",
+            "icon": ICONS.ps1,
+            "subtext": "ePSXe",
+            "pc": {
+                "url": "https://www.epsxe.com/files/ePSXe2018.zip"
+            },
+            "android": {
+                "appId": "com.epsxe.ePSXe",
+                "appName": "ePSXe",
+                "url": "https://play.google.com/store/apps/details?id=com.epsxe.ePSXe&hl=en"
+            }
+        },
+        "ps2": {
+            "id": "ps2",
+            "name": "PlayStation 2",
+            "icon": ICONS.ps2,
+            "subtext": "PCSX2",
+            "pc": {
+                "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.6.2/pcsx2-v2.6.2-windows-x64-Qt.7z"
+            },
+            "android": null
         }
     },
     "pc-programs": {

@@ -2,4 +2,103 @@
   /* Centralized file list heights */
   --filelist-height-desktop: 280px;
   --filelist-height-mobile: 200px;
+
+  /* --- Primitives --- */
+  --orange-500: #ffa500;
+  --orange-400: #ffb74d;
+  --orange-600: #cc8400;
+  
+  --gray-900: #1a1a1a; /* Darkest (Body, Card, Inputs) */
+  --gray-850: #222222; /* Hover on darkest */
+  --gray-800: #2d2d2d; /* Surface, Header */
+  --gray-700: #404040; /* Buttons, Dark Borders */
+  --gray-650: #4a4a4a; /* Button Hover */
+  --gray-600: #555555; /* Default Borders */
+  
+  --gray-400: #666666; /* Disabled text, Light borders */
+  --gray-300: #a0a0a0; /* Muted text */
+  --gray-200: #b0b0b0; /* Secondary text */
+  --gray-100: #e0e0e0; /* Main text */
+  --white:    #ffffff;
+
+  /* --- Semantic Tokens --- */
+  
+  /* Accent */
+  --accent-color: var(--orange-500);
+  --accent-hover: var(--orange-400);
+  --accent-active: var(--orange-600);
+  --accent-shadow: rgba(255, 165, 0, 0.3);
+  --accent-shadow-hover: rgba(255, 165, 0, 0.1);
+
+  /* Backgrounds */
+  --bg-base:      var(--gray-900);
+  --bg-surface:   var(--gray-800);
+  --bg-hover:     var(--gray-850);
+  
+  --bg-body:      var(--bg-base);
+  --bg-card:      var(--bg-base);
+  --bg-input:     var(--bg-base);
+  --bg-footer:    var(--bg-base);
+  --bg-header:    var(--bg-surface);
+
+  /* Buttons */
+  --bg-button:          var(--gray-700);
+  --bg-button-hover:    var(--gray-650);
+  --bg-button-active:   #353535; /* Keep unique active state if needed, or map to primitive */
+  --bg-button-disabled: #2a2a2a;
+
+  /* Text */
+  --text-main:      var(--gray-100);
+  --text-heading:   var(--white);
+  --text-secondary: var(--gray-200);
+  --text-muted:     var(--gray-300);
+  --text-disabled:  var(--gray-400);
+  --text-waiting:   #cfcfcf;
+
+  /* Borders */
+  --border-default: var(--gray-600);
+  --border-light:   var(--gray-400);
+  --border-dark:    var(--gray-700);
+  --border-card:    #2f2f2f; /* Specific card border slightly distinct */
+  --border-header:  var(--border-dark);
+  --border-darker:  #333333;
+
+  /* Status Colors */
+  --status-success-bg: #1a3a1a; /* Keeps slight tint or reuse base? If strictly hex 1a1a1a, use base */
+  --status-success-text: #90ee90;
+  --status-success-border: #2a5a2a;
+
+  --status-error-bg: #3a1a1a;
+  --status-error-text: #ff9999;
+  --status-error-border: #5a2a2a;
+
+  --status-info-bg: #1a2a3a;
+  --status-info-text: #99ccff;
+  --status-info-border: #2a4a5a;
+
+  --status-waiting-bg: #2a2a2a;
+  --status-waiting-text: #cfcfcf;
+  --status-waiting-border: var(--border-default);
+
+  /* Platform/Brand Colors */
+  --btn-pc-bg: #2d4a6b;
+  --btn-pc-border: #3a5a7a;
+  --btn-pc-hover-bg: #3a5a7a;
+  --btn-pc-hover-border: #4a6a8a;
+
+  --btn-android-bg: #2d5a2d;
+  --btn-android-border: #3a6a3a;
+  --btn-android-hover-bg: #3a6a3a;
+  --btn-android-hover-border: #4a7a4a;
+  
+  --brand-github-bg: #24292e;
+  --brand-github-text: #f6f8fa;
+  --brand-gdrive-bg: #4285f4;
+  --brand-gdrive-text: #ffffff;
+
+  /* Shadows */
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 10px 24px rgba(0, 0, 0, 0.45);
+  --shadow-card-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.045);
 }

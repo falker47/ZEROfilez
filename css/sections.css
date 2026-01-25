@@ -1,12 +1,12 @@
 
 section {
-  background: #2d2d2d;
+  background: var(--bg-surface);
   padding: 6px;
   border-radius: 8px;
-  border: 1px solid #2f2f2f; /* card border a bit darker */
+  border: 1px solid var(--border-card); /* card border a bit darker */
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
-    0 6px 18px rgba(0, 0, 0, 0.35);
+    var(--shadow-inset),
+    var(--shadow-card);
   transition: border-color 0.3s ease;
   width: 100%;
   box-sizing: border-box;
@@ -19,18 +19,18 @@ section {
 }
 
 section:hover {
-  border-color: #ff6b35;
+  border-color: var(--accent-color);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 107, 53, 0.1),
-    0 10px 24px rgba(0, 0, 0, 0.45);
+    inset 0 0 0 1px var(--accent-shadow-hover),
+    var(--shadow-card-hover);
 }
 
 section h2 {
-  color: #ffffff;
+  color: var(--text-heading);
   margin-bottom: 10px;
   font-size: 1.3em;
   font-weight: 600; /* bold headings */
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid var(--border-dark);
   padding-bottom: 6px;
 }
 
@@ -114,14 +114,14 @@ section h2 {
 .files-list.empty::before {
   content: attr(data-placeholder);
   display: block;
-  color: #a0a0a0;
+  color: var(--text-muted);
   text-align: center;
   padding: 12px 0;
 }
 
 .file-item {
-  background: #1a1a1a;
-  border: 1px solid #404040;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
   border-radius: 4px;
   padding: 6px;
   display: flex;
@@ -151,13 +151,13 @@ section h2 {
 }
 
 .file-item:hover {
-  border-color: #ff6b35;
-  background: #222222;
+  border-color: var(--accent-color);
+  background: var(--bg-hover);
 }
 
 .file-name {
   font-weight: 400;
-  color: #ffffff;
+  color: var(--text-heading);
   font-size: 0.95em;
   margin-bottom: 2px;
   white-space: nowrap;
@@ -166,14 +166,14 @@ section h2 {
 }
 
 .file-size {
-  color: #a0a0a0;
+  color: var(--text-muted);
   font-size: 0.8em;
 }
 
 /* Bold size in file list boxes */
 .file-actions .file-size {
   font-weight: 600;
-  color: #cfcfcf;
+  color: var(--text-waiting);
   white-space: nowrap; /* prevent wrap */
 }
 
@@ -186,13 +186,13 @@ section h2 {
 }
 
 .file-hosting.github {
-  background-color: #24292e;
-  color: #f6f8fa;
+  background-color: var(--brand-github-bg);
+  color: var(--brand-github-text);
 }
 
 .file-hosting.google_drive {
-  background-color: #4285f4;
-  color: white;
+  background-color: var(--brand-gdrive-bg);
+  color: var(--brand-gdrive-text);
 }
 
 .download-section {
@@ -202,7 +202,7 @@ section h2 {
 .download-info {
   margin-bottom: 12px;
   font-size: 1em;
-  color: #e0e0e0;
+  color: var(--text-main);
 }
 
 /* Quick Startup Page Styles */
@@ -220,29 +220,29 @@ section h2 {
 }
 
 .downloads-section {
-  background: #2d2d2d;
+  background: var(--bg-surface);
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #ff6b35;
+  border: 1px solid var(--accent-color);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
-    0 6px 18px rgba(0, 0, 0, 0.35);
+    var(--shadow-inset),
+    var(--shadow-card);
   transition: border-color 0.3s ease;
 }
 
 .downloads-section:hover {
-  border-color: #ff6b35;
+  border-color: var(--accent-color);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 107, 53, 0.1),
-    0 10px 24px rgba(0, 0, 0, 0.45);
+    inset 0 0 0 1px var(--accent-shadow-hover),
+    var(--shadow-card-hover);
 }
 
 .downloads-section h2 {
-  color: #ffffff;
+  color: var(--text-heading);
   margin-bottom: 12px;
   font-size: 1.3em;
   font-weight: 600;
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid var(--border-dark);
   padding-bottom: 6px;
 }
 
@@ -254,7 +254,7 @@ section h2 {
   overflow-y: auto;
   padding: 4px;
   scrollbar-width: thin;
-  scrollbar-color: #555555 #2d2d2d;
+  scrollbar-color: var(--border-default) var(--bg-surface);
 }
 
 .files-grid::-webkit-scrollbar {
@@ -262,22 +262,22 @@ section h2 {
 }
 
 .files-grid::-webkit-scrollbar-track {
-  background: #2d2d2d;
+  background: var(--bg-surface);
   border-radius: 4px;
 }
 
 .files-grid::-webkit-scrollbar-thumb {
-  background: #555555;
+  background: var(--border-default);
   border-radius: 4px;
 }
 
 .files-grid::-webkit-scrollbar-thumb:hover {
-  background: #666666;
+  background: var(--border-light);
 }
 
 .file-card {
-  background: #1a1a1a;
-  border: 1px solid #404040;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
   border-radius: 6px;
   padding: 12px;
   display: flex;
@@ -290,10 +290,10 @@ section h2 {
 }
 
 .file-card:hover {
-  border-color: #ff6b35;
-  background: #222222;
+  border-color: var(--accent-color);
+  background: var(--bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-card-sm);
 }
 
 .file-icon {
@@ -325,7 +325,7 @@ section h2 {
 }
 
 .file-card .file-info h3 {
-  color: #ffffff;
+  color: var(--text-heading);
   font-size: 1em;
   font-weight: 600;
   margin: 0;
@@ -335,7 +335,7 @@ section h2 {
 }
 
 .file-card .file-info p {
-  color: #b0b0b0;
+  color: var(--text-secondary);
   font-size: 0.8em;
   margin: 0;
   white-space: nowrap;
@@ -344,7 +344,7 @@ section h2 {
 }
 
 .file-card .file-info .file-size {
-  color: #a0a0a0;
+  color: var(--text-muted);
   font-size: 0.75em;
   font-weight: 500;
   margin: 0;
@@ -355,9 +355,9 @@ section h2 {
 }
 
 .file-card .download-btn {
-  background: #404040;
-  color: #e0e0e0;
-  border: 1px solid #555555;
+  background: var(--bg-button);
+  color: var(--text-main);
+  border: 1px solid var(--border-default);
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -369,8 +369,8 @@ section h2 {
 }
 
 .file-card .download-btn:hover {
-  background: #4a4a4a;
-  border-color: #666666;
+  background: var(--bg-button-hover);
+  border-color: var(--border-light);
 }
 
 .file-card .download-btn:active {

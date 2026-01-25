@@ -35,10 +35,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #404040;
+  background-color: var(--bg-button);
   transition: 0.3s;
   border-radius: 24px;
-  border: 1px solid #555555;
+  border: 1px solid var(--border-default);
 }
 
 .toggle-slider:before {
@@ -48,14 +48,14 @@
   width: 18px;
   left: 2px;
   bottom: 2px;
-  background-color: #e0e0e0;
+  background-color: var(--text-main);
   transition: 0.3s;
   border-radius: 50%;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #ff6b35;
-  border-color: #ff8c42;
+  background-color: var(--accent-color);
+  border-color: var(--accent-hover);
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
@@ -63,7 +63,7 @@
 }
 
 .toggle-label {
-  color: #b0b0b0;
+  color: var(--text-secondary);
   font-size: 0.9em;
   font-weight: 400;
   white-space: nowrap;
@@ -78,7 +78,7 @@
 
 .input-group label {
   font-weight: 400;
-  color: #c0c0c0;
+  color: var(--text-waiting);
   font-size: 1em;
 }
 
@@ -86,39 +86,39 @@
 .input-group input[type="text"],
 .input-group input[type="file"] {
   padding: 10px 6px;
-  border: 1px solid #555555;
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   font-size: 1em;
   transition: border-color 0.3s ease;
-  background: #1a1a1a;
-  color: #e0e0e0;
+  background: var(--bg-input);
+  color: var(--text-main);
   touch-action: manipulation;
 }
 
 .input-group input[type="password"]:focus,
 .input-group input[type="text"]:focus {
   outline: none;
-  border-color: #666666;
+  border-color: var(--border-light);
 }
 
 .input-group input[type="file"] {
   padding: 8px;
-  border: 1px dashed #555555;
-  background: #1a1a1a;
+  border: 1px dashed var(--border-default);
+  background: var(--bg-input);
   cursor: pointer;
-  color: #a0a0a0;
+  color: var(--text-muted);
   touch-action: manipulation;
 }
 
 .input-group input[type="file"]:hover {
-  border-color: #666666;
+  border-color: var(--border-light);
 }
 
 .input-group button {
   padding: 6px 10px;
-  background: #404040;
-  color: #e0e0e0;
-  border: 1px solid #555555;
+  background: var(--bg-button);
+  color: var(--text-main);
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
@@ -127,7 +127,7 @@
 }
 
 .input-group button:hover {
-  background: #4a4a4a;
+  background: var(--bg-button-hover);
 }
 
 .status {
@@ -140,33 +140,33 @@
 }
 
 .status.success {
-  background: #1a3a1a;
-  color: #90ee90;
-  border: 1px solid #2a5a2a;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
+  border: 1px solid var(--status-success-border);
 }
 
 .status.error {
-  background: #3a1a1a;
-  color: #ff9999;
-  border: 1px solid #5a2a2a;
+  background: var(--status-error-bg);
+  color: var(--status-error-text);
+  border: 1px solid var(--status-error-border);
 }
 
 .status.info {
-  background: #1a2a3a;
-  color: #99ccff;
-  border: 1px solid #2a4a5a;
+  background: var(--status-info-bg);
+  color: var(--status-info-text);
+  border: 1px solid var(--status-info-border);
 }
 
 .status.waiting {
-  background: #2a2a2a;
-  color: #cfcfcf;
-  border: 1px dashed #555555;
+  background: var(--status-waiting-bg);
+  color: var(--status-waiting-text);
+  border: 1px dashed var(--status-waiting-border);
 }
 
 .download-btn {
-  background: #404040;
-  color: #e0e0e0;
-  border: 1px solid #555555;
+  background: var(--bg-button);
+  color: var(--text-main);
+  border: 1px solid var(--border-default);
   padding: 3px 5px; /* slightly narrower to give space to size */
   border-radius: 4px;
   cursor: pointer;
@@ -179,33 +179,33 @@
 }
 
 .download-btn:hover {
-  background: #4a4a4a;
-  border-color: #666666;
+  background: var(--bg-button-hover);
+  border-color: var(--border-light);
 }
 
 .download-btn:active {
-  background: #353535;
+  background: var(--bg-button-active);
 }
 
 .download-btn:disabled {
-  background: #2a2a2a;
-  color: #666666;
+  background: var(--bg-button-disabled);
+  color: var(--text-disabled);
   cursor: not-allowed;
-  border-color: #333333;
+  border-color: var(--border-darker);
 }
 
 .progress-bar {
   width: 100%;
   height: 12px;
-  background: #1a1a1a;
+  background: var(--bg-input);
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid #404040;
+  border: 1px solid var(--border-dark);
 }
 
 .progress-fill {
   height: 100%;
-  background: #555555;
+  background: var(--border-default);
   width: 0%;
   transition: width 0.3s ease;
   border-radius: 4px;
@@ -213,9 +213,9 @@
 
 .main-tab-btn {
   padding: 12px 20px;
-  background: #404040;
-  color: #e0e0e0;
-  border: 1px solid #555555;
+  background: var(--bg-button);
+  color: var(--text-main);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   cursor: pointer;
   font-size: 1em;
@@ -230,16 +230,16 @@
 }
 
 .main-tab-btn:hover {
-  background: #4a4a4a;
-  border-color: #ff6b35;
+  background: var(--bg-button-hover);
+  border-color: var(--accent-color);
   transform: translateY(-2px);
 }
 
 .main-tab-btn.active {
-  background: #ff6b35;
-  border-color: #ff8c42;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  background: var(--accent-color);
+  border-color: var(--accent-hover);
+  color: var(--text-heading);
+  box-shadow: 0 4px 12px var(--accent-shadow);
 }
 
 .category-tabs {
@@ -250,9 +250,9 @@
 
 .tab-btn {
   padding: 6px 12px;
-  background: #404040;
-  color: #e0e0e0;
-  border: 1px solid #555555;
+  background: var(--bg-button);
+  color: var(--text-main);
+  border: 1px solid var(--border-default);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
@@ -261,14 +261,14 @@
 }
 
 .tab-btn:hover {
-  background: #4a4a4a;
-  border-color: #666666;
+  background: var(--bg-button-hover);
+  border-color: var(--border-light);
 }
 
 .tab-btn.active {
-  background: #ff6b35;
-  border-color: #ff8c42;
-  color: #ffffff;
+  background: var(--accent-color);
+  border-color: var(--accent-hover);
+  color: var(--text-heading);
 }
 
 /* Dual Buttons for Startup cards */
@@ -285,29 +285,29 @@
 }
 
 .pc-btn {
-  background: #2d4a6b;
-  border-color: #3a5a7a;
+  background: var(--btn-pc-bg);
+  border-color: var(--btn-pc-border);
 }
 
 .pc-btn:hover {
-  background: #3a5a7a;
-  border-color: #4a6a8a;
+  background: var(--btn-pc-hover-bg);
+  border-color: var(--btn-pc-hover-border);
 }
 
 .android-btn {
-  background: #2d5a2d;
-  border-color: #3a6a3a;
+  background: var(--btn-android-bg);
+  border-color: var(--btn-android-border);
 }
 
 .android-btn:hover {
-  background: #3a6a3a;
-  border-color: #4a7a4a;
+  background: var(--btn-android-hover-bg);
+  border-color: var(--btn-android-hover-border);
 }
 
 .download-btn.disabled {
-  background: #2a2a2a;
-  color: #666666;
-  border-color: #333333;
+  background: var(--bg-button-disabled);
+  color: var(--text-disabled);
+  border-color: var(--border-darker);
   cursor: not-allowed;
   opacity: 0.6;
 }

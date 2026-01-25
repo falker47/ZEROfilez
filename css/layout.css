@@ -9,10 +9,10 @@
 
 header {
   margin-bottom: 12px;
-  background: #2d2d2d;
+  background: var(--bg-header);
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #404040;
+  border: 1px solid var(--border-header);
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
@@ -61,7 +61,7 @@ header {
 
 header h1 {
   font-size: 2.3em; /* slightly larger for emphasis */
-  color: #ffffff;
+  color: var(--text-heading);
   margin-bottom: 2px; /* tighter spacing to subtitle */
   font-weight: 600; /* stronger weight for prominence */
   letter-spacing: 0.3px;
@@ -74,7 +74,7 @@ header h1 {
 
 header p {
   font-size: 1.05em; /* slightly smaller */
-  color: #b0b0b0;
+  color: var(--text-secondary);
   font-weight: 300;
 }
 
@@ -102,23 +102,23 @@ footer {
   margin-top: 20px;
   padding: 12px 0;
   text-align: center;
-  border-top: 1px solid #404040;
-  background: #1a1a1a;
+  border-top: 1px solid var(--border-dark);
+  background: var(--bg-footer);
 }
 
 footer p {
   margin: 0;
-  color: #a0a0a0;
+  color: var(--text-muted);
   font-size: 0.9em;
 }
 
 footer a {
-  color: #ff6b35;
+  color: var(--accent-color);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 footer a:hover {
-  color: #ff8c42;
+  color: var(--accent-hover);
   text-decoration: underline;
 }

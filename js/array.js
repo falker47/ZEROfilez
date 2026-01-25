@@ -5,7 +5,10 @@ export const ORDER = {
         "switch",
         "gba",
         "gbc",
-        "gc_wii"
+        "gc_wii",
+        "psp",
+        "ps1",
+        "ps2"
     ],
     "pc-programs": [
         "brave-browser",
