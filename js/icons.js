@@ -33,11 +33,9 @@ export const ICONS = {
 
     // Utilities
     sharex: 'https://cdn.simpleicons.org/sharex/white',
-    wiztree: 'https://api.iconify.design/mdi:harddisk.svg?color=white',
-    powertoys: 'https://cdn.simpleicons.org/powertoys/white',
+    wiztree: 'https://api.iconify.design/streamline-cyber:harddisk-4.svg?color=white',
     patchmypc: 'https://api.iconify.design/mdi:update.svg?color=white',
-    everything: 'https://api.iconify.design/fluent:search-visual-24-filled.svg?color=white',
-    espanso: 'https://api.iconify.design/mdi:text-box-search-outline.svg?color=white',
+    everything: 'https://api.iconify.design/mdi:text-box-search-outline.svg?color=white',
     pcloud: 'https://api.iconify.design/arcticons:pcloud.svg?color=white',
     obsidian: 'https://cdn.simpleicons.org/obsidian/white',
 
