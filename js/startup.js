@@ -172,9 +172,9 @@ export class StartupManager {
     // Fallback chain configuration
     getFallbackChain(category) {
         const chain = {
-            'emulation': [ICONS.nintendoFallback, '🎮'],
-            'pc-programs': [ICONS.windowsFallback, `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`],
-            'apk-files': [ICONS.androidFallback, '📱']
+            'emulation': [ICONS.emulationTab, `<img src="${ICONS.emulationTab}" class="file-icon-img" alt="Emulation">`],
+            'pc-programs': [ICONS.laptop, `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`],
+            'apk-files': [ICONS.android, `<img src="${ICONS.android}" class="file-icon-img" alt="Android">`]
         };
         return chain[category] || [null, '📂'];
     }
@@ -185,19 +185,8 @@ export class StartupManager {
 
         const subtextHtml = item.subtext ? item.subtext.split('\n').map(line => `<p>${line}</p>`).join('') : '';
 
-        // Handle icon (URL vs emoji)
-        let iconHtml;
-        if (item.icon && item.icon.startsWith('http')) {
-            const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulation');
-            // Logic: Try exact icon -> Try generic image -> Show Emoji
-            const onErrorLogic = `this.onerror=null; this.src='${fallbackImg}'; this.onerror=function(){ this.outerHTML='${fallbackEmoji}'; };`;
-            iconHtml = `<img src="${item.icon}" alt="${item.name}" class="file-icon-img" onerror="${onErrorLogic}">`;
-        } else {
-            iconHtml = item.icon || '🎮';
-        }
-
         card.innerHTML = `
-            <div class="file-icon">${iconHtml}</div>
+            <div class="file-icon"></div>
             <div class="file-info">
                 <h3>${item.name}</h3>
                 ${subtextHtml}
@@ -209,9 +198,36 @@ export class StartupManager {
             </div>
         `;
 
+        const iconContainer = card.querySelector('.file-icon');
+        if (item.icon && item.icon.startsWith('http')) {
+            const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulation');
+
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = item.name;
+            img.className = 'file-icon-img';
+
+            img.onerror = function () {
+                this.onerror = null;
+                this.src = fallbackImg;
+                this.onerror = function () {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = fallbackEmoji;
+                    if (temp.firstElementChild) {
+                        this.replaceWith(temp.firstElementChild);
+                    } else {
+                        this.outerHTML = fallbackEmoji;
+                    }
+                };
+            };
+            iconContainer.appendChild(img);
+        } else {
+            iconContainer.innerHTML = item.icon || `<img src="${ICONS.emulationTab}" class="file-icon-img" alt="Emulation">`;
+        }
+
         card.querySelectorAll('.download-btn').forEach(btn => {
             if (!btn.disabled) {
-                btn.addEventListener('click', (e) => this.handleDownload(e.target, item));
+                btn.addEventListener('click', (e) => this.handleDownload(e.currentTarget, item));
             }
         });
 
@@ -256,7 +272,9 @@ export class StartupManager {
             };
             iconDiv.appendChild(img);
         } else {
-            const fallbackIcon = dataKey === 'apk-files' ? '📱' : `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`;
+            const fallbackIcon = dataKey === 'apk-files' ?
+                `<img src="${ICONS.android}" class="file-icon-img" alt="Android">` :
+                `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`;
             iconDiv.innerHTML = item.icon || fallbackIcon;
         }
 

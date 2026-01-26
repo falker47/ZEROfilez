@@ -5,6 +5,7 @@ export const ICONS = {
     search: 'https://api.iconify.design/line-md:search-twotone.svg?color=white',
     download: 'https://api.iconify.design/ri:download-2-fill.svg?color=white',
     lock: 'https://api.iconify.design/material-symbols:lock.svg?color=white',
+    emulationTab: 'https://api.iconify.design/solar:gamepad-bold.svg?color=white',
 
     // Platform Icons
     windows: 'https://api.iconify.design/uim:windows.svg?color=white',
@@ -27,6 +28,8 @@ export const ICONS = {
     psp: 'https://cdn.simpleicons.org/playstationportable/white',
     ps1: 'https://cdn.simpleicons.org/playstation/white',
     ps2: 'https://cdn.simpleicons.org/playstation2/white',
+    ps3: 'https://cdn.simpleicons.org/playstation3/white',
+    xbox: 'https://api.iconify.design/fa-brands:xbox.svg?color=white',
     retroArch: 'https://cdn.simpleicons.org/retroarch/white',
     scummvm: 'https://api.iconify.design/codicon:vm-running.svg?color=white',
     wiiu: 'https://api.iconify.design/cib:wiiu.svg?color=white',

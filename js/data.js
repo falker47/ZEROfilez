@@ -160,6 +160,36 @@ export const ITEMS = {
             },
             "android": null
         },
+        "ps3": {
+            "id": "ps3",
+            "name": "PlayStation 3",
+            "icon": ICONS.ps3,
+            "subtext": "RPCS3",
+            "pc": {
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-0ee3e24b25a119ac8810c30a5065ab846419214b/rpcs3-v0.0.39-18736-0ee3e24b_win64_msvc.7z"
+            },
+            "android": null
+        },
+        "xemu": {
+            "id": "xemu",
+            "name": "Xbox",
+            "icon": ICONS.xbox,
+            "subtext": "Xemu",
+            "pc": {
+                "url": "https://github.com/xemu-project/xemu/releases/latest/download/xemu-0.8.133-windows-x86_64.zip"
+            },
+            "android": null
+        },
+        "xenia": {
+            "id": "xenia",
+            "name": "Xbox 360",
+            "icon": ICONS.xbox,
+            "subtext": "Xenia",
+            "pc": {
+                "url": "https://github.com/xenia-project/release-builds-windows/releases/latest/download/xenia_master.zip"
+            },
+            "android": null
+        },
         "retroarch": {
             "id": "retroarch",
             "name": "Multi-System",

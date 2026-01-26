@@ -9,10 +9,13 @@ export const ORDER = {
         "gbc",
         "gc_wii",
         "wiiu",
-        "psp",
         "ps1",
         "ps2",
+        "ps3",
+        "psp",
         "psvita",
+        "xemu",
+        "xenia",
         "pkhex"
     ],
     "pc-programs": [
