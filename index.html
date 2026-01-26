@@ -1,130 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZEROfilez Cloud Decryptor</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="title-section">
-                    <h1 id="mainTitle">ZEROfilez Quick Startup</h1>
-                    <p id="mainSubtitle">Download useful files for free</p>
+      <header>
+        <div class="header-content">
+          <div class="title-section">
+            <h1 id="mainTitle">ZEROfilez Quick Startup</h1>
+            <p id="mainSubtitle">Download useful files for free</p>
+          </div>
+          <div class="toggle-section">
+            <span class="toggle-icon-left"
+              ><img
+                data-icon="download"
+                alt="Startup"
+                style="width: 1.2em; height: 1.2em"
+            /></span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="modeToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-icon-right"
+              ><img
+                data-icon="lock"
+                alt="Decryptor"
+                style="width: 1.2em; height: 1.2em"
+            /></span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <!-- Cloud Decryptor Page -->
+        <div id="cloudDecryptorPage" class="page-content hidden">
+          <div class="row two-col">
+            <!-- User Key Section -->
+            <section class="key-section">
+              <h2>🔑 User Key</h2>
+              <div class="input-group">
+                <div class="status waiting" id="keyStatus">
+                  ⏳ Waiting for key
                 </div>
-                <div class="toggle-section">
-                    <span class="toggle-icon-left"><img src="https://api.iconify.design/ri:download-2-fill.svg?color=white" alt="Startup" style="width: 1.2em; height: 1.2em;"></span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="modeToggle">
-                        <span class="toggle-slider"></span>
-                    </label>
-                    <span class="toggle-icon-right"><img src="https://api.iconify.design/material-symbols:lock.svg?color=white" alt="Decryptor" style="width: 1.2em; height: 1.2em;"></span>
+                <input type="file" id="userKeyFile" accept=".bin,.key" />
+              </div>
+            </section>
+
+            <!-- Package Section -->
+            <section class="package-section">
+              <h2>📦 Encrypted Package</h2>
+              <div class="input-group">
+                <div class="status waiting" id="packageStatus">
+                  ⏳ Waiting for package
                 </div>
+                <input type="file" id="packageFile" accept=".enc" />
+              </div>
+            </section>
+          </div>
+
+          <!-- File List Section -->
+          <section class="files-section" id="filesSection">
+            <h2>📁 Your Files</h2>
+            <div class="input-group">
+              <div class="input-row">
+                <span class="input-icon" aria-hidden="true">🔎</span>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Type to filter files..."
+                />
+              </div>
             </div>
-        </header>
+            <div
+              class="files-list"
+              id="filesList"
+              data-placeholder="No files to show yet. Upload an encrypted package to see your files."
+            ></div>
+          </section>
 
-        <main>
-            <!-- Cloud Decryptor Page -->
-            <div id="cloudDecryptorPage" class="page-content hidden">
-                <div class="row two-col">
-                    <!-- User Key Section -->
-                    <section class="key-section">
-                        <h2>🔑 User Key</h2>
-                        <div class="input-group">
-                            <div class="status waiting" id="keyStatus">⏳ Waiting for key</div>
-                            <input type="file" id="userKeyFile" accept=".bin,.key">
-                        </div>
-                    </section>
-
-                    <!-- Package Section -->
-                    <section class="package-section">
-                        <h2>📦 Encrypted Package</h2>
-                        <div class="input-group">
-                            <div class="status waiting" id="packageStatus">⏳ Waiting for package</div>
-                            <input type="file" id="packageFile" accept=".enc">
-                        </div>
-                    </section>
-                </div>
-
-                <!-- File List Section -->
-                <section class="files-section" id="filesSection">
-                    <h2>📁 Your Files</h2>
-                    <div class="input-group">
-                        <div class="input-row">
-                            <span class="input-icon" aria-hidden="true">🔎</span>
-                            <input type="text" id="searchInput" placeholder="Type to filter files..." />
-                        </div>
-                    </div>
-                    <div class="files-list" id="filesList" data-placeholder="No files to show yet. Upload an encrypted package to see your files."></div>
-                </section>
-
-                <!-- Download Section -->
-                <section class="download-section" id="downloadSection">
-                    <div class="download-info" id="downloadInfo">🔒 Encryption happens locally in your browser. No data is sent to any server.</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                </section>
+          <!-- Download Section -->
+          <section class="download-section" id="downloadSection">
+            <div class="download-info" id="downloadInfo">
+              🔒 Encryption happens locally in your browser. No data is sent to
+              any server.
             </div>
-
-            <!-- Quick Startup Page -->
-            <div id="quickStartupPage" class="page-content">
-                <!-- Main Tabs -->
-                <div class="main-tabs">
-                    <button class="main-tab-btn active" data-tab="emulators">
-                        <img src="https://api.iconify.design/ion:game-controller.svg?color=white" alt="Emulators" style="width: 1.2em; height: 1.2em;"> Emulators
-                    </button>
-                    <button class="main-tab-btn" data-tab="pc-programs">
-                        <img src="https://api.iconify.design/uim:windows.svg?color=white" alt="PC Programs" style="width: 1.2em; height: 1.2em;"> PC Programs
-                    </button>
-                    <button class="main-tab-btn" data-tab="apk-files">
-                        <img src="https://api.iconify.design/uiw:android.svg?color=white" alt="APK Files" style="width: 1.2em; height: 1.2em;"> APK Files
-                    </button>
-                </div>
-
-                <!-- Emulators Section -->
-                <section class="downloads-section" id="emulators-tab">
-                    <div id="emulators-list">
-                        <!-- Content populated by startup.js -->
-                    </div>
-                </section>
-
-                <!-- PC Programs Section -->
-                <section class="downloads-section hidden" id="pc-programs-tab">
-                    <div class="input-group search-container">
-                        <div class="input-row">
-                            <span class="input-icon" aria-hidden="true">🔎</span>
-                            <input type="text" id="pcSearchInput" placeholder="Search PC programs..." />
-                        </div>
-                    </div>
-                    <div id="pc-programs-list">
-                         <!-- Content populated by startup.js -->
-                    </div>
-                </section>
-
-                <!-- APK Section -->
-                <section class="downloads-section hidden" id="apk-files-tab">
-                    <div class="input-group search-container">
-                         <div class="input-row">
-                            <span class="input-icon" aria-hidden="true">🔎</span>
-                            <input type="text" id="apkSearchInput" placeholder="Search APK files..." />
-                        </div>
-                    </div>
-                    <div id="apk-files-list">
-                         <!-- Content populated by startup.js -->
-                    </div>
-                </section>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
             </div>
-        </main>
-        
-        <footer>
-            <p> <a href="https://falker47.github.io/Nexus-portfolio/" target="_blank" rel="noopener noreferrer">&copy; <span id="currentYear"></span> Maurizio Falconi - falker47</a></p>
-        </footer>
+          </section>
+        </div>
+
+        <!-- Quick Startup Page -->
+        <div id="quickStartupPage" class="page-content">
+          <!-- Main Tabs -->
+          <div class="main-tabs">
+            <button class="main-tab-btn active" data-tab="emulation">
+              <img
+                src="https://api.iconify.design/ion:game-controller.svg?color=white"
+                alt="Emulation"
+                style="width: 1.2em; height: 1.2em"
+              />
+              Emulation
+            </button>
+            <button class="main-tab-btn" data-tab="pc-programs">
+              <img
+                data-icon="windows"
+                alt="PC Programs"
+                style="width: 1.2em; height: 1.2em"
+              />
+              PC Programs
+            </button>
+            <button class="main-tab-btn" data-tab="apk-files">
+              <img
+                data-icon="android"
+                alt="APK Files"
+                style="width: 1.2em; height: 1.2em"
+              />
+              APK Files
+            </button>
+          </div>
+
+          <!-- Emulation Section -->
+          <section class="downloads-section" id="emulation-tab">
+            <div class="input-group search-container">
+              <div class="input-row">
+                <span class="input-icon" aria-hidden="true">🔎</span>
+                <input
+                  type="text"
+                  id="emulationSearchInput"
+                  placeholder="Search emulators..."
+                />
+              </div>
+            </div>
+            <div id="emulation-list">
+              <!-- Content populated by startup.js -->
+            </div>
+          </section>
+
+          <!-- PC Programs Section -->
+          <section class="downloads-section hidden" id="pc-programs-tab">
+            <div class="input-group search-container">
+              <div class="input-row">
+                <span class="input-icon" aria-hidden="true">🔎</span>
+                <input
+                  type="text"
+                  id="pcSearchInput"
+                  placeholder="Search PC programs..."
+                />
+              </div>
+            </div>
+            <div id="pc-programs-list">
+              <!-- Content populated by startup.js -->
+            </div>
+          </section>
+
+          <!-- APK Section -->
+          <section class="downloads-section hidden" id="apk-files-tab">
+            <div class="input-group search-container">
+              <div class="input-row">
+                <span class="input-icon" aria-hidden="true">🔎</span>
+                <input
+                  type="text"
+                  id="apkSearchInput"
+                  placeholder="Search APK files..."
+                />
+              </div>
+            </div>
+            <div id="apk-files-list">
+              <!-- Content populated by startup.js -->
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <p>
+          <a
+            href="https://falker47.github.io/Nexus-portfolio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >&copy; <span id="currentYear"></span> Maurizio Falconi -
+            falker47</a
+          >
+        </p>
+      </footer>
     </div>
 
     <!-- Main Entry Point Module -->
     <script type="module" src="js/main.js"></script>
-</body>
+  </body>
 </html>

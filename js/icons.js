@@ -1,6 +1,13 @@
 export const ICONS = {
     // UI Icons
     search: 'https://api.iconify.design/line-md:search-twotone.svg?color=white',
+    download: 'https://api.iconify.design/ri:download-2-fill.svg?color=white',
+    lock: 'https://api.iconify.design/material-symbols:lock.svg?color=white',
+
+    // Platform Icons
+    windows: 'https://api.iconify.design/uim:windows.svg?color=white',
+    android: 'https://api.iconify.design/uiw:android.svg?color=white',
+
 
     // Fallback Icons
     nintendoFallback: 'https://cdn.simpleicons.org/nintendo/white',
@@ -18,6 +25,10 @@ export const ICONS = {
     psp: 'https://cdn.simpleicons.org/playstationportable/white',
     ps1: 'https://cdn.simpleicons.org/playstation/white',
     ps2: 'https://cdn.simpleicons.org/playstation2/white',
+    retroArch: 'https://cdn.simpleicons.org/retroarch/white',
+    scummvm: 'https://api.iconify.design/codicon:vm-running.svg?color=white',
+    wiiu: 'https://api.iconify.design/cib:wiiu.svg?color=white',
+    psvita: 'https://api.iconify.design/simple-icons:playstationvita.svg?color=white',
 
     // Browsers
     brave: 'https://cdn.simpleicons.org/brave/white',

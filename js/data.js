@@ -3,7 +3,7 @@ import { ICONS } from './icons.js';
 
 
 export const ITEMS = {
-    "emulators": {
+    "emulation": {
         "nds": {
             "id": "nds",
             "name": "Nintendo DS",
@@ -50,9 +50,51 @@ export const ITEMS = {
             "id": "switch",
             "name": "Nintendo Switch",
             "icon": ICONS.switch,
-            "subtext": "Coming Soon...",
-            "pc": null, // User did not provide links yet
-            "android": null
+            "subtext": "Eden Emulator",
+            "pc": {
+                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.0.4/Eden-Windows-v0.0.4-amd64-msvc-standard.zip"
+            },
+            "android": {
+                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.0.4/Eden-Android-v0.0.4-standard.apk"
+            }
+        },
+        "scummvm": {
+            "id": "scummvm",
+            "name": "ScummVM",
+            "icon": ICONS.scummvm,
+            "subtext": "Old PC Games",
+            "pc": {
+                "url": "https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1-win32.exe"
+            },
+            "android": {
+                "appId": "org.scummvm.scummvm",
+                "appName": "ScummVM",
+                "url": "https://play.google.com/store/apps/details?id=org.scummvm.scummvm"
+            }
+        },
+        "wiiu": {
+            "id": "wiiu",
+            "name": "Wii U",
+            "icon": ICONS.wiiu,
+            "subtext": "Cemu",
+            "pc": {
+                "url": "https://github.com/cemu-project/Cemu/releases/download/v2.0-95/cemu-2.0-95-windows-x64.zip"
+            },
+            "android": {
+                "url": "https://github.com/SSimco/Cemu/releases/download/0.03/Cemu-0.3.apk"
+            }
+        },
+        "psvita": {
+            "id": "psvita",
+            "name": "PS Vita",
+            "icon": ICONS.psvita,
+            "subtext": "Vita3K",
+            "pc": {
+                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/windows-latest.zip?time=1769420982148"
+            },
+            "android": {
+                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/android-latest.apk?time=1769420982148"
+            }
         },
         "gc_wii": {
             "id": "gc_wii",
@@ -117,6 +159,18 @@ export const ITEMS = {
                 "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.6.2/pcsx2-v2.6.2-windows-x64-Qt.7z"
             },
             "android": null
+        },
+        "retroarch": {
+            "id": "retroarch",
+            "name": "RetroArch",
+            "icon": ICONS.retroArch,
+            "subtext": "Multi-System",
+            "pc": {
+                "url": "https://buildbot.libretro.com/stable/1.22.2/windows/x86_64/RetroArch-Win64-setup.exe"
+            },
+            "android": {
+                "url": "https://buildbot.libretro.com/stable/1.22.2/android/RetroArch.apk"
+            }
         }
     },
     "pc-programs": {

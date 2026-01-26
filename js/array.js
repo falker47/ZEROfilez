@@ -1,5 +1,5 @@
 export const ORDER = {
-    "emulators": [
+    "emulation": [
         "nds",
         "3ds",
         "switch",
@@ -8,7 +8,11 @@ export const ORDER = {
         "gc_wii",
         "psp",
         "ps1",
-        "ps2"
+        "ps2",
+        "retroarch",
+        "scummvm",
+        "wiiu",
+        "psvita"
     ],
     "pc-programs": [
         "brave-browser",

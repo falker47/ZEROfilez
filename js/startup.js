@@ -38,6 +38,7 @@ export class StartupManager {
     initializeSearch() {
         this.setupSearchListener('pcSearchInput', 'pc-programs', 'pc-programs-list');
         this.setupSearchListener('apkSearchInput', 'apk-files', 'apk-files-list');
+        this.setupSearchListener('emulationSearchInput', 'emulation', 'emulation-list');
     }
 
     setupSearchListener(inputId, dataKey, containerId) {
@@ -70,12 +71,12 @@ export class StartupManager {
 
                 if (listContainerId && (!grid || grid.children.length === 0)) {
                     // Map list ID back to data key
-                    const validKeys = ['emulators', 'pc-programs', 'apk-files'];
+                    const validKeys = ['emulation', 'pc-programs', 'apk-files'];
                     const dataKey = validKeys.find(key => listContainerId.startsWith(key));
 
                     if (dataKey) {
-                        if (dataKey === 'emulators') {
-                            this.renderEmulatorsSection(dataKey, listContainerId);
+                        if (dataKey === 'emulation') {
+                            this.renderEmulationSection(dataKey, listContainerId);
                         } else {
                             this.renderSearchableSection(dataKey, listContainerId);
                         }
@@ -86,12 +87,12 @@ export class StartupManager {
     }
 
     renderAllSections() {
-        this.renderEmulatorsSection('emulators', 'emulators-list');
+        this.renderEmulationSection('emulation', 'emulation-list');
         this.renderSearchableSection('pc-programs', 'pc-programs-list');
         this.renderSearchableSection('apk-files', 'apk-files-list');
     }
 
-    renderEmulatorsSection(dataKey, containerId) {
+    renderEmulationSection(dataKey, containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
         const items = this.data[dataKey] || [];
@@ -104,6 +105,10 @@ export class StartupManager {
         container.innerHTML = '<div class="files-grid"></div>';
         const grid = container.querySelector('.files-grid');
 
+        // Use renderGridItems logic instead of manual loop to support filtering consistency if needed,
+        // but Emulation cards are special. So we keep using createEmulatorCard here.
+        // To support search, we might need to use renderGridItems with a callback?
+        // Let's stick to simple rendering here, filtering is handled by filterSection
         items.forEach(item => {
             grid.appendChild(this.createEmulatorCard(item));
         });
@@ -147,7 +152,11 @@ export class StartupManager {
         }
 
         items.forEach(item => {
-            container.appendChild(this.createSimpleFileCard(item, dataKey));
+            if (dataKey === 'emulation') {
+                container.appendChild(this.createEmulatorCard(item));
+            } else {
+                container.appendChild(this.createSimpleFileCard(item, dataKey));
+            }
         });
     }
 
@@ -163,7 +172,7 @@ export class StartupManager {
     // Fallback chain configuration
     getFallbackChain(category) {
         const chain = {
-            'emulators': [ICONS.nintendoFallback, '🎮'],
+            'emulation': [ICONS.nintendoFallback, '🎮'],
             'pc-programs': [ICONS.windowsFallback, `<img src="${ICONS.laptop}" class="file-icon-img" alt="PC">`],
             'apk-files': [ICONS.androidFallback, '📱']
         };
@@ -179,7 +188,7 @@ export class StartupManager {
         // Handle icon (URL vs emoji)
         let iconHtml;
         if (item.icon && item.icon.startsWith('http')) {
-            const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulators');
+            const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulation');
             // Logic: Try exact icon -> Try generic image -> Show Emoji
             const onErrorLogic = `this.onerror=null; this.src='${fallbackImg}'; this.onerror=function(){ this.outerHTML='${fallbackEmoji}'; };`;
             iconHtml = `<img src="${item.icon}" alt="${item.name}" class="file-icon-img" onerror="${onErrorLogic}">`;
@@ -261,9 +270,13 @@ export class StartupManager {
         const btnDiv = document.createElement('div');
         btnDiv.className = 'dual-buttons';
         const btn = document.createElement('button');
-        btn.className = `download-btn ${type}-btn`;
-        btn.textContent = 'Download';
-        btn.addEventListener('click', (e) => this.handleSimpleDownload(e.target, item));
+        btn.className = `download-btn ${type}-btn icon-only-btn`; // Add icon-only-btn class
+        // Replace text with Icon
+        // btn.textContent = 'Download';
+        btn.innerHTML = `<img src="${ICONS.download}" alt="Download" style="width: 1.2em; height: 1.2em;">`;
+        btn.setAttribute('aria-label', 'Download');
+
+        btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item)); // Use currentTarget to get the button, not likely the img
         btnDiv.appendChild(btn);
 
         card.appendChild(iconDiv);
@@ -275,14 +288,19 @@ export class StartupManager {
 
     createButtonHtml(item, platform) {
         const data = item[platform];
-        const label = platform === 'pc' ? 'PC' : 'Android';
-        const className = `download-btn ${platform}-btn`;
+        // Use icons instead of text text
+        const iconSrc = platform === 'pc' ? ICONS.windows : ICONS.android;
+        const className = `download-btn ${platform}-btn icon-only-btn`; // Added class for styling if needed
 
         if (!data) {
-            return `<button class="${className} disabled" disabled>N/A</button>`;
+            return `<button class="${className} disabled" disabled style="padding: 5px 10px;">
+                <img src="${iconSrc}" alt="${platform}" style="width: 1.2em; height: 1.2em; opacity: 0.5;">
+            </button>`;
         }
 
-        return `<button class="${className}" data-platform="${platform}">${label}</button>`;
+        return `<button class="${className}" data-platform="${platform}" style="padding: 5px 10px; display: flex; align-items: center; justify-content: center;">
+            <img src="${iconSrc}" alt="${platform}" style="width: 1.2em; height: 1.2em;">
+        </button>`;
     }
 
     handleDownload(button, item) {

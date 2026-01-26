@@ -13,6 +13,14 @@ class App {
     }
 
     initializeIcons() {
+        // Initialize elements with data-icon attribute
+        document.querySelectorAll('[data-icon]').forEach(element => {
+            const iconKey = element.dataset.icon;
+            if (ICONS[iconKey]) {
+                element.src = ICONS[iconKey];
+            }
+        });
+
         const inputIcons = document.querySelectorAll('.input-icon');
         inputIcons.forEach(icon => {
             if (icon.textContent.includes('🔎')) {
