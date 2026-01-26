@@ -94,6 +94,7 @@ desktop.ini
 *~
 
 # File di ambiente virtuale
+node_modules/
 .venv/
 venv/
 env/
@@ -139,7 +140,7 @@ cache/
 *.cache
 
 # File di lock
-package-lock.json
+# package-lock.json
 yarn.lock
 Pipfile.lock
 

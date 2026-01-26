@@ -1,0 +1,47 @@
+name: Update Download Links
+
+on:
+  schedule:
+    # Run every day at 03:00 UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-links:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to push changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run update script
+        run: npm run update-links
+        env:
+          # Optional: Add GITHUB_TOKEN if you hit rate limits, though public repos usually have enough quota
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # Check if file changed
+          if [[ -n $(git status --porcelain js/data.js) ]]; then
+            echo "Updates found. Committing..."
+            git add js/data.js
+            git commit -m "🤖 Auto-update download links"
+            git push
+          else
+            echo "No updates found."
+          fi

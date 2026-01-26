@@ -10,7 +10,7 @@ export const ITEMS = {
             "icon": ICONS.nintendoDs,
             "subtext": "MelonDS",
             "pc": {
-                "url": "https://melonds.kuribo64.net/downloads/melonDS-windows-x86_64(1).zip"
+                "url": "https://github.com/melonDS-emu/melonDS/releases/download/1.1/melonDS-1.1-windows-x86_64.zip"
             },
             "android": {
                 "appId": "me.magnum.melonds",
@@ -78,7 +78,7 @@ export const ITEMS = {
             "icon": ICONS.wiiu,
             "subtext": "Cemu",
             "pc": {
-                "url": "https://github.com/cemu-project/Cemu/releases/download/v2.0-95/cemu-2.0-95-windows-x64.zip"
+                "url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/cemu-2.6-windows-x64.zip"
             },
             "android": {
                 "url": "https://github.com/SSimco/Cemu/releases/download/0.03/Cemu-0.3.apk"
@@ -114,12 +114,12 @@ export const ITEMS = {
             "id": "3ds",
             "name": "Nintendo 3DS",
             "icon": ICONS.nintendo3ds,
-            "subtext": "Citra Emulator",
+            "subtext": "Azahar",
             "pc": {
-                "url": "https://archive.org/download/citra-emu_202403/citra-windows-msvc-20240303-0ff3440_nightly.zip"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.2/azahar-2124.2-windows-msvc.zip"
             },
             "android": {
-                "url": "https://github.com/PabloMK7/citra/releases/download/r608383e/citra-android-universal-20240927-608383e.apk"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.2/azahar-2124.2-android-googleplay.apk"
             }
         },
         "psp": {
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_3/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_84/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -180,7 +180,7 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2408-x64.exe", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2409-x64.exe", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
@@ -188,11 +188,11 @@ export const ITEMS = {
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v18.0.1/ShareX-18.0.1-setup.exe", "icon": ICONS.sharex },
-        "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_22_setup.exe", "icon": ICONS.wiztree },
-        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.94.2/PowerToysUserSetup-0.94.2-x64.exe", "icon": ICONS.powertoys },
+        "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_28_setup.exe", "icon": ICONS.wiztree },
+        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.97.0/PowerToysUserSetup-0.97.0-x64.exe", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1023.x64-Setup.exe", "icon": ICONS.everything },
-        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/latest/download/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
+        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.3.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://static.pcloud.com/pcloudDrive/pcloud-drive-latest.exe", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.11.5/Obsidian-1.11.5.exe", "icon": ICONS.obsidian }
     },

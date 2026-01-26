@@ -62,6 +62,35 @@ To use the encryption features, you must generate your own encrypted package.
     └── user.key            # Your private decryption key
 ```
 
+## 🛠️ Development Setup
+
+If you want to run this project locally or contribute to the automation scripts, follow these steps:
+
+### Prerequisites
+
+- **Node.js**: Install the latest LTS version from [nodejs.org](https://nodejs.org/).
+
+### Installation
+
+1.  Clone the repository.
+2.  Open a terminal in the project folder.
+3.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running the Auto-Updater
+
+To manually run the script that checks for new software versions:
+
+```bash
+npm run update-links
+```
+
+This will check the supported GitHub repositories and update `js/data.js` if new versions are found.
+
+---
+
 ## 📄 License & Privacy
 
 This project is open for personal use.
