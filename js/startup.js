@@ -308,43 +308,38 @@ export class StartupManager {
 
         const platform = button.dataset.platform;
         const data = item[platform];
-        const originalText = button.textContent;
 
         button.disabled = true;
-        button.textContent = 'Opening...';
 
         if (platform === 'android' && data.appId) {
             this.openPlayStore(data.appId, data.appName || item.name);
-            this.resetButton(button, originalText, 2000);
+            this.resetButton(button, 2000);
         } else if (data.url) {
             window.open(data.url, '_blank', 'noopener,noreferrer');
-            this.resetButton(button, originalText, 1000);
+            this.resetButton(button, 1000);
         } else {
-            this.resetButton(button, originalText, 1500);
+            this.resetButton(button, 1500);
             alert(`No download URL configured for ${item.name}`);
         }
     }
 
     handleSimpleDownload(button, item) {
         if (button.disabled) return;
-        const originalText = button.textContent;
 
         button.disabled = true;
-        button.textContent = 'Opening...';
 
         if (item.url) {
             window.open(item.url, '_blank', 'noopener,noreferrer');
-            this.resetButton(button, originalText, 1000);
+            this.resetButton(button, 1000);
         } else {
-            this.resetButton(button, originalText, 1500);
+            this.resetButton(button, 1500);
             alert(`No download URL configured for ${item.name}`);
         }
     }
 
-    resetButton(button, text, delay) {
+    resetButton(button, delay) {
         setTimeout(() => {
             button.disabled = false;
-            button.textContent = text;
         }, delay);
     }
 

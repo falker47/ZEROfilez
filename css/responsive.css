@@ -152,9 +152,9 @@
   }
 
   .download-btn {
-    padding: 4px 8px;
-    font-size: 0.75em;
-    min-height: 28px;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    min-height: 32px;
   }
 
   /* Mobile: progress bar più alta */
@@ -260,9 +260,9 @@
   }
 
   .download-btn {
-    padding: 3px 6px;
-    font-size: 0.7em;
-    min-height: 26px;
+    padding: 5px 8px;
+    font-size: 0.85em;
+    min-height: 30px;
   }
 }
 
@@ -320,15 +320,15 @@
   }
 
   .file-card .download-btn {
-    padding: 4px 8px;
-    font-size: 0.75em;
-    min-width: 60px;
+    padding: 6px 12px;
+    font-size: 0.9em;
+    min-width: 70px;
   }
 
   .dual-buttons .download-btn {
-    min-width: 40px;
-    padding: 4px 6px;
-    font-size: 0.7em;
+    min-width: 50px;
+    padding: 6px 8px;
+    font-size: 0.85em;
   }
 
   .category-tabs {
@@ -383,15 +383,15 @@
   }
 
   .file-card .download-btn {
-    padding: 3px 6px;
-    font-size: 0.7em;
-    min-width: 50px;
+    padding: 6px 10px;
+    font-size: 0.85em;
+    min-width: 60px;
   }
 
   .dual-buttons .download-btn {
-    min-width: 35px;
-    padding: 3px 4px;
-    font-size: 0.65em;
+    min-width: 45px;
+    padding: 5px 8px;
+    font-size: 0.8em;
   }
 
   .downloads-section {
