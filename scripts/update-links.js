@@ -62,6 +62,8 @@ const PROGRAMS = [
         regex: /("ps2"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
 
+
+
     // --- INCREMENTAL CHECK PROGRAMS (Non-GitHub) ---
     {
         name: "WizTree",
@@ -185,7 +187,7 @@ async function main() {
                 (updatedContent) => { newContent = updatedContent; }
             );
         } else {
-            // Default: GitHub Release
+            // Default: GitHub Release Asset
             updatesCount += await updateGithubRelease(
                 prog.name,
                 prog.repo,
@@ -355,5 +357,7 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
     }
     return 0;
 }
+
+
 
 main();

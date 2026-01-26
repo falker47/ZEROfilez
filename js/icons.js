@@ -1,3 +1,5 @@
+// Iconify: https://icon-sets.iconify.design/
+// Simple Icons: https://simpleicons.org/
 export const ICONS = {
     // UI Icons
     search: 'https://api.iconify.design/line-md:search-twotone.svg?color=white',
@@ -53,5 +55,9 @@ export const ICONS = {
     // Android/APK
     luckyPatcher: 'https://api.iconify.design/raphael:smile.svg?color=white',
     happyMod: 'https://api.iconify.design/arcticons:happymod.svg?color=white',
-    telegram: 'https://cdn.simpleicons.org/telegram/white'
+    telegram: 'https://cdn.simpleicons.org/telegram/white',
+
+    // New Icons
+    pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
+    web: 'https://api.iconify.design/mdi:web.svg?color=white'
 };

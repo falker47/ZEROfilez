@@ -4,15 +4,16 @@ export const ORDER = {
         "3ds",
         "switch",
         "gba",
+        "retroarch",
+        "scummvm",
         "gbc",
         "gc_wii",
+        "wiiu",
         "psp",
         "ps1",
         "ps2",
-        "retroarch",
-        "scummvm",
-        "wiiu",
-        "psvita"
+        "psvita",
+        "pkhex"
     ],
     "pc-programs": [
         "brave-browser",

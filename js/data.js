@@ -60,9 +60,9 @@ export const ITEMS = {
         },
         "scummvm": {
             "id": "scummvm",
-            "name": "ScummVM",
+            "name": "Old PC Games",
             "icon": ICONS.scummvm,
-            "subtext": "Old PC Games",
+            "subtext": "ScummVM",
             "pc": {
                 "url": "https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1-win32.exe"
             },
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_84/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_124/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -162,14 +162,26 @@ export const ITEMS = {
         },
         "retroarch": {
             "id": "retroarch",
-            "name": "RetroArch",
+            "name": "Multi-System",
             "icon": ICONS.retroArch,
-            "subtext": "Multi-System",
+            "subtext": "RetroArch",
             "pc": {
                 "url": "https://buildbot.libretro.com/stable/1.22.2/windows/x86_64/RetroArch-Win64-setup.exe"
             },
             "android": {
                 "url": "https://buildbot.libretro.com/stable/1.22.2/android/RetroArch.apk"
+            }
+        },
+        "pkhex": {
+            "id": "pkhex",
+            "name": "PKHeX",
+            "icon": ICONS.pkhex,
+            "subtext": "Pokemon Save Editor",
+            "pc": {
+                "url": "https://projectpokemon.org/home/files/file/1-pkhex/"
+            },
+            "web": {
+                "url": "https://pkhex-web.github.io/"
             }
         }
     },

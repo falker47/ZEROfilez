@@ -203,8 +203,9 @@ export class StartupManager {
                 ${subtextHtml}
             </div>
             <div class="dual-buttons">
-                ${this.createButtonHtml(item, 'pc')}
-                ${this.createButtonHtml(item, 'android')}
+                ${item.pc ? this.createButtonHtml(item, 'pc') : ''}
+                ${item.web ? this.createButtonHtml(item, 'web') : ''}
+                ${item.android ? this.createButtonHtml(item, 'android') : ''}
             </div>
         `;
 
@@ -289,7 +290,9 @@ export class StartupManager {
     createButtonHtml(item, platform) {
         const data = item[platform];
         // Use icons instead of text text
-        const iconSrc = platform === 'pc' ? ICONS.windows : ICONS.android;
+        const iconSrc = platform === 'pc' ? ICONS.windows :
+            platform === 'web' ? ICONS.web :
+                ICONS.android;
         const className = `download-btn ${platform}-btn icon-only-btn`; // Added class for styling if needed
 
         if (!data) {
