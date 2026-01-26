@@ -296,6 +296,7 @@
     grid-template-columns: 1fr;
     gap: 8px;
     max-height: 65vh;
+    height: auto;
     padding: 2px;
   }
 
