@@ -68,7 +68,7 @@ class App {
             // Switch to Quick Startup
             cloudDecryptorPage.classList.add('hidden');
             quickStartupPage.classList.remove('hidden');
-            mainTitle.textContent = 'ZEROfilez Quick Startup';
+            mainTitle.textContent = 'ZEROfilez';
             mainSubtitle.textContent = 'Download useful files for free';
             // Highlight left icon (Quick Startup)
             toggleIconLeft.style.opacity = '1';
