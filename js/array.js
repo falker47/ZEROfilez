@@ -16,7 +16,8 @@ export const ORDER = {
         "psvita",
         "xemu",
         "xenia",
-        "pkhex"
+        "pkhex",
+        "gba-hackrom-tools"
     ],
     "pc-programs": [
         "brave-browser",

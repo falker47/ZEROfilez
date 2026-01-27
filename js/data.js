@@ -213,6 +213,15 @@ export const ITEMS = {
             "web": {
                 "url": "https://pkhex-web.github.io/"
             }
+        },
+        "gba-hackrom-tools": {
+            "id": "gba-hackrom-tools",
+            "name": "HackROM Tools Pack",
+            "icon": ICONS.tools,
+            "subtext": "Pokemon Hack Rom Tools GBA",
+            "pc": {
+                "url": "https://github.com/falker47/FileStorage/raw/main/GBA_HackROM_Toolz%5BZEROfilezRepack%5D.zip"
+            }
         }
     },
     "pc-programs": {

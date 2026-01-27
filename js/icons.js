@@ -61,6 +61,7 @@ export const ICONS = {
     telegram: 'https://cdn.simpleicons.org/telegram/white',
 
     // New Icons
+    tools: 'https://api.iconify.design/mdi:tools.svg?color=white',
     pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
     web: 'https://api.iconify.design/mdi:web.svg?color=white'
 };
