@@ -17,6 +17,7 @@ export const ORDER = {
         "xemu",
         "xenia",
         "pkhex",
+        "pmd-save-editor",
         "gba-hackrom-tools"
     ],
     "pc-programs": [

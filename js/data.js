@@ -206,12 +206,21 @@ export const ITEMS = {
             "id": "pkhex",
             "name": "PKHeX",
             "icon": ICONS.pkhex,
-            "subtext": "Pokemon Save Editor",
+            "subtext": "Pokémon Save Editor",
             "pc": {
                 "url": "https://projectpokemon.org/home/files/file/1-pkhex/"
             },
             "web": {
                 "url": "https://pkhex-web.github.io/"
+            }
+        },
+        "pmd-save-editor": {
+            "id": "pmd-save-editor",
+            "name": "Sky Editor (Pokémon)",
+            "icon": ICONS.pkhex,
+            "subtext": "Mystery Dungeon Save Editor",
+            "pc": {
+                "url": "https://github.com/falker47/FileStorage/raw/main/SkyEditor.SaveEditor.zip"
             }
         },
         "gba-hackrom-tools": {
