@@ -221,6 +221,9 @@ export const ITEMS = {
             "subtext": "Mystery Dungeon Save Editor",
             "pc": {
                 "url": "https://github.com/falker47/FileStorage/raw/main/SkyEditor.SaveEditor.zip"
+            },
+            "web": {
+                "url": "https://pokemonmysterydungeon-saveditor.netlify.app/"
             }
         },
         "gba-hackrom-tools": {
