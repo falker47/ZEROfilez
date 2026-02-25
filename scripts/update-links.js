@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
 
 // ==========================================
 // 🛠️ CONFIGURATION - ADD NEW PROGRAMS HERE
@@ -223,8 +222,9 @@ async function updateGithubRelease(name, repo, assetFilter, regexPattern, curren
         process.stdout.write(`Checking ${name.padEnd(20)} [GitHub] ... `);
 
         const url = `https://api.github.com/repos/${repo}/releases/latest`;
-        const resp = await axios.get(url);
-        const data = resp.data;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
+        const data = await resp.json();
 
         const asset = data.assets.find(assetFilter);
         if (!asset) {
@@ -326,7 +326,8 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
 
                 try {
                     await sleep(1000);
-                    await axios.head(nextUrl, { timeout: 3000 });
+                    const resp = await fetch(nextUrl, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
+                    if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
 
                     bestUrl = nextUrl;
                     versionStr = nextVer;

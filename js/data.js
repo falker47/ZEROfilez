@@ -52,10 +52,10 @@ export const ITEMS = {
             "icon": ICONS.switch,
             "subtext": "Eden Emulator",
             "pc": {
-                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.0.4/Eden-Windows-v0.0.4-amd64-msvc-standard.zip"
+                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.2.0-rc1/Eden-Windows-v0.2.0-rc1-amd64-msvc-standard.zip"
             },
             "android": {
-                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.0.4/Eden-Android-v0.0.4-standard.apk"
+                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.2.0-rc1/Eden-Android-v0.2.0-rc1-standard.apk"
             }
         },
         "scummvm": {
@@ -116,10 +116,10 @@ export const ITEMS = {
             "icon": ICONS.nintendo3ds,
             "subtext": "Azahar",
             "pc": {
-                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.2/azahar-2124.2-windows-msvc.zip"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.3/azahar-2124.3-windows-msvc.zip"
             },
             "android": {
-                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.2/azahar-2124.2-android-googleplay.apk"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.3/azahar-2124.3-android-googleplay.apk"
             }
         },
         "psp": {
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_124/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_144/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -156,7 +156,7 @@ export const ITEMS = {
             "icon": ICONS.ps2,
             "subtext": "PCSX2",
             "pc": {
-                "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.6.2/pcsx2-v2.6.2-windows-x64-Qt.7z"
+                "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.6.3/pcsx2-v2.6.3-windows-x64-Qt.7z"
             },
             "android": null
         },
@@ -250,17 +250,17 @@ export const ITEMS = {
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-713.exe", "icon": ICONS.winrar },
 
         // Utilities
-        "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v18.0.1/ShareX-18.0.1-setup.exe", "icon": ICONS.sharex },
+        "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
         "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_28_setup.exe", "icon": ICONS.wiztree },
-        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.97.0/PowerToysUserSetup-0.97.0-x64.exe", "icon": ICONS.powertoys },
+        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.97.2/PowerToysUserSetup-0.97.2-x64.exe", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1023.x64-Setup.exe", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.3.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://static.pcloud.com/pcloudDrive/pcloud-drive-latest.exe", "icon": ICONS.pcloud },
-        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.11.5/Obsidian-1.11.5.exe", "icon": ICONS.obsidian }
+        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.11.7/Obsidian-1.11.7.exe", "icon": ICONS.obsidian }
     },
     "apk-files": {
-        "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.0.apk", "icon": ICONS.luckyPatcher },
+        "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },
         "happy-mod": { "id": "happy-mod", "name": "Happy Mod", "url": "https://files.apkdlink.com/happymod/happymod-3.2.6.apk", "icon": ICONS.happyMod },
         "telegram": { "id": "telegram", "name": "Telegram", "url": "https://telegram.org/dl/android/apk", "icon": ICONS.telegram }
     }

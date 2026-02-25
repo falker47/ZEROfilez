@@ -20,13 +20,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Run update script
-        run: npm run update-links
+        run: node scripts/update-links.js
         env:
           # Optional: Add GITHUB_TOKEN if you hit rate limits, though public repos usually have enough quota
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
