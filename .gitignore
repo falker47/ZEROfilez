@@ -49,7 +49,6 @@ wheels/
 # File multimediali
 *.jpg
 *.jpeg
-*.png
 *.gif
 *.bmp
 *.tiff
