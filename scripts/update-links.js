@@ -161,6 +161,11 @@ const PROGRAMS = [
         repo: "obsidianmd/obsidian-releases",
         filter: asset => asset.name.includes('.exe') && !asset.name.includes('arm64'),
         regex: /("obsidian"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "Google Antigravity",
+        mode: "antigravity",
+        regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     }
 ];
 
@@ -180,6 +185,13 @@ async function main() {
     for (const prog of PROGRAMS) {
         if (prog.mode === 'increment') {
             updatesCount += await checkUrlIncrement(
+                prog.name,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
+        } else if (prog.mode === 'antigravity') {
+            updatesCount += await checkAntigravityUrl(
                 prog.name,
                 prog.regex,
                 newContent,
@@ -359,6 +371,53 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
     return 0;
 }
 
+async function checkAntigravityUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
+
+        const r = await fetch('https://antigravity.google/download', { signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const jsFileMatch = text.match(/main.*\.js/i);
+        if (!jsFileMatch) {
+            console.log(`❌ Could not find main JS bundle.`);
+            return 0;
+        }
+
+        const jsFileUrl = 'https://antigravity.google/' + jsFileMatch[0];
+        const r2 = await fetch(jsFileUrl, { signal: AbortSignal.timeout(5000) });
+        const jsText = await r2.text();
+
+        // Extract matching URL for windows-x64 exe
+        const urlMatches = jsText.match(/https:\/\/[^"'>]+exe/ig);
+        const winX64Match = urlMatches ? urlMatches.find(url => url.includes('windows-x64')) : null;
+
+        if (!winX64Match) {
+            console.log(`❌ Could not extract URL from JS bundle.`);
+            return 0;
+        }
+
+        const match = currentContent.match(regexPattern);
+        if (match) {
+            const currentUrl = match[2];
+            if (currentUrl !== winX64Match) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${currentUrl}`);
+                console.log(`    New: ${winX64Match}`);
+
+                const updated = currentContent.replace(regexPattern, `$1${winX64Match}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        } else {
+            console.log(`⚠️ Regex mismatch.`);
+        }
+    } catch (err) {
+        console.log(`❌ Error: ${err.message}`);
+    }
+    return 0;
+}
 
 
 main();

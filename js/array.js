@@ -24,6 +24,7 @@ export const ORDER = {
         "brave-browser",
         "google-chrome",
         "mozilla-firefox",
+        "panacea",
         "7-zip",
         "vlc-media-player",
         "revo-uninstaller",
@@ -36,7 +37,8 @@ export const ORDER = {
         "everything",
         "espanso",
         "pcloud",
-        "obsidian"
+        "obsidian",
+        "antigravity"
     ],
     "apk-files": [
         "lucky-patcher",

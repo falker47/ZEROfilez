@@ -199,7 +199,7 @@ export class StartupManager {
         `;
 
         const iconContainer = card.querySelector('.file-icon');
-        if (item.icon && item.icon.startsWith('http')) {
+        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
             const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulation');
 
             const img = document.createElement('img');
@@ -244,7 +244,7 @@ export class StartupManager {
         const iconDiv = document.createElement('div');
         iconDiv.className = 'file-icon';
 
-        if (item.icon && item.icon.startsWith('http')) {
+        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
             const [fallbackImg, fallbackEmoji] = this.getFallbackChain(dataKey);
 
             const img = document.createElement('img');

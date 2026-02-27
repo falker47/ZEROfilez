@@ -63,5 +63,7 @@ export const ICONS = {
     // New Icons
     tools: 'https://api.iconify.design/mdi:tools.svg?color=white',
     pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
-    web: 'https://api.iconify.design/mdi:web.svg?color=white'
+    web: 'https://api.iconify.design/mdi:web.svg?color=white',
+    panacea: 'panacea_icon_white.png',
+    antigravity: 'https://api.iconify.design/codicon:code.svg?color=white'
 };
