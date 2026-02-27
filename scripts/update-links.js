@@ -60,69 +60,78 @@ const PROGRAMS = [
         filter: asset => asset.name.includes('windows-x64-Qt.7z'),
         regex: /("ps2"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
+    {
+        name: "RPCS3 (PC)",
+        repo: "RPCS3/rpcs3-binaries-win",
+        filter: asset => asset.name.includes('win64_msvc.7z') && !asset.name.includes('.sha256'),
+        regex: /("ps3"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "Xemu (PC)",
+        repo: "xemu-project/xemu",
+        filter: asset => asset.name.includes('windows-x86_64.zip') && !asset.name.includes('dbg') && !asset.name.includes('pdb'),
+        regex: /("xemu"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "Cemu (Android)",
+        repo: "SSimco/Cemu",
+        filter: asset => asset.name.endsWith('.apk'),
+        regex: /("wiiu"[\s\S]*?"android"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
 
 
 
-    // --- INCREMENTAL CHECK PROGRAMS (Non-GitHub) ---
+    // --- INCREMENTAL AND SCRAPER PROGRAMS (Non-GitHub) ---
     {
         name: "WizTree",
-        mode: "increment",
-        // Current: https://diskanalyzer.com/files/wiztree_4_22_setup.exe
+        mode: "wiztree",
         regex: /("wiztree"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "PPSSPP (PC)",
-        mode: "increment",
-        // Current: https://www.ppsspp.org/files/1_19_3/PPSSPPSetup.exe
+        mode: "ppsspp",
         regex: /("psp"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "ScummVM",
-        mode: "increment",
-        // Current: https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1-win32.exe
+        mode: "scummvm",
         regex: /("scummvm"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "Dolphin (PC)",
-        mode: "increment",
-        // Current: https://dl.dolphin-emu.org/releases/2509/dolphin-2509-x64.7z
+        mode: "dolphin",
         regex: /("gc_wii"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "RetroArch (PC)",
-        mode: "increment",
-        // Current: https://buildbot.libretro.com/stable/1.22.2/windows/x86_64/RetroArch-Win64-setup.exe
+        mode: "retroarch",
         regex: /("retroarch"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "7-Zip",
-        mode: "increment",
-        // Current: https://www.7-zip.org/a/7z2408-x64.exe
+        mode: "7zip",
         regex: /("7-zip"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "VLC",
-        mode: "increment",
-        // Current: https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe
+        mode: "vlc",
         regex: /("vlc-media-player"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "WinRAR",
+        mode: "winrar",
+        regex: /("winrar"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "Everything",
+        mode: "everything",
+        regex: /("everything"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "LibreOffice",
         mode: "increment",
         // Current: https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi
         regex: /("libreoffice"[\s\S]*?"url":\s*")([^"]+)(")/
-    },
-    {
-        name: "WinRAR",
-        mode: "increment",
-        // Current: https://www.rarlab.com/rar/winrar-x64-713.exe
-        regex: /("winrar"[\s\S]*?"url":\s*")([^"]+)(")/
-    },
-    {
-        name: "Everything",
-        mode: "increment",
-        // Current: https://www.voidtools.com/Everything-1.4.1.1023.x64-Setup.exe
-        regex: /("everything"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "Lucky Patcher",
@@ -197,6 +206,54 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'ppsspp') {
+            updatesCount += await checkPpssppUrl(
+                prog.name,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
+        } else if (prog.mode === 'retroarch') {
+            updatesCount += await checkRetroarchUrl(
+                prog.name,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
+        } else if (prog.mode === 'dolphin') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://dolphin-emu.org/download/',
+                /https:\/\/dl\.dolphin-emu\.org\/releases\/2[0-9]{3}\/dolphin-[^\/]+-x64\.7z/i);
+        } else if (prog.mode === '7zip') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.7-zip.org/download.html',
+                /a\/7z[0-9]+-x64\.exe/i,
+                'https://www.7-zip.org/');
+        } else if (prog.mode === 'winrar') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.rarlab.com/download.htm',
+                /rar\/winrar-x64-[0-9]+\.exe/i,
+                'https://www.rarlab.com/');
+        } else if (prog.mode === 'vlc') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.videolan.org/vlc/download-windows.html',
+                /vlc-[0-9\.]+-win64\.exe/i,
+                'https://mirror.init7.net/videolan/vlc/{version}/win64/');
+        } else if (prog.mode === 'wiztree') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://diskanalyzer.com/download',
+                /files\/wiztree_[0-9_]+_setup\.exe/i,
+                'https://diskanalyzer.com/');
+        } else if (prog.mode === 'scummvm') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.scummvm.org/downloads/',
+                /scummvm-[0-9\.]+-win32\.exe/i,
+                'https://downloads.scummvm.org/frs/scummvm/{version}/');
+        } else if (prog.mode === 'everything') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.voidtools.com/downloads/',
+                /Everything-[0-9\.]+\.x64-Setup\.exe/i,
+                'https://www.voidtools.com/');
         } else {
             // Default: GitHub Release Asset
             updatesCount += await updateGithubRelease(
@@ -419,5 +476,159 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
     return 0;
 }
 
+async function checkPpssppUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
+        const r = await fetch('https://www.ppsspp.org/download/', { signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const exeMatch = text.match(/https:\/\/www\.ppsspp\.org\/files\/[^\/]+\/PPSSPPSetup\.exe/i);
+        if (!exeMatch) {
+            console.log(`❌ Could not find PPSSPP installer URL on download page.`);
+            return 0;
+        }
+
+        const newUrl = exeMatch[0];
+        const match = currentContent.match(regexPattern);
+        if (match) {
+            if (match[2] !== newUrl) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${match[2]}`);
+                console.log(`    New: ${newUrl}`);
+                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        }
+    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    return 0;
+}
+
+async function checkRetroarchUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
+        const r = await fetch('https://buildbot.libretro.com/stable/', { signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const versions = [...text.matchAll(/href="\/stable\/([0-9]+\.[0-9]+\.[0-9]+)\/"/g)].map(m => m[1]);
+        if (versions.length === 0) {
+            console.log(`❌ Could not scrape RetroArch versions.`);
+            return 0;
+        }
+
+        const latestVersion = versions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).pop();
+        const newUrl = `https://buildbot.libretro.com/stable/${latestVersion}/windows/x86_64/RetroArch-Win64-setup.exe`;
+
+        const match = currentContent.match(regexPattern);
+        if (match) {
+            if (match[2] !== newUrl) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${match[2]}`);
+                console.log(`    New: ${newUrl}`);
+                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        }
+    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    return 0;
+}
+
+// Universal Web Scraper for predictable download links
+async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallback, scrapeUrl, extractRegex, prependDomain = '') {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
+        const r = await fetch(scrapeUrl, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const extractedMatch = text.match(extractRegex);
+
+        if (!extractedMatch) {
+            console.log(`❌ Could not find installer URL on ${scrapeUrl}`);
+            return 0;
+        }
+
+        let newUrl = extractedMatch[0];
+
+        // Handle prepending domains and special version injections
+        if (prependDomain && !newUrl.startsWith('http')) {
+            if (prependDomain.includes('{version}')) {
+                // Try to extract version number from the matched string e.g vlc-3.0.23-win64.exe -> 3.0.23
+                const verMatch = newUrl.match(/[0-9]+(?:\.[0-9]+)+/);
+                if (verMatch) {
+                    newUrl = prependDomain.replace('{version}', verMatch[0]) + newUrl;
+                } else {
+                    newUrl = 'https://' + newUrl; // Fallback
+                }
+            } else {
+                newUrl = prependDomain + newUrl;
+            }
+        }
+
+        const match = currentContent.match(regexPattern);
+        if (match) {
+            if (match[2] !== newUrl) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${match[2]}`);
+                console.log(`    New: ${newUrl}`);
+                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        }
+    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    return 0;
+}
+
+// Universal Web Scraper for predictable download links
+async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallback, scrapeUrl, extractRegex, prependDomain = '') {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
+        const r = await fetch(scrapeUrl, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) });
+        const text = await r.text();
+        const extractedMatch = text.match(extractRegex);
+
+        if (!extractedMatch) {
+            console.log(`❌ Could not find installer URL on ${scrapeUrl}`);
+            return 0;
+        }
+
+        let newUrl = extractedMatch[0];
+
+        // Handle prepending domains and special version injections
+        if (prependDomain && !newUrl.startsWith('http')) {
+            if (prependDomain.includes('{version}')) {
+                // Try to extract version number from the matched string e.g vlc-3.0.23-win64.exe -> 3.0.23
+                // or scummvm-2.9.1-win32.exe -> 2.9.1
+                const verMatch = newUrl.match(/[0-9]+(?:\.[0-9]+)+/);
+                if (verMatch) {
+                    newUrl = prependDomain.replace('{version}', verMatch[0]) + newUrl;
+                } else {
+                    newUrl = 'https://' + newUrl; // Fallback
+                }
+            } else {
+                newUrl = prependDomain + newUrl;
+            }
+        }
+
+        const match = currentContent.match(regexPattern);
+        if (match) {
+            if (match[2] !== newUrl) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${match[2]}`);
+                console.log(`    New: ${newUrl}`);
+                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        }
+    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    return 0;
+}
 
 main();

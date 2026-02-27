@@ -64,7 +64,7 @@ export const ITEMS = {
             "icon": ICONS.scummvm,
             "subtext": "ScummVM",
             "pc": {
-                "url": "https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1-win32.exe"
+                "url": "https://downloads.scummvm.org/frs/scummvm/2026.1.0/scummvm-2026.1.0-win32.exe"
             },
             "android": {
                 "appId": "org.scummvm.scummvm",
@@ -102,7 +102,7 @@ export const ITEMS = {
             "icon": ICONS.wii,
             "subtext": "Dolphin Emulator",
             "pc": {
-                "url": "https://dl.dolphin-emu.org/releases/2509/dolphin-2509-x64.7z"
+                "url": "https://dl.dolphin-emu.org/releases/2512/dolphin-2512-x64.7z"
             },
             "android": {
                 "appId": "org.dolphinemu.dolphinemu",
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_184/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_3/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-0ee3e24b25a119ac8810c30a5065ab846419214b/rpcs3-v0.0.39-18736-0ee3e24b_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-b30a20c2dc368f76e81ee484d2322a2c35848656/rpcs3-v0.0.39-18850-b30a20c2_win64_msvc.7z"
             },
             "android": null
         },
@@ -176,7 +176,7 @@ export const ITEMS = {
             "icon": ICONS.xbox,
             "subtext": "Xemu",
             "pc": {
-                "url": "https://github.com/xemu-project/xemu/releases/latest/download/xemu-0.8.133-windows-x86_64.zip"
+                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.134/xemu-0.8.134-windows-x86_64.zip"
             },
             "android": null
         },
@@ -243,18 +243,18 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2409-x64.exe", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2600-x64.exe", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
-        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-713.exe", "icon": ICONS.winrar },
+        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-720.exe", "icon": ICONS.winrar },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
         "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_28_setup.exe", "icon": ICONS.wiztree },
         "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.97.2/PowerToysUserSetup-0.97.2-x64.exe", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "icon": ICONS.patchmypc },
-        "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1023.x64-Setup.exe", "icon": ICONS.everything },
+        "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.3.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://static.pcloud.com/pcloudDrive/pcloud-drive-latest.exe", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.11.7/Obsidian-1.11.7.exe", "icon": ICONS.obsidian },
