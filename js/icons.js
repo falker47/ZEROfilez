@@ -54,6 +54,8 @@ export const ICONS = {
     everything: 'https://api.iconify.design/mdi:text-box-search-outline.svg?color=white',
     pcloud: 'https://api.iconify.design/arcticons:pcloud.svg?color=white',
     obsidian: 'https://cdn.simpleicons.org/obsidian/white',
+    powertoys: 'https://api.iconify.design/simple-icons:powertoys.svg?color=white',
+    claude: 'https://cdn.simpleicons.org/claude/white',
 
     // Android/APK
     luckyPatcher: 'https://api.iconify.design/raphael:smile.svg?color=white',

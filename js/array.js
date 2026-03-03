@@ -38,6 +38,7 @@ export const ORDER = {
         "espanso",
         "pcloud",
         "obsidian",
+        "claude-desktop",
         "antigravity"
     ],
     "apk-files": [
