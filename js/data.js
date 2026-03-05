@@ -38,7 +38,7 @@ export const ITEMS = {
             "icon": ICONS.gbc,
             "subtext": "💻: SameBoy\n📱: Pizza Boy GBC",
             "pc": {
-                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.2/sameboy_winsdl_v1.0.2.zip"
+                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.3/sameboy_winsdl_v1.0.3.zip"
             },
             "android": {
                 "appId": "it.dbtecno.pizzaboy",
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_284/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_304/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
