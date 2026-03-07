@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_324/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_344/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -262,7 +262,7 @@ export const ITEMS = {
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.19.6-6514342219874304/windows-x64/Antigravity.exe", "icon": ICONS.antigravity }
+        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.20.4-5535391095848960/windows-x64/Antigravity.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
         "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },
