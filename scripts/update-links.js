@@ -16,7 +16,7 @@ const PROGRAMS = [
         name: "Eden (PC)",
         mode: "gitea",
         giteaBase: "https://git.eden-emu.dev",
-        giteaRepo: "eden-emu/eden",
+        repo: "eden-emu/eden",
         filter: asset => asset.name.includes('Windows') && asset.name.includes('msvc') && asset.name.includes('standard.zip'),
         regex: /("switch"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -24,7 +24,7 @@ const PROGRAMS = [
         name: "Eden (Android)",
         mode: "gitea",
         giteaBase: "https://git.eden-emu.dev",
-        giteaRepo: "eden-emu/eden",
+        repo: "eden-emu/eden",
         filter: asset => asset.name.includes('Android') && asset.name.includes('standard.apk'),
         regex: /("switch"[\s\S]*?"android"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -194,19 +194,19 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
-        } else if (prog.mode === 'antigravity') {
-            updatesCount += await checkAntigravityUrl(
-                prog.name,
-                prog.regex,
-                newContent,
-                (updatedContent) => { newContent = updatedContent; }
-            );
         } else if (prog.mode === 'gitea') {
             updatesCount += await updateGiteaRelease(
                 prog.name,
                 prog.giteaBase,
-                prog.giteaRepo,
+                prog.repo,
                 prog.filter,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
+        } else if (prog.mode === 'antigravity') {
+            updatesCount += await checkAntigravityUrl(
+                prog.name,
                 prog.regex,
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
@@ -284,11 +284,11 @@ async function updateGithubRelease(name, repo, assetFilter, regexPattern, curren
     return 0;
 }
 
-async function updateGiteaRelease(name, giteaBase, giteaRepo, assetFilter, regexPattern, currentContent, updateCallback) {
+async function updateGiteaRelease(name, giteaBase, repo, assetFilter, regexPattern, currentContent, updateCallback) {
     try {
         process.stdout.write(`Checking ${name.padEnd(20)} [Gitea]  ... `);
 
-        const url = `${giteaBase}/api/v1/repos/${giteaRepo}/releases/latest`;
+        const url = `${giteaBase}/api/v1/repos/${repo}/releases/latest`;
         const resp = await fetch(url);
         if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
         const data = await resp.json();
