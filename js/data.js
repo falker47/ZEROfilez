@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_19_564/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_19_584/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
