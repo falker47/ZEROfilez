@@ -14,13 +14,17 @@ const PROGRAMS = [
     },
     {
         name: "Eden (PC)",
-        repo: "eden-emulator/Releases",
+        mode: "gitea",
+        giteaBase: "https://git.eden-emu.dev",
+        giteaRepo: "eden-emu/eden",
         filter: asset => asset.name.includes('Windows') && asset.name.includes('msvc') && asset.name.includes('standard.zip'),
         regex: /("switch"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "Eden (Android)",
-        repo: "eden-emulator/Releases",
+        mode: "gitea",
+        giteaBase: "https://git.eden-emu.dev",
+        giteaRepo: "eden-emu/eden",
         filter: asset => asset.name.includes('Android') && asset.name.includes('standard.apk'),
         regex: /("switch"[\s\S]*?"android"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -197,6 +201,16 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'gitea') {
+            updatesCount += await updateGiteaRelease(
+                prog.name,
+                prog.giteaBase,
+                prog.giteaRepo,
+                prog.filter,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
         } else {
             // Default: GitHub Release Asset
             updatesCount += await updateGithubRelease(
@@ -234,6 +248,47 @@ async function updateGithubRelease(name, repo, assetFilter, regexPattern, curren
         process.stdout.write(`Checking ${name.padEnd(20)} [GitHub] ... `);
 
         const url = `https://api.github.com/repos/${repo}/releases/latest`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
+        const data = await resp.json();
+
+        const asset = data.assets.find(assetFilter);
+        if (!asset) {
+            console.log(`❌ No matching asset.`);
+            return 0;
+        }
+
+        const newUrl = asset.browser_download_url;
+        const match = currentContent.match(regexPattern);
+
+        if (match) {
+            const currentUrl = match[2];
+            if (currentUrl !== newUrl) {
+                console.log(`✨ UPDATE FOUND!`);
+                console.log(`    Old: ${currentUrl}`);
+                console.log(`    New: ${newUrl}`);
+
+                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
+                updateCallback(updated);
+                return 1;
+            } else {
+                console.log(`✅`);
+            }
+        } else {
+            console.log(`⚠️ Regex mismatch.`);
+        }
+
+    } catch (err) {
+        console.log(`❌ Error: ${err.message}`);
+    }
+    return 0;
+}
+
+async function updateGiteaRelease(name, giteaBase, giteaRepo, assetFilter, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Gitea]  ... `);
+
+        const url = `${giteaBase}/api/v1/repos/${giteaRepo}/releases/latest`;
         const resp = await fetch(url);
         if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
         const data = await resp.json();
