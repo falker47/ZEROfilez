@@ -261,7 +261,7 @@ export const ITEMS = {
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
 
         // Custom
-        "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
+        "panacea": { "id": "panacea", "name": "Panacea", "url": "https://github.com/falker47/panacea/releases/latest/download/Panacea.exe", "icon": ICONS.panacea },
         "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.20.6-5891862175809536/windows-x64/Antigravity.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
