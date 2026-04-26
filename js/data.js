@@ -52,10 +52,10 @@ export const ITEMS = {
             "icon": ICONS.switch,
             "subtext": "Eden Emulator",
             "pc": {
-                "url": "https://git.eden-emu.dev/eden-emu/eden/releases/download/v0.2.0-rc2/Eden-Windows-v0.2.0-rc2-amd64-msvc-standard.zip"
+                "url": "https://stable.eden-emu.dev/v0.2.0-rc2/Eden-Windows-v0.2.0-rc2-amd64-msvc-standard.zip"
             },
             "android": {
-                "url": "https://git.eden-emu.dev/eden-emu/eden/releases/download/v0.2.0-rc2/Eden-Android-v0.2.0-rc2-standard.apk"
+                "url": "https://stable.eden-emu.dev/v0.2.0-rc2/Eden-Android-v0.2.0-rc2-standard.apk"
             }
         },
         "scummvm": {
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_24_580/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_24_600/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
