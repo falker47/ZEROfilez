@@ -203,6 +203,16 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'gitea') {
+            updatesCount += await updateGiteaRelease(
+                prog.name,
+                prog.giteaBase,
+                prog.repo,
+                prog.filter,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
         } else if (prog.mode === 'antigravity') {
             updatesCount += await checkAntigravityUrl(
                 prog.name,
