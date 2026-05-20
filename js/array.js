@@ -38,7 +38,8 @@ export const ORDER = {
         "espanso",
         "pcloud",
         "obsidian",
-        "antigravity"
+        "antigravity",
+        "cluely"
     ],
     "apk-files": [
         "lucky-patcher",
