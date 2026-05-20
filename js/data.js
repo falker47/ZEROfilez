@@ -52,10 +52,10 @@ export const ITEMS = {
             "icon": ICONS.switch,
             "subtext": "Eden Emulator",
             "pc": {
-                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.2.0-rc1/Eden-Windows-v0.2.0-rc1-amd64-msvc-standard.zip"
+                "url": "https://stable.eden-emu.dev/v0.2.0/Eden-Windows-v0.2.0-amd64-msvc-standard.zip"
             },
             "android": {
-                "url": "https://github.com/eden-emulator/Releases/releases/download/v0.2.0-rc1/Eden-Android-v0.2.0-rc1-standard.apk"
+                "url": "https://stable.eden-emu.dev/v0.2.0/Eden-Android-v0.2.0-standard.apk"
             }
         },
         "scummvm": {
@@ -261,7 +261,8 @@ export const ITEMS = {
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.19.6-6514342219874304/windows-x64/Antigravity.exe", "icon": ICONS.antigravity }
+        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.19.6-6514342219874304/windows-x64/Antigravity.exe", "icon": ICONS.antigravity },
+        "cluely": { "id": "cluely", "name": "Cluely", "url": "https://api.v2.cluely.com/desktop-download/win/latest.exe", "icon": ICONS.cluely }
     },
     "apk-files": {
         "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },

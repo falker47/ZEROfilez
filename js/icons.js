@@ -65,5 +65,6 @@ export const ICONS = {
     pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
     web: 'https://api.iconify.design/mdi:web.svg?color=white',
     panacea: 'panacea_icon_white.png',
-    antigravity: 'https://api.iconify.design/codicon:code.svg?color=white'
+    antigravity: 'https://api.iconify.design/codicon:code.svg?color=white',
+    cluely: 'https://api.iconify.design/mdi:eye-outline.svg?color=white'
 };
