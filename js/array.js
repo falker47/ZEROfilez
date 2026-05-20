@@ -39,7 +39,8 @@ export const ORDER = {
         "pcloud",
         "obsidian",
         "claude-desktop",
-        "antigravity"
+        "antigravity",
+        "cluely"
     ],
     "apk-files": [
         "lucky-patcher",
