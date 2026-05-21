@@ -64,7 +64,7 @@ export const ITEMS = {
             "icon": ICONS.scummvm,
             "subtext": "ScummVM",
             "pc": {
-                "url": "https://downloads.scummvm.org/frs/scummvm/2026.1.0/scummvm-2026.1.0-win32.exe"
+                "url": "https://downloads.scummvm.org/frs/scummvm/2026.2.0/scummvm-2026.2.0-win32.exe"
             },
             "android": {
                 "appId": "org.scummvm.scummvm",
@@ -81,7 +81,7 @@ export const ITEMS = {
                 "url": "https://github.com/cemu-project/Cemu/releases/download/v2.6/cemu-2.6-windows-x64.zip"
             },
             "android": {
-                "url": "https://github.com/SSimco/Cemu/releases/download/0.03/Cemu-0.3.apk"
+                "url": "https://github.com/SSimco/Cemu/releases/download/0.5/Cemu-0.5.apk"
             }
         },
         "psvita": {
@@ -128,7 +128,7 @@ export const ITEMS = {
             "icon": ICONS.psp,
             "subtext": "PPSSPP",
             "pc": {
-                "url": "https://www.ppsspp.org/files/1_24_1080/PPSSPPSetup.exe"
+                "url": "https://www.ppsspp.org/files/1_20_4/PPSSPPSetup.exe"
             },
             "android": {
                 "appId": "org.ppsspp.ppsspp",
@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-b30a20c2dc368f76e81ee484d2322a2c35848656/rpcs3-v0.0.39-18850-b30a20c2_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-67464f97df8679d5d540256987551f34fe00d4cc/rpcs3-v0.0.40-19389-67464f97_win64_msvc.7z"
             },
             "android": null
         },
@@ -176,7 +176,7 @@ export const ITEMS = {
             "icon": ICONS.xbox,
             "subtext": "Xemu",
             "pc": {
-                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.134/xemu-0.8.134-windows-x86_64.zip"
+                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.135/xemu-0.8.135-windows-x86_64.zip"
             },
             "android": null
         },
@@ -243,11 +243,11 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2600-x64.exe", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2301-x64.exe", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
-        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-720.exe", "icon": ICONS.winrar },
+        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-722.exe", "icon": ICONS.winrar },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
