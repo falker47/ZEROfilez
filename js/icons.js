@@ -58,6 +58,7 @@ export const ICONS = {
     powertoys: 'https://api.iconify.design/simple-icons:powertoys.svg?color=white',
     claude: 'https://cdn.simpleicons.org/claude/white',
     bitwarden: 'https://cdn.simpleicons.org/bitwarden/white',
+    discord: 'https://cdn.simpleicons.org/discord/white',
 
     // Android/APK
     luckyPatcher: 'https://api.iconify.design/raphael:smile.svg?color=white',

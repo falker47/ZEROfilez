@@ -41,6 +41,7 @@ export const ORDER = {
         "obsidian",
         "claude-desktop",
         "bitwarden-desktop",
+        "discord",
         "antigravity",
         "cluely"
     ],
