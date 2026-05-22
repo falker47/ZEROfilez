@@ -178,6 +178,7 @@ const PROGRAMS = [
     {
         name: "Bitwarden",
         repo: "bitwarden/clients",
+        tagPrefix: "desktop-v",
         filter: asset => asset.name.startsWith('Bitwarden-Installer-') && asset.name.endsWith('.exe'),
         regex: /("bitwarden-desktop"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -185,6 +186,11 @@ const PROGRAMS = [
         name: "Google Antigravity",
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
+        name: "Cheat Engine",
+        mode: "cheatengine",
+        regex: /("cheat-engine"[\s\S]*?"url":\s*")([^"]+)(")/
     }
 ];
 
@@ -284,6 +290,10 @@ async function main() {
                 'https://www.voidtools.com/downloads/',
                 /Everything-[0-9\.]+\.x64-Setup\.exe/i,
                 'https://www.voidtools.com/');
+        } else if (prog.mode === 'cheatengine') {
+            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
+                'https://www.cheatengine.org/downloads.php',
+                /https:\/\/[a-z0-9]+\.cloudfront\.net\/[a-z0-9]+\/[a-z0-9]+\.exe/i);
         } else {
             // Default: GitHub Release Asset
             updatesCount += await updateGithubRelease(
@@ -292,7 +302,8 @@ async function main() {
                 prog.filter,
                 prog.regex,
                 newContent,
-                (updatedContent) => { newContent = updatedContent; }
+                (updatedContent) => { newContent = updatedContent; },
+                prog.tagPrefix
             );
         }
         // Polite delay between programs to avoid aggressive rate limiting
@@ -316,16 +327,28 @@ function sleep(ms) {
 // 🛠️ HELPER FUNCTIONS
 // ==========================================
 
-async function updateGithubRelease(name, repo, assetFilter, regexPattern, currentContent, updateCallback) {
+async function updateGithubRelease(name, repo, assetFilter, regexPattern, currentContent, updateCallback, tagPrefix) {
     try {
         process.stdout.write(`Checking ${name.padEnd(20)} [GitHub] ... `);
 
-        const url = `https://api.github.com/repos/${repo}/releases/latest`;
+        const url = tagPrefix 
+            ? `https://api.github.com/repos/${repo}/releases`
+            : `https://api.github.com/repos/${repo}/releases/latest`;
         const resp = await fetch(url);
         if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
         const data = await resp.json();
 
-        const asset = data.assets.find(assetFilter);
+        let release = data;
+        if (tagPrefix) {
+            release = data.find(r => !r.draft && !r.prerelease && r.tag_name.startsWith(tagPrefix));
+        }
+
+        if (!release) {
+            console.log(`❌ No matching release.`);
+            return 0;
+        }
+
+        const asset = release.assets.find(assetFilter);
         if (!asset) {
             console.log(`❌ No matching asset.`);
             return 0;
@@ -626,54 +649,6 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
         if (prependDomain && !newUrl.startsWith('http')) {
             if (prependDomain.includes('{version}')) {
                 // Try to extract version number from the matched string e.g vlc-3.0.23-win64.exe -> 3.0.23
-                const verMatch = newUrl.match(/[0-9]+(?:\.[0-9]+)+/);
-                if (verMatch) {
-                    newUrl = prependDomain.replace('{version}', verMatch[0]) + newUrl;
-                } else {
-                    newUrl = 'https://' + newUrl; // Fallback
-                }
-            } else {
-                newUrl = prependDomain + newUrl;
-            }
-        }
-
-        const match = currentContent.match(regexPattern);
-        if (match) {
-            if (match[2] !== newUrl) {
-                console.log(`✨ UPDATE FOUND!`);
-                console.log(`    Old: ${match[2]}`);
-                console.log(`    New: ${newUrl}`);
-                const updated = currentContent.replace(regexPattern, `$1${newUrl}$3`);
-                updateCallback(updated);
-                return 1;
-            } else {
-                console.log(`✅`);
-            }
-        }
-    } catch (err) { console.log(`❌ Error: ${err.message}`); }
-    return 0;
-}
-
-// Universal Web Scraper for predictable download links
-async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallback, scrapeUrl, extractRegex, prependDomain = '') {
-    try {
-        process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
-        const r = await fetch(scrapeUrl, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) });
-        const text = await r.text();
-        const extractedMatch = text.match(extractRegex);
-
-        if (!extractedMatch) {
-            console.log(`❌ Could not find installer URL on ${scrapeUrl}`);
-            return 0;
-        }
-
-        let newUrl = extractedMatch[0];
-
-        // Handle prepending domains and special version injections
-        if (prependDomain && !newUrl.startsWith('http')) {
-            if (prependDomain.includes('{version}')) {
-                // Try to extract version number from the matched string e.g vlc-3.0.23-win64.exe -> 3.0.23
-                // or scummvm-2.9.1-win32.exe -> 2.9.1
                 const verMatch = newUrl.match(/[0-9]+(?:\.[0-9]+)+/);
                 if (verMatch) {
                     newUrl = prependDomain.replace('{version}', verMatch[0]) + newUrl;

@@ -46,6 +46,7 @@ export const ICONS = {
     revo: 'https://api.iconify.design/arcticons:multi-app-uninstaller.svg?color=white',
     libreoffice: 'https://cdn.simpleicons.org/libreoffice/white',
     winrar: 'https://api.iconify.design/solar:winrar-outline.svg?color=white',
+    cheatEngine: 'https://api.iconify.design/mdi:memory.svg?color=white',
 
     // Utilities
     sharex: 'https://cdn.simpleicons.org/sharex/white',

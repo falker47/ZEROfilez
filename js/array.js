@@ -30,6 +30,7 @@ export const ORDER = {
         "revo-uninstaller",
         "libreoffice",
         "winrar",
+        "cheat-engine",
         "sharex",
         "wiztree",
         "powertoys",
