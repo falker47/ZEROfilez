@@ -102,7 +102,7 @@ export const ITEMS = {
             "icon": ICONS.wii,
             "subtext": "Dolphin Emulator",
             "pc": {
-                "url": "https://dl.dolphin-emu.org/releases/2512/dolphin-2512-x64.7z"
+                "url": "https://dl.dolphin-emu.org/releases/2603/dolphin-2603-x64.7z"
             },
             "android": {
                 "appId": "org.dolphinemu.dolphinemu",
@@ -259,10 +259,11 @@ export const ITEMS = {
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/Obsidian-1.12.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.4.0/Bitwarden-Installer-2026.4.0.exe", "icon": ICONS.bitwarden },
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.1-6566078776737792/windows-x64/Antigravity-x64.exe", "icon": ICONS.antigravity },
+        "antigravity": { "id": "antigravity", "name": "Google Antigravity", "url": "https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.6-5413878570549248/windows-x64/Antigravity-x64.exe", "icon": ICONS.antigravity },
         "cluely": { "id": "cluely", "name": "Cluely", "url": "https://api.v2.cluely.com/desktop-download/win/latest.exe", "icon": ICONS.cluely }
     },
     "apk-files": {

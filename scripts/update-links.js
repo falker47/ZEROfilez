@@ -176,6 +176,12 @@ const PROGRAMS = [
         regex: /("obsidian"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
+        name: "Bitwarden",
+        repo: "bitwarden/clients",
+        filter: asset => asset.name.startsWith('Bitwarden-Installer-') && asset.name.endsWith('.exe'),
+        regex: /("bitwarden-desktop"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
         name: "Google Antigravity",
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/

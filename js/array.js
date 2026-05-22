@@ -39,6 +39,7 @@ export const ORDER = {
         "pcloud",
         "obsidian",
         "claude-desktop",
+        "bitwarden-desktop",
         "antigravity",
         "cluely"
     ],
