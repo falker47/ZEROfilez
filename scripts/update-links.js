@@ -176,7 +176,7 @@ const PROGRAMS = [
         regex: /("obsidian"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
-        name: "Google Antigravity",
+        name: "Google Antigravity IDE",
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     }
@@ -511,7 +511,7 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
 
         // Extract matching URL for windows-x64 exe
         const urlMatches = jsText.match(/https:\/\/[^"'>]+exe/ig);
-        const winX64Match = urlMatches ? urlMatches.find(url => url.includes('windows-x64')) : null;
+        const winX64Match = urlMatches ? urlMatches.find(url => url.includes('windows-x64') && url.toLowerCase().includes('ide')) : null;
 
         if (!winX64Match) {
             console.log(`❌ Could not extract URL from JS bundle.`);
