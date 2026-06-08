@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-2d1be0918044c2bd906403dfb310ae8054d13d44/rpcs3-v0.0.41-19446-2d1be091_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-e379fba97d132a84b976709ce35670c520ccc0ae/rpcs3-v0.0.41-19452-e379fba9_win64_msvc.7z"
             },
             "android": null
         },
@@ -176,7 +176,7 @@ export const ITEMS = {
             "icon": ICONS.xbox,
             "subtext": "Xemu",
             "pc": {
-                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.135/xemu-0.8.135-windows-x86_64.zip"
+                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.136/xemu-0.8.136-windows-x86_64.zip"
             },
             "android": null
         },
@@ -248,7 +248,7 @@ export const ITEMS = {
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-722.exe", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d5iv42o50fxks.cloudfront.net/BtRvILA/ppk0.exe", "icon": ICONS.cheatEngine },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://duwtdv56pofh5.cloudfront.net/Yclyoco/e6zj.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
