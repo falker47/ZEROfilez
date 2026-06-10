@@ -183,7 +183,7 @@ const PROGRAMS = [
         regex: /("bitwarden-desktop"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
-        name: "Google Antigravity",
+        name: "Antigravity IDE",
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -526,21 +526,25 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
     try {
         process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
 
-        const r = await fetch('https://antigravity.google/download', { signal: AbortSignal.timeout(5000) });
+        const downloadPageUrl = 'https://antigravity.google/download';
+        const r = await fetch(downloadPageUrl, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) });
         const text = await r.text();
-        const jsFileMatch = text.match(/main.*\.js/i);
+        const jsFileUrls = getScriptUrls(text, downloadPageUrl);
+        let winX64Match = extractAntigravityInstallerUrl(text);
+        const jsFileMatch = winX64Match || jsFileUrls.length > 0;
         if (!jsFileMatch) {
             console.log(`❌ Could not find main JS bundle.`);
             return 0;
         }
 
-        const jsFileUrl = 'https://antigravity.google/' + jsFileMatch[0];
-        const r2 = await fetch(jsFileUrl, { signal: AbortSignal.timeout(5000) });
-        const jsText = await r2.text();
-
-        // Extract matching URL for windows-x64 exe
-        const urlMatches = jsText.match(/https:\/\/[^"'>]+exe/ig);
-        const winX64Match = urlMatches ? urlMatches.find(url => url.includes('windows-x64')) : null;
+        for (const jsFileUrl of jsFileUrls) {
+            if (winX64Match) break;
+            try {
+                const bundleResponse = await fetch(jsFileUrl, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(5000) });
+                const bundleText = await bundleResponse.text();
+                winX64Match = extractAntigravityInstallerUrl(bundleText);
+            } catch (err) { }
+        }
 
         if (!winX64Match) {
             console.log(`❌ Could not extract URL from JS bundle.`);
@@ -568,6 +572,44 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
         console.log(`❌ Error: ${err.message}`);
     }
     return 0;
+}
+
+function getScriptUrls(html, pageUrl) {
+    const scriptSrcs = [...html.matchAll(/<script[^>]+src=["']([^"']+\.js[^"']*)["']/ig)].map(match => match[1]);
+    const fallbackBundles = [...html.matchAll(/(?:src=["']|["'(/])([^"'()]*main[^"'()]*\.js[^"'()]*)/ig)].map(match => match[1]);
+    const urls = [...scriptSrcs, ...fallbackBundles]
+        .map(src => src.replace(/^["'(/]+/, ''))
+        .map(src => {
+            try {
+                return new URL(src, pageUrl).href;
+            } catch {
+                return null;
+            }
+        })
+        .filter(Boolean);
+
+    return [...new Set(urls)];
+}
+
+function extractAntigravityInstallerUrl(text) {
+    const normalizedText = text
+        .replace(/\\u002F/gi, '/')
+        .replace(/\\u003A/gi, ':')
+        .replace(/\\\//g, '/')
+        .replace(/&amp;/g, '&');
+
+    const urls = normalizedText.match(/https?:\/\/[^"'<>\s)]+\.exe/ig) || [];
+    const cleanUrls = urls.map(url => url.replace(/\\x26/g, '&'));
+
+    return cleanUrls.find(url =>
+        /\/antigravity\/stable\//i.test(url) &&
+        /\/windows-x64\//i.test(url) &&
+        /Antigravity(?:%20|\+)IDE\.exe$/i.test(url)
+    ) || cleanUrls.find(url =>
+        /\/antigravity\/stable\//i.test(url) &&
+        /\/windows-x64\//i.test(url) &&
+        /\.exe$/i.test(url)
+    ) || null;
 }
 
 async function checkPpssppUrl(name, regexPattern, currentContent, updateCallback) {
