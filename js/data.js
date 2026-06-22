@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-e32d19ffac500c6194f93b0338a4a64c51399b38/rpcs3-v0.0.41-19499-e32d19ff_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-c7478d6dcc3b5e5303a91a107b6a393e79c0e7cb/rpcs3-v0.0.41-19507-c7478d6d_win64_msvc.7z"
             },
             "android": null
         },
@@ -248,7 +248,7 @@ export const ITEMS = {
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-722.exe", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/kJGrZAS/hv1l.exe", "icon": ICONS.cheatEngine },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/LBKTUAO/yoqu.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
