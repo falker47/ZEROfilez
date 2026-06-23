@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-c7478d6dcc3b5e5303a91a107b6a393e79c0e7cb/rpcs3-v0.0.41-19507-c7478d6d_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-927e2492ef720d2223bd8b149a02af875e11c398/rpcs3-v0.0.41-19508-927e2492_win64_msvc.7z"
             },
             "android": null
         },
@@ -248,7 +248,7 @@ export const ITEMS = {
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-722.exe", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/LBKTUAO/yoqu.exe", "icon": ICONS.cheatEngine },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/TybXwgG/nuwg.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
@@ -265,7 +265,7 @@ export const ITEMS = {
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.4-6381998290370560/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
+        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.1.1-6123990880747520/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
         "cluely": { "id": "cluely", "name": "Cluely", "url": "https://api.v2.cluely.com/desktop-download/win/latest.exe", "icon": ICONS.cluely }
     },
     "apk-files": {
