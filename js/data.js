@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-f5e8a2bfa987f4cb7a2a8a58c2abc0ee788aed82/rpcs3-v0.0.41-19525-f5e8a2bf_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-67ee6c1ab9482015907d1300468ec7d52cc1dc67/rpcs3-v0.0.41-19528-67ee6c1a_win64_msvc.7z"
             },
             "android": null
         },
@@ -247,8 +247,8 @@ export const ITEMS = {
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
-        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-722.exe", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/vnvqiGT/le8c.exe", "icon": ICONS.cheatEngine },
+        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "icon": ICONS.winrar },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d3px5ihclumdo8.cloudfront.net/VqRLQHw/lhw8.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
@@ -260,7 +260,7 @@ export const ITEMS = {
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/Obsidian-1.12.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
-        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.0/Bitwarden-Installer-2026.6.0.exe", "icon": ICONS.bitwarden },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.6.1/Bitwarden-Installer-2026.6.1.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "icon": ICONS.discord },
 
         // Custom
