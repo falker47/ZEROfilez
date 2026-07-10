@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-bb5dc93becea08888518a65920c11afc6c3d6e50/rpcs3-v0.0.41-19561-bb5dc93b_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4003b017f55f6ba3793469f35927cb5a2815cd22/rpcs3-v0.0.41-19563-4003b017_win64_msvc.7z"
             },
             "android": null
         },
