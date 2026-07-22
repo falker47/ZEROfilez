@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-63851f4242582a877f65514a9d014e6e61282111/rpcs3-v0.0.41-19600-63851f42_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-8b05c8cc1f831913a84560b304a8d15a07f4662c/rpcs3-v0.0.41-19604-8b05c8cc_win64_msvc.7z"
             },
             "android": null
         },
@@ -256,7 +256,7 @@ export const ITEMS = {
         "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.100.2/PowerToysUserSetup-0.100.2-x64.exe", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "icon": ICONS.everything },
-        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.3.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
+        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/Obsidian-1.12.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
