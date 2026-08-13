@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-92870a3d4eb2642967523174eaaf4ffe773bd24a/rpcs3-v0.0.42-19732-92870a3d_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-26e37d8c8ca758fc81dda57521ed8f9a68d042fd/rpcs3-v0.0.42-19734-26e37d8c_win64_msvc.7z"
             },
             "android": null
         },
@@ -258,14 +258,14 @@ export const ITEMS = {
         "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.0/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
-        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.13.6/Obsidian-1.13.6.exe", "icon": ICONS.obsidian },
+        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.13.7/Obsidian-1.13.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.7.0/Bitwarden-Installer-2026.7.0.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "icon": ICONS.discord },
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.1.1-6123990880747520/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
+        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.2-6697361355964416/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
         "cluely": { "id": "cluely", "name": "Cluely", "url": "https://api.v2.cluely.com/desktop-download/win/latest.exe", "icon": ICONS.cluely }
     },
     "apk-files": {
