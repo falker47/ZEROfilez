@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-26e37d8c8ca758fc81dda57521ed8f9a68d042fd/rpcs3-v0.0.42-19734-26e37d8c_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4c63acfb40b23da7e7ceee46c8fddd1acbeee152/rpcs3-v0.0.42-19748-4c63acfb_win64_msvc.7z"
             },
             "android": null
         },
@@ -265,7 +265,7 @@ export const ITEMS = {
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.2-6697361355964416/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
+        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.5-4923483625488384/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },
         "cluely": { "id": "cluely", "name": "Cluely", "url": "https://api.v2.cluely.com/desktop-download/win/latest.exe", "icon": ICONS.cluely }
     },
     "apk-files": {
