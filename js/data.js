@@ -156,7 +156,7 @@ export const ITEMS = {
             "icon": ICONS.ps2,
             "subtext": "PCSX2",
             "pc": {
-                "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.6.3/pcsx2-v2.6.3-windows-x64-Qt.7z"
+                "url": "https://github.com/PCSX2/pcsx2/releases/download/v2.8.0/pcsx2-v2.8.0-windows-x64-Qt.7z"
             },
             "android": null
         },
@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-48d2b2481325bee02602e5e4ae47beab9040fa85/rpcs3-v0.0.42-19872-48d2b248_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-98906eb0357823aa84997a1ce06406a66fde3722/rpcs3-v0.0.42-19873-98906eb0_win64_msvc.7z"
             },
             "android": null
         },
