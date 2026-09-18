@@ -260,7 +260,7 @@ export const ITEMS = {
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.13.7/Obsidian-1.13.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
-        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.8.0/Bitwarden-Installer-2026.8.0.exe", "icon": ICONS.bitwarden },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.0/Bitwarden-Installer-2026.9.0.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "icon": ICONS.discord },
 
         // Custom
