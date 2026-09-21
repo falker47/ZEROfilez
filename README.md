@@ -1,8 +1,18 @@
 # 🔐 ZEROfilez Cloud Decryptor
 
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=F7DF1E) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
 
 **ZEROfilez** is a dual-mode encrypted file management system and public archive utility. It operates entirely client-side, ensuring zero knowledge privacy for your personal files while offering a quick interface for public tools.
+
+---
+
+## 🌱 From Community Support to Software
+
+ZEROfilez began during the COVID lockdown as a practical response to a recurring problem: friends kept asking me how to set up emulators and get started with retro gaming, and I found myself explaining the same workflows over and over again.
+
+What started as one-to-one support gradually evolved into reusable tutorials, curated resources, and a small community ecosystem built around making those workflows easier to understand and access.
+
+This repository is the modern continuation of that original idea. The implementation has evolved, but the goal remains the same: **reduce friction, organize useful tools, and turn repeated technical help into something reusable**.
 
 ---
 
