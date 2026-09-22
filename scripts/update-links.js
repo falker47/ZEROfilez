@@ -113,7 +113,8 @@ const PROGRAMS = [
     },
     {
         name: "7-Zip",
-        mode: "7zip",
+        repo: "ip7z/7zip",
+        filter: asset => /^7z\d+-x64\.exe$/i.test(asset.name),
         regex: /("7-zip"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
@@ -133,8 +134,7 @@ const PROGRAMS = [
     },
     {
         name: "LibreOffice",
-        mode: "increment",
-        // Current: https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi
+        mode: "libreoffice",
         regex: /("libreoffice"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
@@ -215,16 +215,6 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
-        } else if (prog.mode === 'gitea') {
-            updatesCount += await updateGiteaRelease(
-                prog.name,
-                prog.giteaBase,
-                prog.repo,
-                prog.filter,
-                prog.regex,
-                newContent,
-                (updatedContent) => { newContent = updatedContent; }
-            );
         } else if (prog.mode === 'antigravity') {
             updatesCount += await checkAntigravityUrl(
                 prog.name,
@@ -256,15 +246,17 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'libreoffice') {
+            updatesCount += await checkLibreOfficeUrl(
+                prog.name,
+                prog.regex,
+                newContent,
+                (updatedContent) => { newContent = updatedContent; }
+            );
         } else if (prog.mode === 'dolphin') {
             updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
                 'https://dolphin-emu.org/download/',
                 /https:\/\/dl\.dolphin-emu\.org\/releases\/2[0-9]{3}\/dolphin-[^\/]+-x64\.7z/i);
-        } else if (prog.mode === '7zip') {
-            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
-                'https://www.7-zip.org/download.html',
-                /a\/7z[0-9]+-x64\.exe/i,
-                'https://www.7-zip.org/');
         } else if (prog.mode === 'winrar') {
             updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
                 'https://www.rarlab.com/download.htm',
@@ -638,6 +630,54 @@ async function checkPpssppUrl(name, regexPattern, currentContent, updateCallback
             }
         }
     } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    return 0;
+}
+
+async function checkLibreOfficeUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Official] ... `);
+
+        const indexUrl = 'https://download.documentfoundation.org/libreoffice/stable/';
+        const r = await fetch(indexUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0' },
+            signal: AbortSignal.timeout(5000)
+        });
+        if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+
+        const html = await r.text();
+        const versions = [...html.matchAll(/href=["'](\d+\.\d+\.\d+)\/["']/g)]
+            .map(match => match[1]);
+
+        if (versions.length === 0) {
+            console.log('❌ Could not find stable versions.');
+            return 0;
+        }
+
+        const latestVersion = versions.sort((a, b) =>
+            a.localeCompare(b, undefined, { numeric: true })
+        ).pop();
+
+        const newUrl =
+            `https://download.documentfoundation.org/libreoffice/stable/${latestVersion}/win/x86_64/LibreOffice_${latestVersion}_Win_x86-64.msi`;
+
+        const match = currentContent.match(regexPattern);
+        if (!match) {
+            console.log('⚠️ Regex mismatch.');
+            return 0;
+        }
+
+        if (match[2] !== newUrl) {
+            console.log('✨ UPDATE FOUND!');
+            console.log(`    Old: ${match[2]}`);
+            console.log(`    New: ${newUrl}`);
+            updateCallback(currentContent.replace(regexPattern, `$1${newUrl}$3`));
+            return 1;
+        }
+
+        console.log('✅');
+    } catch (err) {
+        console.log(`❌ Error: ${err.message}`);
+    }
     return 0;
 }
 
