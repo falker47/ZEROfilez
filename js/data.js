@@ -52,10 +52,10 @@ export const ITEMS = {
             "icon": ICONS.switch,
             "subtext": "Eden Emulator",
             "pc": {
-                "url": "https://stable.eden-emu.dev/v0.2.0/Eden-Windows-v0.2.0-amd64-msvc-standard.zip"
+                "url": "https://stable.eden-emu.dev/v0.2.1/Eden-Windows-v0.2.1-amd64-msvc-standard.zip"
             },
             "android": {
-                "url": "https://stable.eden-emu.dev/v0.2.0/Eden-Android-v0.2.0-standard.apk"
+                "url": "https://stable.eden-emu.dev/v0.2.1/Eden-Android-v0.2.1-standard.apk"
             }
         },
         "scummvm": {
@@ -243,10 +243,10 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://www.7-zip.org/a/7z2301-x64.exe", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
-        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/25.8.4/win/x86_64/LibreOffice_25.8.4_Win_x86-64.msi", "icon": ICONS.libreoffice },
+        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "icon": ICONS.winrar },
         "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d1ya6fb9ltsosh.cloudfront.net/DwtYwfn/jsog.exe", "icon": ICONS.cheatEngine },
 
