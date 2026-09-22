@@ -1,8 +1,8 @@
-# 🔐 ZEROfilez Cloud Decryptor
+# ZEROfilez
 
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=F7DF1E) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
 
-**ZEROfilez** is a dual-mode encrypted file management system and public archive utility. It operates entirely client-side, ensuring zero knowledge privacy for your personal files while offering a quick interface for public tools.
+**ZEROfilez** is a static, client-side utility with two complementary modes: a curated quick-start catalog for useful software and emulation tools, and a browser-based decryptor for personal encrypted file packages.
 
 ---
 
@@ -18,90 +18,99 @@ This repository is the modern continuation of that original idea. The implementa
 
 ## 🌓 Project Modes
 
-This project features a unique duality:
+### 1. 🎮 Quick Startup
 
-### 1. 🎮 Quick Startup (Public Mode)
+A curated catalog for quickly reaching useful software and emulation tooling.
 
-A public archive mode designed for quick access to essential tools.
+- **Emulators**: Windows and Android links for actively maintained emulator projects.
+- **PC utilities**: browsers, maintenance tools, productivity software and selected personal utilities.
+- **Gaming tools**: save editors and ROM-hacking utilities used in the wider ZEROfilez workflow.
+- **Upstream-first links**: official project/vendor sources are preferred whenever practical. Two legacy project-owned packages are intentionally served from the companion `FileStorage` repository.
 
-- **Emulators**: Direct downloads for popular emulators (PC & Android).
-- **Utilities**: Curated list of useful software and APKs.
-- **Game Archives**: Quick links for retro-gaming setups.
+Download URLs that change with releases are maintained by `scripts/update-links.js` and the scheduled GitHub Actions workflow.
 
-### 2. 🔐 Personal Vault (Private Mode)
+### 2. 🔐 Personal Vault
 
-A secure system to decrypt and manage your private files directly in the browser.
+A local browser interface for decrypting a personal encrypted package.
 
-- **Client-Side Encryption**: Uses AES-256-GCM + HKDF-SHA256.
-- **Zero Knowledge**: No private keys or unencrypted data are ever sent to a server.
-- **Local Key Management**: Requires your personal `user.key` to unlock content.
+- **Client-side cryptography**: AES-256-GCM with HKDF-SHA256 through the Web Crypto API.
+- **Local key handling**: the decryption key is selected from the local device.
+- **No upload backend in this repository**: package and key processing happens in the browser.
+
+The private packaging scripts used for my own archive workflow are not part of this public repository because they are personal tooling, not because their secrecy is required for the cryptographic design.
 
 ---
 
-## 🚀 Setup & Usage
+## 🚀 Running the App
 
-### For Public Use
+Because the application uses JavaScript modules, serve the repository over HTTP rather than opening `index.html` directly with `file://`.
 
-Simply open the `index.html` file or host it on GitHub Pages. The "Quick Startup" mode works out-of-the-box.
+For example:
 
-### For Personal Vault Use
+```bash
+python -m http.server 8000
+```
 
-To use the encryption features, you must generate your own encrypted package.
+Then open `http://localhost:8000`.
 
-1.  **Dependencies**: You need the backend python scripts (excluded from this repo for privacy).
-2.  **Generate Package**: Use the `packager.py` (not included) to create `packages.json.enc`.
-3.  **Unlock**: Upload your `packages.json.enc` and `user.key` in the web interface.
+The project is also suitable for static hosting such as GitHub Pages.
 
-> **Note**: The Python scripts used to generate the encrypted packages are intentionally excluded from this public repository to maintain the security of my personal implementation. You are free to implement your own package generator adhering to the `packages.json` schema.
+### Personal Vault input
+
+The public repository contains the decryptor, but not my private package-generation pipeline. To use the vault mode with your own data, provide:
+
+1. an encrypted `packages.json.enc` package compatible with the frontend format;
+2. the corresponding `user.key`;
+3. the files referenced by that package through whatever storage layout your own generator uses.
+
+---
+
+## 🔄 Download-Link Maintenance
+
+The updater has no npm dependencies. It requires **Node.js 20+** and can be run directly:
+
+```bash
+node scripts/update-links.js
+```
+
+The same script runs automatically from:
+
+```text
+.github/workflows/update_links.yml
+```
+
+The updater uses official release APIs or upstream download pages where possible. Version-specific links are updated in `js/data.js`; stable vendor landing/latest endpoints are left unchanged when they are already designed not to require version maintenance.
 
 ---
 
 ## 📁 Project Structure
 
 ```text
-├── index.html              # Main Web App (Dual Interface)
-├── styles.css              # Styling & Animations
-├── script.js               # Core Logic (Crypto + UI)
-├── README.md               # Documentation
-│
-├── [EXCLUDED]              # Private Backend Tools
-│   ├── add_file.py
-│   ├── process_all.py
-│   └── packages.json.enc   # Your encrypted file list
-└── [EXCLUDED]
-    └── user.key            # Your private decryption key
+├── index.html
+├── styles.css
+├── css/                         # Layout, components and responsive styles
+├── js/
+│   ├── main.js                  # App entry point / mode switching
+│   ├── startup.js               # Quick Startup rendering and downloads
+│   ├── data.js                  # Curated software/emulator links
+│   ├── array.js                 # Display ordering
+│   ├── icons.js                 # Icon sources and fallbacks
+│   └── decryptor.js             # Client-side vault/decryption logic
+├── scripts/
+│   └── update-links.js          # Release/link updater
+├── .github/workflows/
+│   └── update_links.yml         # Scheduled updater
+├── panacea_icon_white.png       # Local icon for Panacea
+└── README.md
 ```
 
-## 🛠️ Development Setup
-
-If you want to run this project locally or contribute to the automation scripts, follow these steps:
-
-### Prerequisites
-
-- **Node.js**: Install the latest LTS version from [nodejs.org](https://nodejs.org/).
-
-### Installation
-
-1.  Clone the repository.
-2.  Open a terminal in the project folder.
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-### Running the Auto-Updater
-
-To manually run the script that checks for new software versions:
-
-```bash
-npm run update-links
-```
-
-This will check the supported GitHub repositories and update `js/data.js` if new versions are found.
+Private keys, encrypted personal indexes and personal packaging scripts are intentionally not committed.
 
 ---
 
-## 📄 License & Privacy
+## 🔐 Security Notes
 
-This project is open for personal use.
-**Security Notice**: All cryptographic operations rely on standard Web Crypto APIs. Always keep your `user.key` safe and maintain backups of your original files.
+- Keep `user.key` private and backed up.
+- Keep independent backups of original files; the browser decryptor is not a backup system.
+- Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
+- No explicit software license is currently granted in this repository; licensing is intentionally left for the portfolio-wide licensing pass.
