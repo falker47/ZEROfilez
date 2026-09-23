@@ -29,6 +29,14 @@ A curated catalog for quickly reaching useful software and emulation tooling.
 
 Download URLs that change with releases are maintained by `scripts/update-links.js` and the scheduled GitHub Actions workflow.
 
+#### Windows Setup
+
+The **PC Programs** tab can also build a reproducible Windows setup from the same curated catalog. Enter **Select for setup**, choose any programs that expose a verified `wingetId`, then generate a PowerShell script.
+
+The script is created entirely in the browser and can be inspected, copied or downloaded as a `.ps1` before use. It checks for `winget`, skips packages already installed, and installs the remaining exact package IDs from the `winget` source. ZEROfilez does **not** execute PowerShell or other commands on the PC from the browser.
+
+Programs without `winget` metadata remain available through their normal direct-download button and are never inserted into the generated script.
+
 ### 2. 🔐 Personal Vault
 
 A local browser interface for decrypting a personal encrypted package.
@@ -95,10 +103,14 @@ The updater uses official release APIs or upstream download pages where possible
 │   ├── data.js                  # Curated software/emulator links
 │   ├── array.js                 # Display ordering
 │   ├── icons.js                 # Icon sources and fallbacks
+│   ├── windows-setup.js         # Pure winget/PowerShell setup generator
 │   └── decryptor.js             # Client-side vault/decryption logic
 ├── scripts/
 │   └── update-links.js          # Release/link updater
+├── tests/
+│   └── windows-setup.test.mjs   # Zero-dependency generator/regression tests
 ├── .github/workflows/
+│   ├── ci.yml                   # Syntax + Node built-in tests
 │   └── update_links.yml         # Scheduled updater
 ├── panacea_icon_white.png       # Local icon for Panacea
 └── README.md
@@ -113,4 +125,5 @@ Private keys, encrypted personal indexes and personal packaging scripts are inte
 - Keep `user.key` private and backed up.
 - Keep independent backups of original files; the browser decryptor is not a backup system.
 - Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
+- Generated Windows setup scripts contain only validated `winget` package IDs from the curated catalog; review the script before running it.
 - No explicit software license is currently granted in this repository.

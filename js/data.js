@@ -238,30 +238,30 @@ export const ITEMS = {
     },
     "pc-programs": {
         // Browsers
-        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "url": "https://laptop-updates.brave.com/latest/win64", "icon": ICONS.brave },
-        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "icon": ICONS.chrome },
-        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "icon": ICONS.firefox },
+        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "url": "https://laptop-updates.brave.com/latest/win64", "wingetId": "Brave.Brave", "icon": ICONS.brave },
+        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "wingetId": "Google.Chrome", "icon": ICONS.chrome },
+        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe", "icon": ICONS.sevenZip },
-        "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "icon": ICONS.vlc },
-        "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "icon": ICONS.revo },
-        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.0/win/x86_64/LibreOffice_26.8.0_Win_x86-64.msi", "icon": ICONS.libreoffice },
-        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "icon": ICONS.winrar },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
+        "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.23/win64/vlc-3.0.23-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
+        "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
+        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.0/win/x86_64/LibreOffice_26.8.0_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
+        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "wingetId": "RARLab.WinRAR", "icon": ICONS.winrar },
         "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d1ya6fb9ltsosh.cloudfront.net/DwtYwfn/jsog.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
-        "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "icon": ICONS.sharex },
-        "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "icon": ICONS.wiztree },
-        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.101.2362.0/PowerToysUserSetup-0.101.2362.0-x64.exe", "icon": ICONS.powertoys },
-        "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "icon": ICONS.patchmypc },
-        "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "icon": ICONS.everything },
-        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "icon": ICONS.espanso },
-        "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "icon": ICONS.pcloud },
+        "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
+        "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
+        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.101.2362.0/PowerToysUserSetup-0.101.2362.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
+        "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
+        "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
+        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
+        "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.13.7/Obsidian-1.13.7.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.0/Bitwarden-Installer-2026.9.0.exe", "icon": ICONS.bitwarden },
-        "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "icon": ICONS.discord },
+        "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },

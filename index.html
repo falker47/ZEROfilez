@@ -156,6 +156,25 @@
                 />
               </div>
             </div>
+            <div class="windows-setup-panel" id="windowsSetupPanel">
+              <div class="windows-setup-toolbar">
+                <button type="button" id="toggleSetupSelection">Select for setup</button>
+                <span id="setupSelectionCount" aria-live="polite">0 selected</span>
+                <button type="button" id="generateSetupScript" disabled>Generate setup</button>
+                <button type="button" id="clearSetupSelection" disabled>Clear</button>
+              </div>
+              <p class="windows-setup-hint">
+                Select winget-compatible programs to build a local PowerShell setup script. Direct downloads still work normally.
+              </p>
+              <div class="windows-setup-output hidden" id="windowsSetupOutput">
+                <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated PowerShell setup script"></textarea>
+                <div class="windows-setup-actions">
+                  <button type="button" id="copySetupScript">Copy script</button>
+                  <button type="button" id="downloadSetupScript">Download .ps1</button>
+                  <span id="windowsSetupStatus" aria-live="polite"></span>
+                </div>
+              </div>
+            </div>
             <div id="pc-programs-list">
               <!-- Content populated by startup.js -->
             </div>
