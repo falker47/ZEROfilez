@@ -1,9 +1,13 @@
 import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
+import { generatePowerShellSetup } from './windows-setup.js';
 
 export class StartupManager {
     constructor() {
+        this.setupSelectionMode = false;
+        this.selectedSetupItems = new Set();
+        this.generatedSetupScript = '';
         this.data = this.buildData();
         this.initialize();
     }
@@ -23,6 +27,130 @@ export class StartupManager {
         this.initializeTabs();
         this.renderAllSections();
         this.initializeSearch();
+        this.initializeWindowsSetup();
+    }
+
+    initializeWindowsSetup() {
+        const toggleButton = document.getElementById('toggleSetupSelection');
+        const generateButton = document.getElementById('generateSetupScript');
+        const clearButton = document.getElementById('clearSetupSelection');
+        const copyButton = document.getElementById('copySetupScript');
+        const downloadButton = document.getElementById('downloadSetupScript');
+
+        if (!toggleButton) return;
+
+        toggleButton.addEventListener('click', () => {
+            this.setupSelectionMode = !this.setupSelectionMode;
+            toggleButton.textContent = this.setupSelectionMode ? 'Done selecting' : 'Select for setup';
+            this.renderPcProgramsForCurrentSearch();
+            this.updateWindowsSetupControls();
+        });
+
+        generateButton?.addEventListener('click', () => this.generateWindowsSetup());
+        clearButton?.addEventListener('click', () => this.clearWindowsSetupSelection());
+        copyButton?.addEventListener('click', () => this.copyGeneratedSetup());
+        downloadButton?.addEventListener('click', () => this.downloadGeneratedSetup());
+
+        this.updateWindowsSetupControls();
+    }
+
+    renderPcProgramsForCurrentSearch() {
+        const query = document.getElementById('pcSearchInput')?.value?.toLowerCase() || '';
+        this.filterSection('pc-programs', 'pc-programs-list', query);
+    }
+
+    updateWindowsSetupControls() {
+        const count = this.selectedSetupItems.size;
+        const countLabel = document.getElementById('setupSelectionCount');
+        const generateButton = document.getElementById('generateSetupScript');
+        const clearButton = document.getElementById('clearSetupSelection');
+
+        if (countLabel) {
+            countLabel.textContent = `${count} selected`;
+        }
+        if (generateButton) {
+            generateButton.disabled = count === 0;
+        }
+        if (clearButton) {
+            clearButton.disabled = count === 0;
+        }
+    }
+
+    clearWindowsSetupSelection() {
+        this.selectedSetupItems.clear();
+        this.generatedSetupScript = '';
+
+        const output = document.getElementById('windowsSetupOutput');
+        const preview = document.getElementById('setupScriptPreview');
+        if (output) output.classList.add('hidden');
+        if (preview) preview.value = '';
+
+        this.setWindowsSetupStatus('');
+        this.renderPcProgramsForCurrentSearch();
+        this.updateWindowsSetupControls();
+    }
+
+    generateWindowsSetup() {
+        const selectedItems = (this.data['pc-programs'] || [])
+            .filter(item => this.selectedSetupItems.has(item.id));
+
+        try {
+            this.generatedSetupScript = generatePowerShellSetup(selectedItems);
+        } catch (error) {
+            this.setWindowsSetupStatus(error.message);
+            return;
+        }
+
+        const output = document.getElementById('windowsSetupOutput');
+        const preview = document.getElementById('setupScriptPreview');
+        if (preview) preview.value = this.generatedSetupScript;
+        if (output) output.classList.remove('hidden');
+
+        this.setWindowsSetupStatus('Script generated locally. Review it before running.');
+    }
+
+    async copyGeneratedSetup() {
+        if (!this.generatedSetupScript) return;
+
+        try {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(this.generatedSetupScript);
+            } else {
+                const preview = document.getElementById('setupScriptPreview');
+                if (!preview) throw new Error('Script preview unavailable.');
+                preview.focus();
+                preview.select();
+                if (!document.execCommand('copy')) {
+                    throw new Error('Copy command was rejected.');
+                }
+            }
+            this.setWindowsSetupStatus('Script copied.');
+        } catch {
+            this.setWindowsSetupStatus('Copy failed. Select the script text and copy it manually.');
+        }
+    }
+
+    downloadGeneratedSetup() {
+        if (!this.generatedSetupScript) return;
+
+        const blob = new Blob([this.generatedSetupScript], {
+            type: 'text/plain;charset=utf-8'
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'ZEROfilez-Windows-Setup.ps1';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+
+        this.setWindowsSetupStatus('PowerShell script downloaded.');
+    }
+
+    setWindowsSetupStatus(message) {
+        const status = document.getElementById('windowsSetupStatus');
+        if (status) status.textContent = message;
     }
 
     initializeTabs() {
@@ -239,6 +367,40 @@ export class StartupManager {
         card.className = 'file-card';
 
         const type = dataKey === 'apk-files' ? 'android' : 'pc';
+        const canSelectForSetup = dataKey === 'pc-programs' && Boolean(item.wingetId);
+        let setupSelector = null;
+
+        if (canSelectForSetup) {
+            setupSelector = document.createElement('label');
+            setupSelector.className = 'setup-selector';
+            setupSelector.hidden = !this.setupSelectionMode;
+            setupSelector.title = `Select ${item.name} for Windows setup`;
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = this.selectedSetupItems.has(item.id);
+            checkbox.setAttribute('aria-label', `Select ${item.name} for Windows setup`);
+
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    this.selectedSetupItems.add(item.id);
+                } else {
+                    this.selectedSetupItems.delete(item.id);
+                }
+
+                card.classList.toggle(
+                    'setup-selected',
+                    this.setupSelectionMode && checkbox.checked
+                );
+                this.updateWindowsSetupControls();
+            });
+
+            setupSelector.appendChild(checkbox);
+            card.classList.toggle(
+                'setup-selected',
+                this.setupSelectionMode && checkbox.checked
+            );
+        }
 
         // Icon Container
         const iconDiv = document.createElement('div');
@@ -298,6 +460,7 @@ export class StartupManager {
         btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item)); // Use currentTarget to get the button, not likely the img
         btnDiv.appendChild(btn);
 
+        if (setupSelector) card.appendChild(setupSelector);
         card.appendChild(iconDiv);
         card.appendChild(infoDiv);
         card.appendChild(btnDiv);
