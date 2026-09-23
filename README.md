@@ -113,4 +113,4 @@ Private keys, encrypted personal indexes and personal packaging scripts are inte
 - Keep `user.key` private and backed up.
 - Keep independent backups of original files; the browser decryptor is not a backup system.
 - Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
-- No explicit software license is currently granted in this repository; licensing is intentionally left for the portfolio-wide licensing pass.
+- No explicit software license is currently granted in this repository.
