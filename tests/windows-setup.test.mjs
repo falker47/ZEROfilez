@@ -184,6 +184,8 @@ test('PC setup builder exposes a compact component-based three-step flow', async
 
     assert.match(indexHtml, /id="pcProgramsToolbar"/);
     assert.match(indexHtml, /class="input-group search-container pc-search-container"/);
+    assert.match(indexHtml, /New PC · Set up multiple programs in a few clicks/);
+    assert.doesNotMatch(indexHtml, /<span class="setup-entry-kicker">Windows setup<\/span>/);
     assert.match(indexHtml, /<h2>PC Setup<\/h2>/);
     assert.match(indexHtml, /data-setup-step="1"/);
     assert.match(indexHtml, /data-setup-step="2"/);
@@ -207,8 +209,9 @@ test('PC setup builder exposes a compact component-based three-step flow', async
 
     assert.match(sectionsCss, /#quickStartupPage \.downloads-section[\s\S]*height:\s*clamp\(/);
     assert.match(sectionsCss, /#quickStartupPage \.files-grid[\s\S]*flex:\s*1 1 auto/);
-    assert.match(sectionsCss, /#pcProgramsToolbar[\s\S]*grid-template-columns:/);
-    assert.match(sectionsCss, /#pcProgramsToolbar #pcSearchInput[\s\S]*flex:\s*1 1 auto/);
+    assert.match(sectionsCss, /#pcProgramsToolbar[\s\S]*--pc-toolbar-control-height:\s*48px/);
+    assert.match(sectionsCss, /#pcProgramsToolbar #pcSearchInput[\s\S]*height:\s*var\(--pc-toolbar-control-height\)/);
+    assert.match(sectionsCss, /#pcProgramsToolbar \.pc-setup-entry[\s\S]*height:\s*var\(--pc-toolbar-control-height\)/);
     assert.match(sectionsCss, /#emulation-tab \.file-card,[\s\S]*#apk-files-tab \.file-card[\s\S]*var\(--startup-card-height-desktop\)/);
     assert.match(sectionsCss, /\.setup-step-body[\s\S]*overflow-y:\s*auto/);
     assert.match(sectionsCss, /\.setup-step-footer[\s\S]*flex:\s*0 0 auto/);
