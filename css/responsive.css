@@ -429,10 +429,13 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    height: auto;
+    min-height: 0;
     margin-bottom: 8px;
   }
 
   #pcProgramsToolbar .pc-search-container {
+    height: auto;
     margin-bottom: 0;
   }
 
@@ -446,10 +449,21 @@
   #pcProgramsToolbar #pcSearchInput {
     flex: initial;
     width: auto;
+    height: auto;
   }
 
   #pcProgramsToolbar .pc-setup-entry {
+    height: auto;
+    min-height: 52px;
     margin-bottom: 0;
+  }
+
+  #pcProgramsToolbar .pc-setup-single-label {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 0.72em;
+    font-weight: 600;
+    line-height: 1.25;
   }
 
   .pc-setup-entry {
@@ -491,13 +505,14 @@
     border-radius: 8px;
   }
 
-  .pc-setup-entry-copy p,
   .setup-entry-kicker {
     display: none;
   }
 
-  .pc-setup-entry h2 {
-    font-size: 0.88em;
+  #pcProgramsToolbar .pc-setup-single-label {
+    display: block;
+    font-size: 0.68em;
+    white-space: normal;
   }
 
   .windows-setup-builder {
