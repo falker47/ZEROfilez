@@ -2,6 +2,7 @@
   /* Centralized file list heights */
   --filelist-height-desktop: 280px;
   --filelist-height-mobile: 200px;
+  --startup-card-height-desktop: 90px;
 
   /* --- Primitives --- */
   --orange-500: #ff5500;

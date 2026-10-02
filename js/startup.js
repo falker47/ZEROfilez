@@ -323,8 +323,8 @@ export class StartupManager {
 
             const button = document.createElement('button');
             button.type = 'button';
-            button.className = 'setup-secondary setup-icon-button';
-            button.textContent = '↓';
+            button.className = 'ui-icon-button';
+            button.innerHTML = `<img src="${ICONS.download}" alt="">`;
             button.setAttribute('aria-label', `Download ${item.name}`);
             button.title = 'Download';
             button.disabled = !item.url;

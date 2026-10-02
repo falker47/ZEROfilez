@@ -6,6 +6,13 @@ export const ICONS = {
     download: 'https://api.iconify.design/ri:download-2-fill.svg?color=white',
     lock: 'https://api.iconify.design/material-symbols:lock.svg?color=white',
     emulationTab: 'https://api.iconify.design/solar:gamepad-bold.svg?color=white',
+    arrowLeft: 'https://api.iconify.design/lucide:arrow-left.svg?color=white',
+    arrowRight: 'https://api.iconify.design/lucide:arrow-right.svg?color=white',
+    check: 'https://api.iconify.design/lucide:check.svg?color=white',
+    reset: 'https://api.iconify.design/lucide:rotate-ccw.svg?color=white',
+    close: 'https://api.iconify.design/lucide:x.svg?color=white',
+    copy: 'https://api.iconify.design/lucide:copy.svg?color=white',
+    setup: 'https://api.iconify.design/lucide:wand-sparkles.svg?color=white',
 
     // Platform Icons
     windows: 'https://api.iconify.design/uim:windows.svg?color=white',

@@ -311,3 +311,101 @@
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+
+/* Reusable compact UI components */
+.ui-button,
+.ui-icon-button {
+  appearance: none;
+  border: 1px solid var(--border-default);
+  background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015));
+  color: var(--text-main);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.055),
+    0 4px 12px rgba(0,0,0,0.18);
+  cursor: pointer;
+  transition:
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    background 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.ui-button {
+  min-height: 34px;
+  padding: 7px 11px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font: inherit;
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
+.ui-button__icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.ui-icon-button {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-icon-button img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.ui-button:hover:not(:disabled),
+.ui-icon-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--border-light);
+  background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.075),
+    0 6px 16px rgba(0,0,0,0.24);
+}
+
+.ui-button:active:not(:disabled),
+.ui-icon-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ui-button:disabled,
+.ui-icon-button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.ui-button--primary,
+.ui-icon-button--primary {
+  border-color: rgba(255,85,0,0.72);
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent-color));
+  color: var(--white);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    0 6px 16px rgba(255,85,0,0.18);
+}
+
+.ui-button--primary:hover:not(:disabled),
+.ui-icon-button--primary:hover:not(:disabled) {
+  border-color: var(--accent-hover);
+  background: linear-gradient(180deg, #ff874f, var(--accent-color));
+}
+
+.ui-icon-button--success {
+  border-color: var(--status-success-border);
+  background: linear-gradient(180deg, rgba(42,90,42,0.95), rgba(26,58,26,0.95));
+}
