@@ -63,8 +63,7 @@ export class StartupManager {
     openWindowsSetupBuilder() {
         this.setupBuilderOpen = true;
 
-        document.getElementById('pcSetupEntry')?.classList.add('hidden');
-        document.querySelector('#pc-programs-tab .search-container')?.classList.add('hidden');
+        document.getElementById('pcProgramsToolbar')?.classList.add('hidden');
         document.getElementById('pc-programs-list')?.classList.add('hidden');
         document.getElementById('windowsSetupBuilder')?.classList.remove('hidden');
 
@@ -74,8 +73,7 @@ export class StartupManager {
     closeWindowsSetupBuilder() {
         this.setupBuilderOpen = false;
 
-        document.getElementById('pcSetupEntry')?.classList.remove('hidden');
-        document.querySelector('#pc-programs-tab .search-container')?.classList.remove('hidden');
+        document.getElementById('pcProgramsToolbar')?.classList.remove('hidden');
         document.getElementById('pc-programs-list')?.classList.remove('hidden');
         document.getElementById('windowsSetupBuilder')?.classList.add('hidden');
 

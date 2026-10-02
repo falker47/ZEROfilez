@@ -182,6 +182,8 @@ test('PC setup builder exposes a compact component-based three-step flow', async
         readFile(new URL('../js/icons.js', import.meta.url), 'utf8')
     ]);
 
+    assert.match(indexHtml, /id="pcProgramsToolbar"/);
+    assert.match(indexHtml, /class="input-group search-container pc-search-container"/);
     assert.match(indexHtml, /<h2>PC Setup<\/h2>/);
     assert.match(indexHtml, /data-setup-step="1"/);
     assert.match(indexHtml, /data-setup-step="2"/);
@@ -205,6 +207,8 @@ test('PC setup builder exposes a compact component-based three-step flow', async
 
     assert.match(sectionsCss, /#quickStartupPage \.downloads-section[\s\S]*height:\s*clamp\(/);
     assert.match(sectionsCss, /#quickStartupPage \.files-grid[\s\S]*flex:\s*1 1 auto/);
+    assert.match(sectionsCss, /#pcProgramsToolbar[\s\S]*grid-template-columns:/);
+    assert.match(sectionsCss, /#pcProgramsToolbar #pcSearchInput[\s\S]*flex:\s*1 1 auto/);
     assert.match(sectionsCss, /#emulation-tab \.file-card,[\s\S]*#apk-files-tab \.file-card[\s\S]*var\(--startup-card-height-desktop\)/);
     assert.match(sectionsCss, /\.setup-step-body[\s\S]*overflow-y:\s*auto/);
     assert.match(sectionsCss, /\.setup-step-footer[\s\S]*flex:\s*0 0 auto/);
@@ -213,6 +217,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.match(iconsJs, /arrowRight:/);
     assert.match(iconsJs, /copy:/);
 
+    assert.match(startupJs, /pcProgramsToolbar/);
     assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
     assert.match(startupJs, /badge\.textContent = item\.wingetId \? 'Auto' : 'Manual'/);
     assert.match(startupJs, /generateCommandSetup\(automatic\)/);

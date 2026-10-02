@@ -146,29 +146,31 @@
 
           <!-- PC Programs Section -->
           <section class="downloads-section hidden" id="pc-programs-tab">
-            <div class="input-group search-container">
-              <div class="input-row">
-                <span class="input-icon" aria-hidden="true">🔎</span>
-                <input
-                  type="text"
-                  id="pcSearchInput"
-                  placeholder="Search PC programs..."
-                />
+            <div class="pc-tools-row" id="pcProgramsToolbar">
+              <div class="input-group search-container pc-search-container">
+                <div class="input-row">
+                  <span class="input-icon" aria-hidden="true">🔎</span>
+                  <input
+                    type="text"
+                    id="pcSearchInput"
+                    placeholder="Search PC programs..."
+                  />
+                </div>
               </div>
-            </div>
-            <div class="pc-setup-entry setup-launch-card" id="pcSetupEntry">
-              <div class="setup-launch-icon" aria-hidden="true">
-                <img data-icon="setup" alt="" />
+
+              <div class="pc-setup-entry setup-launch-card" id="pcSetupEntry">
+                <div class="setup-launch-icon" aria-hidden="true">
+                  <img data-icon="setup" alt="" />
+                </div>
+                <div class="pc-setup-entry-copy">
+                  <span class="setup-entry-kicker">Windows setup</span>
+                  <h2>PC Setup</h2>
+                </div>
+                <button type="button" class="ui-button ui-button--primary" id="startWindowsSetup">
+                  <span>Build</span>
+                  <img class="ui-button__icon" data-icon="arrowRight" alt="" />
+                </button>
               </div>
-              <div class="pc-setup-entry-copy">
-                <span class="setup-entry-kicker">Windows setup</span>
-                <h2>PC Setup</h2>
-                <p>Pick apps once. Install them together.</p>
-              </div>
-              <button type="button" class="ui-button ui-button--primary" id="startWindowsSetup">
-                <span>Build</span>
-                <img class="ui-button__icon" data-icon="arrowRight" alt="" />
-              </button>
             </div>
 
             <div class="windows-setup-builder setup-surface hidden" id="windowsSetupBuilder">

@@ -425,6 +425,33 @@
 
 /* PC Setup Builder responsive */
 @media (max-width: 768px) {
+  #pcProgramsToolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  #pcProgramsToolbar .pc-search-container {
+    margin-bottom: 0;
+  }
+
+  #pcProgramsToolbar .pc-search-container .input-row {
+    width: 95%;
+    height: auto;
+    margin: 0 auto 6px auto;
+    justify-content: center;
+  }
+
+  #pcProgramsToolbar #pcSearchInput {
+    flex: initial;
+    width: auto;
+  }
+
+  #pcProgramsToolbar .pc-setup-entry {
+    margin-bottom: 0;
+  }
+
   .pc-setup-entry {
     min-height: 52px;
     padding: 7px 8px;
