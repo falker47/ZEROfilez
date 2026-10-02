@@ -182,7 +182,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
         readFile(new URL('../js/icons.js', import.meta.url), 'utf8')
     ]);
 
-    assert.match(indexHtml, /Set up a new PC/);
+    assert.match(indexHtml, /<h2>PC Setup<\/h2>/);
     assert.match(indexHtml, /data-setup-step="1"/);
     assert.match(indexHtml, /data-setup-step="2"/);
     assert.match(indexHtml, /data-setup-step="3"/);
