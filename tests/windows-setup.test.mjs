@@ -173,10 +173,11 @@ test('legacy FileStorage packages remain in the canonical catalog', () => {
     );
 });
 
-test('PC setup builder exposes a plain-language three-step flow', async () => {
-    const [indexHtml, startupJs] = await Promise.all([
+test('PC setup builder exposes a compact three-step flow', async () => {
+    const [indexHtml, startupJs, sectionsCss] = await Promise.all([
         readFile(new URL('../index.html', import.meta.url), 'utf8'),
-        readFile(new URL('../js/startup.js', import.meta.url), 'utf8')
+        readFile(new URL('../js/startup.js', import.meta.url), 'utf8'),
+        readFile(new URL('../css/sections.css', import.meta.url), 'utf8')
     ]);
 
     assert.match(indexHtml, /Set up a new PC/);
@@ -184,13 +185,25 @@ test('PC setup builder exposes a plain-language three-step flow', async () => {
     assert.match(indexHtml, /data-setup-step="2"/);
     assert.match(indexHtml, /data-setup-step="3"/);
     assert.match(indexHtml, /id="downloadSetupScript"/);
-    assert.match(indexHtml, /Technical details/);
-    assert.match(indexHtml, /ZEROfilez-Windows-Setup\.cmd/);
+    assert.match(indexHtml, /setup-step-body/);
+    assert.match(indexHtml, /aria-label="Review selection"/);
+    assert.match(indexHtml, />→<\/button>/);
+    assert.match(indexHtml, />←<\/button>/);
+    assert.match(indexHtml, />✓<\/button>/);
+    assert.match(indexHtml, /<summary>Details<\/summary>/);
+    assert.doesNotMatch(indexHtml, /Review selection<\/button>/);
+    assert.doesNotMatch(indexHtml, /Download Windows setup/);
+    assert.doesNotMatch(indexHtml, /Copy file contents/);
+    assert.doesNotMatch(indexHtml, /Technical details/);
     assert.doesNotMatch(indexHtml, /Select for setup/);
     assert.doesNotMatch(indexHtml, /Generate setup/);
 
+    assert.match(sectionsCss, /height:\s*clamp\(/);
+    assert.match(sectionsCss, /\.setup-step-body[\s\S]*overflow-y:\s*auto/);
+    assert.match(sectionsCss, /\.setup-step-footer[\s\S]*flex:\s*0 0 auto/);
+
     assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
-    assert.match(startupJs, /Manual download/);
+    assert.match(startupJs, /badge\.textContent = item\.wingetId \? 'Auto' : 'Manual'/);
     assert.match(startupJs, /generateCommandSetup\(automatic\)/);
     assert.match(startupJs, /setupManualDownloads/);
     assert.match(startupJs, /ZEROfilez-Windows-Setup\.cmd/);
