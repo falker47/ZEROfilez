@@ -426,11 +426,8 @@
 /* PC Setup Builder responsive */
 @media (max-width: 768px) {
   .pc-setup-entry {
-    padding: 10px 11px;
-  }
-
-  .pc-setup-entry p {
-    max-width: 42ch;
+    min-height: 52px;
+    padding: 7px 8px;
   }
 
   .windows-setup-builder {
@@ -456,19 +453,24 @@
 
 @media (max-width: 480px) {
   .pc-setup-entry {
-    gap: 9px;
+    min-height: 48px;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 7px;
   }
 
-  .pc-setup-entry-copy p {
+  .setup-launch-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+
+  .pc-setup-entry-copy p,
+  .setup-entry-kicker {
     display: none;
   }
 
   .pc-setup-entry h2 {
-    font-size: 0.92em;
-  }
-
-  .pc-setup-entry .setup-primary {
-    flex-shrink: 0;
+    font-size: 0.88em;
   }
 
   .windows-setup-builder {
@@ -476,22 +478,14 @@
     padding: 7px;
   }
 
-  .setup-entry-kicker {
-    display: none;
-  }
-
-  .setup-stepper {
-    margin: 6px 0;
+  .setup-segmented {
+    margin: 5px 0;
   }
 
   .setup-step-indicator {
     min-height: 26px;
-    padding: 2px 3px 5px;
-    font-size: 0.66em;
-  }
-
-  .setup-step-indicator strong {
-    font-size: 0.8em;
+    padding: 2px 4px;
+    font-size: 0.64em;
   }
 
   .setup-category + .setup-category {
@@ -518,7 +512,7 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .setup-ready-actions button {
+  .setup-ready-actions .ui-button {
     width: 100%;
   }
 

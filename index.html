@@ -156,30 +156,41 @@
                 />
               </div>
             </div>
-            <div class="pc-setup-entry" id="pcSetupEntry">
+            <div class="pc-setup-entry setup-launch-card" id="pcSetupEntry">
+              <div class="setup-launch-icon" aria-hidden="true">
+                <img data-icon="setup" alt="" />
+              </div>
               <div class="pc-setup-entry-copy">
                 <span class="setup-entry-kicker">Windows setup</span>
-                <h2>Set up a new PC</h2>
-                <p>Pick your apps once. ZEROfilez handles the setup.</p>
+                <h2>PC Setup</h2>
+                <p>Pick apps once. Install them together.</p>
               </div>
-              <button type="button" class="setup-primary" id="startWindowsSetup">
-                Build setup
+              <button type="button" class="ui-button ui-button--primary" id="startWindowsSetup">
+                <span>Build</span>
+                <img class="ui-button__icon" data-icon="arrowRight" alt="" />
               </button>
             </div>
 
-            <div class="windows-setup-builder hidden" id="windowsSetupBuilder">
+            <div class="windows-setup-builder setup-surface hidden" id="windowsSetupBuilder">
               <div class="setup-builder-header">
                 <div class="setup-builder-title">
-                  <span class="setup-entry-kicker">Windows</span>
-                  <h2>PC Setup</h2>
+                  <div class="setup-builder-icon" aria-hidden="true">
+                    <img data-icon="setup" alt="" />
+                  </div>
+                  <div>
+                    <span class="setup-entry-kicker">Windows</span>
+                    <h2>PC Setup</h2>
+                  </div>
                 </div>
-                <button type="button" class="setup-ghost setup-icon-button" id="exitWindowsSetup" aria-label="Exit setup" title="Exit">×</button>
+                <button type="button" class="ui-icon-button" id="exitWindowsSetup" aria-label="Exit setup" title="Exit">
+                  <img data-icon="close" alt="" />
+                </button>
               </div>
 
-              <div class="setup-stepper" aria-label="Setup progress">
-                <span class="setup-step-indicator active" data-step-indicator="1"><strong>1</strong> Choose</span>
-                <span class="setup-step-indicator" data-step-indicator="2"><strong>2</strong> Review</span>
-                <span class="setup-step-indicator" data-step-indicator="3"><strong>3</strong> Install</span>
+              <div class="setup-stepper setup-segmented" aria-label="Setup progress">
+                <span class="setup-step-indicator active" data-step-indicator="1"><strong>1</strong><span>Choose</span></span>
+                <span class="setup-step-indicator" data-step-indicator="2"><strong>2</strong><span>Review</span></span>
+                <span class="setup-step-indicator" data-step-indicator="3"><strong>3</strong><span>Install</span></span>
               </div>
 
               <div class="setup-step" data-setup-step="1">
@@ -187,9 +198,13 @@
                   <div id="setupBuilderSelectionList"></div>
                 </div>
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-ghost setup-icon-button" id="clearSetupSelection" aria-label="Clear selection" title="Clear">↺</button>
+                  <button type="button" class="ui-icon-button" id="clearSetupSelection" aria-label="Clear selection" title="Clear">
+                    <img data-icon="reset" alt="" />
+                  </button>
                   <span id="setupSelectionCount" aria-live="polite">0 selected</span>
-                  <button type="button" class="setup-primary setup-icon-button" id="setupStep1Next" aria-label="Review selection" title="Next" disabled>→</button>
+                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep1Next" aria-label="Review selection" title="Next" disabled>
+                    <img data-icon="arrowRight" alt="" />
+                  </button>
                 </div>
               </div>
 
@@ -213,9 +228,13 @@
                   </div>
                 </div>
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-secondary setup-icon-button" id="setupStep2Back" aria-label="Back to program selection" title="Back">←</button>
+                  <button type="button" class="ui-icon-button" id="setupStep2Back" aria-label="Back to program selection" title="Back">
+                    <img data-icon="arrowLeft" alt="" />
+                  </button>
                   <span id="setupReviewTotal"></span>
-                  <button type="button" class="setup-primary setup-icon-button" id="setupStep2Next" aria-label="Create setup" title="Next">→</button>
+                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep2Next" aria-label="Create setup" title="Next">
+                    <img data-icon="arrowRight" alt="" />
+                  </button>
                 </div>
               </div>
 
@@ -229,13 +248,19 @@
 
                     <div id="setupAutomaticOutput">
                       <div class="setup-ready-actions">
-                        <button type="button" class="setup-primary" id="downloadSetupScript">Download</button>
-                        <button type="button" class="setup-secondary" id="copySetupScript">Copy</button>
+                        <button type="button" class="ui-button ui-button--primary" id="downloadSetupScript">
+                          <img class="ui-button__icon" data-icon="download" alt="" />
+                          <span>Download</span>
+                        </button>
+                        <button type="button" class="ui-button" id="copySetupScript">
+                          <img class="ui-button__icon" data-icon="copy" alt="" />
+                          <span>Copy</span>
+                        </button>
                       </div>
-                      <p class="setup-run-note">Double-click the <code>.cmd</code>. The window stays open if something fails.</p>
+                      <p class="setup-run-note">Double-click the <code>.cmd</code>. It stays open if something fails.</p>
                       <details class="setup-technical-details" id="setupTechnicalDetails">
                         <summary>Details</summary>
-                        <p>Generated locally with verified WinGet package IDs. ZEROfilez runs nothing from the website.</p>
+                        <p>Generated locally with verified WinGet package IDs.</p>
                         <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup"></textarea>
                       </details>
                     </div>
@@ -257,9 +282,13 @@
                 </div>
 
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-secondary setup-icon-button" id="setupStep3Back" aria-label="Back to review" title="Back">←</button>
+                  <button type="button" class="ui-icon-button" id="setupStep3Back" aria-label="Back to review" title="Back">
+                    <img data-icon="arrowLeft" alt="" />
+                  </button>
                   <span></span>
-                  <button type="button" class="setup-ghost setup-icon-button" id="finishWindowsSetup" aria-label="Finish setup" title="Done">✓</button>
+                  <button type="button" class="ui-icon-button ui-icon-button--success" id="finishWindowsSetup" aria-label="Finish setup" title="Done">
+                    <img data-icon="check" alt="" />
+                  </button>
                 </div>
               </div>
             </div>

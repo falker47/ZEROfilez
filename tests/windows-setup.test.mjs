@@ -173,11 +173,13 @@ test('legacy FileStorage packages remain in the canonical catalog', () => {
     );
 });
 
-test('PC setup builder exposes a compact three-step flow', async () => {
-    const [indexHtml, startupJs, sectionsCss] = await Promise.all([
+test('PC setup builder exposes a compact component-based three-step flow', async () => {
+    const [indexHtml, startupJs, sectionsCss, componentsCss, iconsJs] = await Promise.all([
         readFile(new URL('../index.html', import.meta.url), 'utf8'),
         readFile(new URL('../js/startup.js', import.meta.url), 'utf8'),
-        readFile(new URL('../css/sections.css', import.meta.url), 'utf8')
+        readFile(new URL('../css/sections.css', import.meta.url), 'utf8'),
+        readFile(new URL('../css/components.css', import.meta.url), 'utf8'),
+        readFile(new URL('../js/icons.js', import.meta.url), 'utf8')
     ]);
 
     assert.match(indexHtml, /Set up a new PC/);
@@ -187,9 +189,12 @@ test('PC setup builder exposes a compact three-step flow', async () => {
     assert.match(indexHtml, /id="downloadSetupScript"/);
     assert.match(indexHtml, /setup-step-body/);
     assert.match(indexHtml, /aria-label="Review selection"/);
-    assert.match(indexHtml, />→<\/button>/);
-    assert.match(indexHtml, />←<\/button>/);
-    assert.match(indexHtml, />✓<\/button>/);
+    assert.match(indexHtml, /data-icon="arrowRight"/);
+    assert.match(indexHtml, /data-icon="arrowLeft"/);
+    assert.match(indexHtml, /data-icon="check"/);
+    assert.doesNotMatch(indexHtml, />→<\/button>/);
+    assert.doesNotMatch(indexHtml, />←<\/button>/);
+    assert.doesNotMatch(indexHtml, />✓<\/button>/);
     assert.match(indexHtml, /<summary>Details<\/summary>/);
     assert.doesNotMatch(indexHtml, /Review selection<\/button>/);
     assert.doesNotMatch(indexHtml, /Download Windows setup/);
@@ -198,9 +203,15 @@ test('PC setup builder exposes a compact three-step flow', async () => {
     assert.doesNotMatch(indexHtml, /Select for setup/);
     assert.doesNotMatch(indexHtml, /Generate setup/);
 
-    assert.match(sectionsCss, /height:\s*clamp\(/);
+    assert.match(sectionsCss, /#quickStartupPage \.downloads-section[\s\S]*height:\s*clamp\(/);
+    assert.match(sectionsCss, /#quickStartupPage \.files-grid[\s\S]*flex:\s*1 1 auto/);
+    assert.match(sectionsCss, /#emulation-tab \.file-card,[\s\S]*#apk-files-tab \.file-card[\s\S]*var\(--startup-card-height-desktop\)/);
     assert.match(sectionsCss, /\.setup-step-body[\s\S]*overflow-y:\s*auto/);
     assert.match(sectionsCss, /\.setup-step-footer[\s\S]*flex:\s*0 0 auto/);
+    assert.match(componentsCss, /\.ui-button,/);
+    assert.match(componentsCss, /\.ui-icon-button/);
+    assert.match(iconsJs, /arrowRight:/);
+    assert.match(iconsJs, /copy:/);
 
     assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
     assert.match(startupJs, /badge\.textContent = item\.wingetId \? 'Auto' : 'Manual'/);
