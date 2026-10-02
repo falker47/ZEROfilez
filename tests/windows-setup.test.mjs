@@ -4,6 +4,7 @@ import test from 'node:test';
 
 import { ITEMS } from '../js/data.js';
 import {
+    generateCommandSetup,
     generatePowerShellSetup,
     getSetupPackages,
     isValidWingetId
@@ -89,6 +90,31 @@ test('winget IDs use a strict data whitelist', () => {
     );
 });
 
+test('command setup avoids PowerShell execution-policy friction and keeps errors visible', () => {
+    const script = generateCommandSetup([
+        { name: 'Firefox', wingetId: 'Mozilla.Firefox' },
+        { name: 'LibreOffice', wingetId: 'TheDocumentFoundation.LibreOffice' }
+    ]);
+
+    assert.match(script, /^@echo off/);
+    assert.match(script, /where winget >nul 2>&1/);
+    assert.match(script, /winget list --id "%PACKAGE_ID%" --exact --accept-source-agreements --disable-interactivity/);
+    assert.match(script, /winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);
+    assert.match(script, /Already installed; skipping\./);
+    assert.match(script, /pause >nul/);
+    assert.match(script, /call :install "Mozilla\.Firefox"/);
+    assert.match(script, /call :install "TheDocumentFoundation\.LibreOffice"/);
+    assert.doesNotMatch(script, /powershell/i);
+    assert.doesNotMatch(script, /ExecutionPolicy/i);
+});
+
+test('command setup rejects zero compatible selections', () => {
+    assert.throws(
+        () => generateCommandSetup([]),
+        /Select at least one/
+    );
+});
+
 test('generated script checks winget, skips installed packages, and installs exact IDs from winget', () => {
     const script = generatePowerShellSetup([
         { name: 'Firefox', wingetId: 'Mozilla.Firefox' }
@@ -159,13 +185,16 @@ test('PC setup builder exposes a plain-language three-step flow', async () => {
     assert.match(indexHtml, /data-setup-step="3"/);
     assert.match(indexHtml, /id="downloadSetupScript"/);
     assert.match(indexHtml, /Technical details/);
+    assert.match(indexHtml, /ZEROfilez-Windows-Setup\.cmd/);
     assert.doesNotMatch(indexHtml, /Select for setup/);
     assert.doesNotMatch(indexHtml, /Generate setup/);
 
     assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
     assert.match(startupJs, /Manual download/);
-    assert.match(startupJs, /generatePowerShellSetup\(automatic\)/);
+    assert.match(startupJs, /generateCommandSetup\(automatic\)/);
     assert.match(startupJs, /setupManualDownloads/);
+    assert.match(startupJs, /ZEROfilez-Windows-Setup\.cmd/);
+    assert.doesNotMatch(startupJs, /ZEROfilez-Windows-Setup\.ps1/);
 });
 
 test('Personal Vault and normal startup entry points remain wired', async () => {

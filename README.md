@@ -33,9 +33,9 @@ Download URLs that change with releases are maintained by `scripts/update-links.
 
 The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the programs you want, review the selection, and let ZEROfilez split the result into automatic installs and normal manual downloads.
 
-Programs with a verified `wingetId` are bundled into one local Windows setup script. The script is generated entirely in the browser, skips packages already installed, and installs the remaining exact package IDs from the `winget` source. ZEROfilez does **not** execute PowerShell or other commands on the PC from the browser.
+Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`). The file is generated entirely in the browser, skips packages already installed, installs the remaining exact package IDs from the `winget` source, and pauses before closing so installation errors remain visible. ZEROfilez does **not** execute commands on the PC from the browser.
 
-Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow. The generated PowerShell remains available under **Technical details** for users who want to inspect it.
+Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow. The generated command file remains available under **Technical details** for users who want to inspect it.
 
 ### 2. 🔐 Personal Vault
 
@@ -103,7 +103,7 @@ The updater uses official release APIs or upstream download pages where possible
 │   ├── data.js                  # Curated software/emulator links
 │   ├── array.js                 # Display ordering
 │   ├── icons.js                 # Icon sources and fallbacks
-│   ├── windows-setup.js         # Pure winget/PowerShell setup generator
+│   ├── windows-setup.js         # Validated winget setup generators
 │   └── decryptor.js             # Client-side vault/decryption logic
 ├── scripts/
 │   └── update-links.js          # Release/link updater
