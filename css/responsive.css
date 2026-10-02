@@ -425,15 +425,17 @@
 
 /* PC Setup Builder responsive */
 @media (max-width: 768px) {
-  .pc-setup-entry,
-  .setup-builder-header {
-    align-items: stretch;
-    flex-direction: column;
+  .pc-setup-entry {
+    padding: 10px 11px;
   }
 
-  .pc-setup-entry .setup-primary,
-  .setup-builder-header .setup-ghost {
-    width: 100%;
+  .pc-setup-entry p {
+    max-width: 42ch;
+  }
+
+  .windows-setup-builder {
+    height: clamp(430px, calc(100dvh - 235px), 620px);
+    padding: 8px;
   }
 
   .setup-program-grid,
@@ -442,64 +444,91 @@
   }
 
   .setup-program-card {
-    grid-template-columns: auto 30px minmax(0, 1fr);
-  }
-
-  .setup-type-badge {
-    grid-column: 2 / -1;
-    justify-self: start;
-    margin-left: 0;
+    grid-template-columns: auto 24px minmax(0, 1fr) auto;
   }
 
   .setup-step-footer {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .setup-step-footer > span {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-
-  .setup-step-footer > button {
-    width: 100%;
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
   }
 }
 
 @media (max-width: 480px) {
-  .windows-setup-builder,
   .pc-setup-entry {
-    padding: 11px;
+    gap: 9px;
+  }
+
+  .pc-setup-entry-copy p {
+    display: none;
+  }
+
+  .pc-setup-entry h2 {
+    font-size: 0.92em;
+  }
+
+  .pc-setup-entry .setup-primary {
+    flex-shrink: 0;
+  }
+
+  .windows-setup-builder {
+    height: clamp(410px, calc(100dvh - 205px), 590px);
+    padding: 7px;
+  }
+
+  .setup-entry-kicker {
+    display: none;
   }
 
   .setup-stepper {
-    gap: 5px;
+    margin: 6px 0;
   }
 
   .setup-step-indicator {
-    flex-direction: column;
-    gap: 4px;
-    padding: 7px 5px;
-    font-size: 0.72em;
+    min-height: 26px;
+    padding: 2px 3px 5px;
+    font-size: 0.66em;
+  }
+
+  .setup-step-indicator strong {
+    font-size: 0.8em;
+  }
+
+  .setup-category + .setup-category {
+    margin-top: 8px;
   }
 
   .setup-program-card {
-    padding: 8px;
+    min-height: 44px;
+    padding: 5px 6px;
+    gap: 6px;
+  }
+
+  .setup-program-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .setup-type-badge {
+    font-size: 0.54em;
   }
 
   .setup-ready-actions {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .setup-ready-actions button {
     width: 100%;
   }
 
-  .setup-manual-row {
-    align-items: stretch;
-    flex-direction: column;
+  .setup-step-footer {
+    min-height: 39px;
+    padding-top: 5px;
+    margin-top: 4px;
   }
 
-  .setup-manual-row button {
-    width: 100%;
+  .setup-manual-row {
+    min-height: 32px;
   }
 }

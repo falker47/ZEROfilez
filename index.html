@@ -160,23 +160,20 @@
               <div class="pc-setup-entry-copy">
                 <span class="setup-entry-kicker">Windows setup</span>
                 <h2>Set up a new PC</h2>
-                <p>
-                  Pick the programs you want once. ZEROfilez prepares the automatic installs
-                  and keeps anything else as a simple download checklist.
-                </p>
+                <p>Pick your apps once. ZEROfilez handles the setup.</p>
               </div>
               <button type="button" class="setup-primary" id="startWindowsSetup">
-                Create my setup
+                Build setup
               </button>
             </div>
 
             <div class="windows-setup-builder hidden" id="windowsSetupBuilder">
               <div class="setup-builder-header">
-                <div>
-                  <span class="setup-entry-kicker">PC Setup Builder</span>
-                  <h2>Set up a new PC</h2>
+                <div class="setup-builder-title">
+                  <span class="setup-entry-kicker">Windows</span>
+                  <h2>PC Setup</h2>
                 </div>
-                <button type="button" class="setup-ghost" id="exitWindowsSetup">Exit setup</button>
+                <button type="button" class="setup-ghost setup-icon-button" id="exitWindowsSetup" aria-label="Exit setup" title="Exit">×</button>
               </div>
 
               <div class="setup-stepper" aria-label="Setup progress">
@@ -186,88 +183,83 @@
               </div>
 
               <div class="setup-step" data-setup-step="1">
-                <div class="setup-step-heading">
-                  <h3>Choose your programs</h3>
-                  <p>Select everything you want on this PC. Automatic and manual items can be mixed freely.</p>
+                <div class="setup-step-body" id="setupChooseBody">
+                  <div id="setupBuilderSelectionList"></div>
                 </div>
-                <div id="setupBuilderSelectionList"></div>
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-ghost" id="clearSetupSelection">Clear</button>
+                  <button type="button" class="setup-ghost setup-icon-button" id="clearSetupSelection" aria-label="Clear selection" title="Clear">↺</button>
                   <span id="setupSelectionCount" aria-live="polite">0 selected</span>
-                  <button type="button" class="setup-primary" id="setupStep1Next" disabled>Review selection</button>
+                  <button type="button" class="setup-primary setup-icon-button" id="setupStep1Next" aria-label="Review selection" title="Next" disabled>→</button>
                 </div>
               </div>
 
               <div class="setup-step hidden" data-setup-step="2">
-                <div class="setup-step-heading">
-                  <h3>Review your setup</h3>
-                  <p>ZEROfilez separates what Windows can install automatically from the few items that need a normal download.</p>
-                </div>
-                <div class="setup-review-grid">
-                  <div class="setup-review-card">
-                    <div class="setup-review-number" id="setupAutomaticCount">0</div>
-                    <h4>Automatic installs</h4>
-                    <p>Already installed apps will be skipped.</p>
-                    <div class="setup-review-list" id="setupReviewAutomaticList"></div>
-                  </div>
-                  <div class="setup-review-card">
-                    <div class="setup-review-number" id="setupManualCount">0</div>
-                    <h4>Manual downloads</h4>
-                    <p>ZEROfilez will keep these links ready for you.</p>
-                    <div class="setup-review-list" id="setupReviewManualList"></div>
+                <div class="setup-step-body" id="setupReviewBody">
+                  <div class="setup-review-grid">
+                    <div class="setup-review-card">
+                      <div class="setup-review-head">
+                        <span class="setup-review-number" id="setupAutomaticCount">0</span>
+                        <h4>Automatic</h4>
+                      </div>
+                      <div class="setup-review-list" id="setupReviewAutomaticList"></div>
+                    </div>
+                    <div class="setup-review-card">
+                      <div class="setup-review-head">
+                        <span class="setup-review-number" id="setupManualCount">0</span>
+                        <h4>Manual</h4>
+                      </div>
+                      <div class="setup-review-list" id="setupReviewManualList"></div>
+                    </div>
                   </div>
                 </div>
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-secondary" id="setupStep2Back">Back</button>
+                  <button type="button" class="setup-secondary setup-icon-button" id="setupStep2Back" aria-label="Back to program selection" title="Back">←</button>
                   <span id="setupReviewTotal"></span>
-                  <button type="button" class="setup-primary" id="setupStep2Next">Create setup</button>
+                  <button type="button" class="setup-primary setup-icon-button" id="setupStep2Next" aria-label="Create setup" title="Next">→</button>
                 </div>
               </div>
 
               <div class="setup-step hidden" data-setup-step="3">
-                <div class="setup-ready-card">
-                  <span class="setup-entry-kicker">Ready</span>
-                  <h3>Your PC setup is prepared</h3>
-                  <p id="setupReadySummary"></p>
+                <div class="setup-step-body" id="setupInstallBody">
+                  <div class="setup-ready-card">
+                    <div class="setup-ready-head">
+                      <h3>Ready</h3>
+                      <span id="setupReadySummary"></span>
+                    </div>
 
-                  <div id="setupAutomaticOutput">
-                    <div class="setup-ready-actions">
-                      <button type="button" class="setup-primary" id="downloadSetupScript">Download Windows setup</button>
-                      <button type="button" class="setup-secondary" id="copySetupScript">Copy file contents</button>
+                    <div id="setupAutomaticOutput">
+                      <div class="setup-ready-actions">
+                        <button type="button" class="setup-primary" id="downloadSetupScript">Download</button>
+                        <button type="button" class="setup-secondary" id="copySetupScript">Copy</button>
+                      </div>
+                      <p class="setup-run-note">Double-click the <code>.cmd</code>. The window stays open if something fails.</p>
+                      <details class="setup-technical-details" id="setupTechnicalDetails">
+                        <summary>Details</summary>
+                        <p>Generated locally with verified WinGet package IDs. ZEROfilez runs nothing from the website.</p>
+                        <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup"></textarea>
+                      </details>
                     </div>
-                    <div class="setup-run-instructions" id="setupRunInstructions">
-                      <strong>How to run it</strong>
-                      <ol>
-                        <li>Download the setup file.</li>
-                        <li>In Downloads, double-click <code>ZEROfilez-Windows-Setup.cmd</code>.</li>
-                        <li>ZEROfilez skips programs already installed and continues through the rest.</li>
-                        <li>The window stays open when setup finishes or fails, so you can read the result before closing it.</li>
-                      </ol>
+
+                    <div class="setup-no-automatic hidden" id="setupNoAutomatic">
+                      Manual downloads only. No setup file is needed.
                     </div>
-                    <details class="setup-technical-details" id="setupTechnicalDetails">
-                      <summary>Technical details</summary>
-                      <p>The setup is generated locally in your browser as a Windows command file and uses verified WinGet package IDs. Nothing is executed by this website.</p>
-                      <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup"></textarea>
-                    </details>
+
+                    <span id="windowsSetupStatus" aria-live="polite"></span>
                   </div>
 
-                  <div class="setup-no-automatic hidden" id="setupNoAutomatic">
-                    Your selection only contains manual downloads, so there is no Windows setup file to run.
+                  <div class="setup-manual-card hidden" id="setupManualSection">
+                    <div class="setup-ready-head">
+                      <h3>Manual</h3>
+                      <span>Download separately</span>
+                    </div>
+                    <div class="setup-manual-downloads" id="setupManualDownloads"></div>
                   </div>
-
-                  <span id="windowsSetupStatus" aria-live="polite"></span>
-                </div>
-
-                <div class="setup-manual-card hidden" id="setupManualSection">
-                  <h3>Finish the manual downloads</h3>
-                  <p>These programs are not added to the automatic setup. Download them normally when you're ready.</p>
-                  <div class="setup-manual-downloads" id="setupManualDownloads"></div>
                 </div>
 
                 <div class="setup-step-footer">
-                  <button type="button" class="setup-secondary" id="setupStep3Back">Back</button>
+                  <button type="button" class="setup-secondary setup-icon-button" id="setupStep3Back" aria-label="Back to review" title="Back">←</button>
                   <span></span>
-                  <button type="button" class="setup-ghost" id="finishWindowsSetup">Done</button>
+                  <button type="button" class="setup-ghost setup-icon-button" id="finishWindowsSetup" aria-label="Finish setup" title="Done">✓</button>
                 </div>
               </div>
             </div>

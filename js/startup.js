@@ -192,17 +192,11 @@ export class StartupManager {
         const name = document.createElement('strong');
         name.textContent = item.name;
 
-        const description = document.createElement('span');
-        description.textContent = item.wingetId
-            ? 'Can be installed automatically'
-            : 'Download link provided at the end';
-
         copy.appendChild(name);
-        copy.appendChild(description);
 
         const badge = document.createElement('span');
         badge.className = `setup-type-badge ${item.wingetId ? 'automatic' : 'manual'}`;
-        badge.textContent = item.wingetId ? 'Automatic' : 'Manual download';
+        badge.textContent = item.wingetId ? 'Auto' : 'Manual';
 
         checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
@@ -250,10 +244,10 @@ export class StartupManager {
 
         if (automaticCount) automaticCount.textContent = String(automatic.length);
         if (manualCount) manualCount.textContent = String(manual.length);
-        if (total) total.textContent = `${all.length} programs selected`;
+        if (total) total.textContent = `${all.length} total · ${automatic.length} auto · ${manual.length} manual`;
 
-        this.renderSetupNameList('setupReviewAutomaticList', automatic, 'Everything here goes into one Windows setup file.');
-        this.renderSetupNameList('setupReviewManualList', manual, 'No manual downloads selected.');
+        this.renderSetupNameList('setupReviewAutomaticList', automatic, 'None');
+        this.renderSetupNameList('setupReviewManualList', manual, 'None');
     }
 
     renderSetupNameList(containerId, items, emptyMessage) {
@@ -285,8 +279,8 @@ export class StartupManager {
 
         if (summary) {
             summary.textContent = automatic.length > 0
-                ? `${automatic.length} automatic install${automatic.length === 1 ? '' : 's'} prepared${manual.length ? `, plus ${manual.length} manual download${manual.length === 1 ? '' : 's'}` : ''}.`
-                : `${all.length} manual download${all.length === 1 ? '' : 's'} ready.`;
+                ? `${automatic.length} auto · ${manual.length} manual`
+                : `${all.length} manual`;
         }
 
         this.generatedSetupScript = '';
@@ -329,8 +323,10 @@ export class StartupManager {
 
             const button = document.createElement('button');
             button.type = 'button';
-            button.className = 'setup-secondary';
-            button.textContent = 'Download';
+            button.className = 'setup-secondary setup-icon-button';
+            button.textContent = '↓';
+            button.setAttribute('aria-label', `Download ${item.name}`);
+            button.title = 'Download';
             button.disabled = !item.url;
             button.addEventListener('click', (event) => this.handleSimpleDownload(event.currentTarget, item));
 
