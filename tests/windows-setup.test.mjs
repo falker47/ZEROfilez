@@ -147,6 +147,27 @@ test('legacy FileStorage packages remain in the canonical catalog', () => {
     );
 });
 
+test('PC setup builder exposes a plain-language three-step flow', async () => {
+    const [indexHtml, startupJs] = await Promise.all([
+        readFile(new URL('../index.html', import.meta.url), 'utf8'),
+        readFile(new URL('../js/startup.js', import.meta.url), 'utf8')
+    ]);
+
+    assert.match(indexHtml, /Set up a new PC/);
+    assert.match(indexHtml, /data-setup-step="1"/);
+    assert.match(indexHtml, /data-setup-step="2"/);
+    assert.match(indexHtml, /data-setup-step="3"/);
+    assert.match(indexHtml, /id="downloadSetupScript"/);
+    assert.match(indexHtml, /Technical details/);
+    assert.doesNotMatch(indexHtml, /Select for setup/);
+    assert.doesNotMatch(indexHtml, /Generate setup/);
+
+    assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
+    assert.match(startupJs, /Manual download/);
+    assert.match(startupJs, /generatePowerShellSetup\(automatic\)/);
+    assert.match(startupJs, /setupManualDownloads/);
+});
+
 test('Personal Vault and normal startup entry points remain wired', async () => {
     const [indexHtml, mainJs, startupJs] = await Promise.all([
         readFile(new URL('../index.html', import.meta.url), 'utf8'),
