@@ -421,3 +421,85 @@
     font-size: 0.8em;
   }
 }
+
+
+/* PC Setup Builder responsive */
+@media (max-width: 768px) {
+  .pc-setup-entry,
+  .setup-builder-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pc-setup-entry .setup-primary,
+  .setup-builder-header .setup-ghost {
+    width: 100%;
+  }
+
+  .setup-program-grid,
+  .setup-review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setup-program-card {
+    grid-template-columns: auto 30px minmax(0, 1fr);
+  }
+
+  .setup-type-badge {
+    grid-column: 2 / -1;
+    justify-self: start;
+    margin-left: 0;
+  }
+
+  .setup-step-footer {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .setup-step-footer > span {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .setup-step-footer > button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .windows-setup-builder,
+  .pc-setup-entry {
+    padding: 11px;
+  }
+
+  .setup-stepper {
+    gap: 5px;
+  }
+
+  .setup-step-indicator {
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px 5px;
+    font-size: 0.72em;
+  }
+
+  .setup-program-card {
+    padding: 8px;
+  }
+
+  .setup-ready-actions {
+    flex-direction: column;
+  }
+
+  .setup-ready-actions button {
+    width: 100%;
+  }
+
+  .setup-manual-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .setup-manual-row button {
+    width: 100%;
+  }
+}

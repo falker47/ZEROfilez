@@ -3,9 +3,20 @@ import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
 import { generatePowerShellSetup } from './windows-setup.js';
 
+const SETUP_CATEGORY_GROUPS = [
+    { label: 'Browsers', ids: ['brave-browser', 'google-chrome', 'mozilla-firefox'] },
+    { label: 'Essentials', ids: ['7-zip', 'vlc-media-player', 'revo-uninstaller', 'libreoffice', 'winrar'] },
+    { label: 'Utilities', ids: ['cheat-engine', 'sharex', 'wiztree', 'powertoys', 'patch-my-pc', 'everything', 'espanso', 'pcloud', 'obsidian', 'bitwarden-desktop'] },
+    { label: 'Communication', ids: ['discord'] },
+    { label: 'AI & tools', ids: ['claude-desktop', 'antigravity', 'cluely'] },
+    { label: 'Personal', ids: ['panacea'] }
+];
+
 export class StartupManager {
     constructor() {
         this.setupSelectionMode = false;
+        this.setupBuilderOpen = false;
+        this.setupStep = 1;
         this.selectedSetupItems = new Set();
         this.generatedSetupScript = '';
         this.data = this.buildData();
@@ -31,82 +42,302 @@ export class StartupManager {
     }
 
     initializeWindowsSetup() {
-        const toggleButton = document.getElementById('toggleSetupSelection');
-        const generateButton = document.getElementById('generateSetupScript');
-        const clearButton = document.getElementById('clearSetupSelection');
-        const copyButton = document.getElementById('copySetupScript');
-        const downloadButton = document.getElementById('downloadSetupScript');
+        const startButton = document.getElementById('startWindowsSetup');
+        if (!startButton) return;
 
-        if (!toggleButton) return;
+        startButton.addEventListener('click', () => this.openWindowsSetupBuilder());
+        document.getElementById('exitWindowsSetup')?.addEventListener('click', () => this.closeWindowsSetupBuilder());
+        document.getElementById('finishWindowsSetup')?.addEventListener('click', () => this.closeWindowsSetupBuilder());
+        document.getElementById('clearSetupSelection')?.addEventListener('click', () => this.clearWindowsSetupSelection());
+        document.getElementById('setupStep1Next')?.addEventListener('click', () => this.setSetupStep(2));
+        document.getElementById('setupStep2Back')?.addEventListener('click', () => this.setSetupStep(1));
+        document.getElementById('setupStep2Next')?.addEventListener('click', () => this.setSetupStep(3));
+        document.getElementById('setupStep3Back')?.addEventListener('click', () => this.setSetupStep(2));
+        document.getElementById('copySetupScript')?.addEventListener('click', () => this.copyGeneratedSetup());
+        document.getElementById('downloadSetupScript')?.addEventListener('click', () => this.downloadGeneratedSetup());
 
-        toggleButton.addEventListener('click', () => {
-            this.setupSelectionMode = !this.setupSelectionMode;
-            toggleButton.textContent = this.setupSelectionMode ? 'Done selecting' : 'Select for setup';
-            this.renderPcProgramsForCurrentSearch();
-            this.updateWindowsSetupControls();
+        this.renderSetupSelection();
+        this.updateSetupSelectionCount();
+    }
+
+    openWindowsSetupBuilder() {
+        this.setupBuilderOpen = true;
+
+        document.getElementById('pcSetupEntry')?.classList.add('hidden');
+        document.querySelector('#pc-programs-tab .search-container')?.classList.add('hidden');
+        document.getElementById('pc-programs-list')?.classList.add('hidden');
+        document.getElementById('windowsSetupBuilder')?.classList.remove('hidden');
+
+        this.setSetupStep(1);
+    }
+
+    closeWindowsSetupBuilder() {
+        this.setupBuilderOpen = false;
+
+        document.getElementById('pcSetupEntry')?.classList.remove('hidden');
+        document.querySelector('#pc-programs-tab .search-container')?.classList.remove('hidden');
+        document.getElementById('pc-programs-list')?.classList.remove('hidden');
+        document.getElementById('windowsSetupBuilder')?.classList.add('hidden');
+
+        this.setWindowsSetupStatus('');
+    }
+
+    setSetupStep(step) {
+        this.setupStep = step;
+
+        document.querySelectorAll('#windowsSetupBuilder [data-setup-step]').forEach(element => {
+            element.classList.toggle('hidden', Number(element.dataset.setupStep) !== step);
         });
 
-        generateButton?.addEventListener('click', () => this.generateWindowsSetup());
-        clearButton?.addEventListener('click', () => this.clearWindowsSetupSelection());
-        copyButton?.addEventListener('click', () => this.copyGeneratedSetup());
-        downloadButton?.addEventListener('click', () => this.downloadGeneratedSetup());
+        document.querySelectorAll('#windowsSetupBuilder [data-step-indicator]').forEach(element => {
+            const indicatorStep = Number(element.dataset.stepIndicator);
+            element.classList.toggle('active', indicatorStep === step);
+            element.classList.toggle('completed', indicatorStep < step);
+        });
 
-        this.updateWindowsSetupControls();
+        if (step === 1) {
+            this.renderSetupSelection();
+            this.updateSetupSelectionCount();
+        } else if (step === 2) {
+            this.renderSetupReview();
+        } else if (step === 3) {
+            this.prepareWindowsSetup();
+        }
     }
 
-    renderPcProgramsForCurrentSearch() {
-        const query = document.getElementById('pcSearchInput')?.value?.toLowerCase() || '';
-        this.filterSection('pc-programs', 'pc-programs-list', query);
+    getSelectedSetupItems() {
+        return (this.data['pc-programs'] || [])
+            .filter(item => this.selectedSetupItems.has(item.id));
     }
 
-    updateWindowsSetupControls() {
+    getSetupBreakdown() {
+        const all = this.getSelectedSetupItems();
+        return {
+            all,
+            automatic: all.filter(item => Boolean(item.wingetId)),
+            manual: all.filter(item => !item.wingetId)
+        };
+    }
+
+    renderSetupSelection() {
+        const container = document.getElementById('setupBuilderSelectionList');
+        if (!container) return;
+
+        const itemMap = new Map((this.data['pc-programs'] || []).map(item => [item.id, item]));
+        container.innerHTML = '';
+
+        for (const group of SETUP_CATEGORY_GROUPS) {
+            const items = group.ids.map(id => itemMap.get(id)).filter(Boolean);
+            if (items.length === 0) continue;
+
+            const category = document.createElement('div');
+            category.className = 'setup-category';
+
+            const heading = document.createElement('div');
+            heading.className = 'setup-category-heading';
+
+            const title = document.createElement('h4');
+            title.textContent = group.label;
+
+            const count = document.createElement('span');
+            count.textContent = `${items.length} programs`;
+
+            heading.appendChild(title);
+            heading.appendChild(count);
+            category.appendChild(heading);
+
+            const grid = document.createElement('div');
+            grid.className = 'setup-program-grid';
+
+            for (const item of items) {
+                grid.appendChild(this.createSetupProgramCard(item));
+            }
+
+            category.appendChild(grid);
+            container.appendChild(category);
+        }
+    }
+
+    createSetupProgramCard(item) {
+        const card = document.createElement('label');
+        card.className = 'setup-program-card';
+        card.classList.toggle('selected', this.selectedSetupItems.has(item.id));
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = this.selectedSetupItems.has(item.id);
+        checkbox.setAttribute('aria-label', `Select ${item.name}`);
+
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'setup-program-icon';
+
+        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
+            const img = document.createElement('img');
+            img.src = item.icon;
+            img.alt = '';
+            img.className = 'file-icon-img';
+            img.onerror = () => {
+                iconDiv.textContent = '▣';
+            };
+            iconDiv.appendChild(img);
+        } else if (item.icon) {
+            iconDiv.innerHTML = item.icon;
+        } else {
+            iconDiv.textContent = '▣';
+        }
+
+        const copy = document.createElement('div');
+        copy.className = 'setup-program-copy';
+
+        const name = document.createElement('strong');
+        name.textContent = item.name;
+
+        const description = document.createElement('span');
+        description.textContent = item.wingetId
+            ? 'Can be installed automatically'
+            : 'Download link provided at the end';
+
+        copy.appendChild(name);
+        copy.appendChild(description);
+
+        const badge = document.createElement('span');
+        badge.className = `setup-type-badge ${item.wingetId ? 'automatic' : 'manual'}`;
+        badge.textContent = item.wingetId ? 'Automatic' : 'Manual download';
+
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                this.selectedSetupItems.add(item.id);
+            } else {
+                this.selectedSetupItems.delete(item.id);
+            }
+            card.classList.toggle('selected', checkbox.checked);
+            this.generatedSetupScript = '';
+            this.updateSetupSelectionCount();
+        });
+
+        card.appendChild(checkbox);
+        card.appendChild(iconDiv);
+        card.appendChild(copy);
+        card.appendChild(badge);
+        return card;
+    }
+
+    updateSetupSelectionCount() {
         const count = this.selectedSetupItems.size;
         const countLabel = document.getElementById('setupSelectionCount');
-        const generateButton = document.getElementById('generateSetupScript');
+        const nextButton = document.getElementById('setupStep1Next');
         const clearButton = document.getElementById('clearSetupSelection');
 
-        if (countLabel) {
-            countLabel.textContent = `${count} selected`;
-        }
-        if (generateButton) {
-            generateButton.disabled = count === 0;
-        }
-        if (clearButton) {
-            clearButton.disabled = count === 0;
-        }
+        if (countLabel) countLabel.textContent = `${count} selected`;
+        if (nextButton) nextButton.disabled = count === 0;
+        if (clearButton) clearButton.disabled = count === 0;
     }
 
     clearWindowsSetupSelection() {
         this.selectedSetupItems.clear();
         this.generatedSetupScript = '';
-
-        const output = document.getElementById('windowsSetupOutput');
-        const preview = document.getElementById('setupScriptPreview');
-        if (output) output.classList.add('hidden');
-        if (preview) preview.value = '';
-
+        this.renderSetupSelection();
+        this.updateSetupSelectionCount();
         this.setWindowsSetupStatus('');
-        this.renderPcProgramsForCurrentSearch();
-        this.updateWindowsSetupControls();
     }
 
-    generateWindowsSetup() {
-        const selectedItems = (this.data['pc-programs'] || [])
-            .filter(item => this.selectedSetupItems.has(item.id));
+    renderSetupReview() {
+        const { all, automatic, manual } = this.getSetupBreakdown();
 
-        try {
-            this.generatedSetupScript = generatePowerShellSetup(selectedItems);
-        } catch (error) {
-            this.setWindowsSetupStatus(error.message);
+        const automaticCount = document.getElementById('setupAutomaticCount');
+        const manualCount = document.getElementById('setupManualCount');
+        const total = document.getElementById('setupReviewTotal');
+
+        if (automaticCount) automaticCount.textContent = String(automatic.length);
+        if (manualCount) manualCount.textContent = String(manual.length);
+        if (total) total.textContent = `${all.length} programs selected`;
+
+        this.renderSetupNameList('setupReviewAutomaticList', automatic, 'Everything here goes into one Windows setup file.');
+        this.renderSetupNameList('setupReviewManualList', manual, 'No manual downloads selected.');
+    }
+
+    renderSetupNameList(containerId, items, emptyMessage) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = '';
+        if (items.length === 0) {
+            const empty = document.createElement('span');
+            empty.className = 'setup-review-empty';
+            empty.textContent = emptyMessage;
+            container.appendChild(empty);
             return;
         }
 
-        const output = document.getElementById('windowsSetupOutput');
-        const preview = document.getElementById('setupScriptPreview');
-        if (preview) preview.value = this.generatedSetupScript;
-        if (output) output.classList.remove('hidden');
+        for (const item of items) {
+            const row = document.createElement('span');
+            row.textContent = item.name;
+            container.appendChild(row);
+        }
+    }
 
-        this.setWindowsSetupStatus('Script generated locally. Review it before running.');
+    prepareWindowsSetup() {
+        const { all, automatic, manual } = this.getSetupBreakdown();
+        const summary = document.getElementById('setupReadySummary');
+        const automaticOutput = document.getElementById('setupAutomaticOutput');
+        const noAutomatic = document.getElementById('setupNoAutomatic');
+        const preview = document.getElementById('setupScriptPreview');
+
+        if (summary) {
+            summary.textContent = automatic.length > 0
+                ? `${automatic.length} automatic install${automatic.length === 1 ? '' : 's'} prepared${manual.length ? `, plus ${manual.length} manual download${manual.length === 1 ? '' : 's'}` : ''}.`
+                : `${all.length} manual download${all.length === 1 ? '' : 's'} ready.`;
+        }
+
+        this.generatedSetupScript = '';
+        this.setWindowsSetupStatus('');
+
+        if (automatic.length > 0) {
+            try {
+                this.generatedSetupScript = generatePowerShellSetup(automatic);
+                if (preview) preview.value = this.generatedSetupScript;
+                automaticOutput?.classList.remove('hidden');
+                noAutomatic?.classList.add('hidden');
+            } catch (error) {
+                automaticOutput?.classList.add('hidden');
+                noAutomatic?.classList.remove('hidden');
+                this.setWindowsSetupStatus(error.message);
+            }
+        } else {
+            if (preview) preview.value = '';
+            automaticOutput?.classList.add('hidden');
+            noAutomatic?.classList.remove('hidden');
+        }
+
+        this.renderManualDownloads(manual);
+    }
+
+    renderManualDownloads(items) {
+        const section = document.getElementById('setupManualSection');
+        const container = document.getElementById('setupManualDownloads');
+        if (!section || !container) return;
+
+        container.innerHTML = '';
+        section.classList.toggle('hidden', items.length === 0);
+
+        for (const item of items) {
+            const row = document.createElement('div');
+            row.className = 'setup-manual-row';
+
+            const name = document.createElement('strong');
+            name.textContent = item.name;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'setup-secondary';
+            button.textContent = 'Download';
+            button.disabled = !item.url;
+            button.addEventListener('click', (event) => this.handleSimpleDownload(event.currentTarget, item));
+
+            row.appendChild(name);
+            row.appendChild(button);
+            container.appendChild(row);
+        }
     }
 
     async copyGeneratedSetup() {
@@ -117,16 +348,16 @@ export class StartupManager {
                 await navigator.clipboard.writeText(this.generatedSetupScript);
             } else {
                 const preview = document.getElementById('setupScriptPreview');
-                if (!preview) throw new Error('Script preview unavailable.');
+                if (!preview) throw new Error('Setup preview unavailable.');
                 preview.focus();
                 preview.select();
                 if (!document.execCommand('copy')) {
                     throw new Error('Copy command was rejected.');
                 }
             }
-            this.setWindowsSetupStatus('Script copied.');
+            this.setWindowsSetupStatus('Setup copied to the clipboard.');
         } catch {
-            this.setWindowsSetupStatus('Copy failed. Select the script text and copy it manually.');
+            this.setWindowsSetupStatus('Copy failed. Open Technical details and copy the setup manually.');
         }
     }
 
@@ -145,7 +376,7 @@ export class StartupManager {
         link.remove();
         URL.revokeObjectURL(url);
 
-        this.setWindowsSetupStatus('PowerShell script downloaded.');
+        this.setWindowsSetupStatus('Setup file downloaded.');
     }
 
     setWindowsSetupStatus(message) {

@@ -31,11 +31,11 @@ Download URLs that change with releases are maintained by `scripts/update-links.
 
 #### Windows Setup
 
-The **PC Programs** tab can also build a reproducible Windows setup from the same curated catalog. Enter **Select for setup**, choose any programs that expose a verified `wingetId`, then generate a PowerShell script.
+The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the programs you want, review the selection, and let ZEROfilez split the result into automatic installs and normal manual downloads.
 
-The script is created entirely in the browser and can be inspected, copied or downloaded as a `.ps1` before use. It checks for `winget`, skips packages already installed, and installs the remaining exact package IDs from the `winget` source. ZEROfilez does **not** execute PowerShell or other commands on the PC from the browser.
+Programs with a verified `wingetId` are bundled into one local Windows setup script. The script is generated entirely in the browser, skips packages already installed, and installs the remaining exact package IDs from the `winget` source. ZEROfilez does **not** execute PowerShell or other commands on the PC from the browser.
 
-Programs without `winget` metadata remain available through their normal direct-download button and are never inserted into the generated script.
+Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow. The generated PowerShell remains available under **Technical details** for users who want to inspect it.
 
 ### 2. 🔐 Personal Vault
 
