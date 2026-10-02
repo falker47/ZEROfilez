@@ -1,7 +1,7 @@
 import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
-import { generatePowerShellSetup } from './windows-setup.js';
+import { generateCommandSetup } from './windows-setup.js';
 
 const SETUP_CATEGORY_GROUPS = [
     { label: 'Browsers', ids: ['brave-browser', 'google-chrome', 'mozilla-firefox'] },
@@ -294,7 +294,7 @@ export class StartupManager {
 
         if (automatic.length > 0) {
             try {
-                this.generatedSetupScript = generatePowerShellSetup(automatic);
+                this.generatedSetupScript = generateCommandSetup(automatic);
                 if (preview) preview.value = this.generatedSetupScript;
                 automaticOutput?.classList.remove('hidden');
                 noAutomatic?.classList.add('hidden');
@@ -370,7 +370,7 @@ export class StartupManager {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'ZEROfilez-Windows-Setup.ps1';
+        link.download = 'ZEROfilez-Windows-Setup.cmd';
         document.body.appendChild(link);
         link.click();
         link.remove();

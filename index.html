@@ -233,20 +233,21 @@
                   <div id="setupAutomaticOutput">
                     <div class="setup-ready-actions">
                       <button type="button" class="setup-primary" id="downloadSetupScript">Download Windows setup</button>
-                      <button type="button" class="setup-secondary" id="copySetupScript">Copy setup</button>
+                      <button type="button" class="setup-secondary" id="copySetupScript">Copy file contents</button>
                     </div>
                     <div class="setup-run-instructions" id="setupRunInstructions">
                       <strong>How to run it</strong>
                       <ol>
                         <li>Download the setup file.</li>
-                        <li>In Downloads, right-click <code>ZEROfilez-Windows-Setup.ps1</code> and choose <strong>Run with PowerShell</strong>. On Windows 11 you may need <strong>Show more options</strong> first.</li>
+                        <li>In Downloads, double-click <code>ZEROfilez-Windows-Setup.cmd</code>.</li>
                         <li>ZEROfilez skips programs already installed and continues through the rest.</li>
+                        <li>The window stays open when setup finishes or fails, so you can read the result before closing it.</li>
                       </ol>
                     </div>
                     <details class="setup-technical-details" id="setupTechnicalDetails">
                       <summary>Technical details</summary>
-                      <p>The setup is generated locally in your browser and uses verified Windows package IDs. Nothing is executed by this website.</p>
-                      <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated PowerShell setup script"></textarea>
+                      <p>The setup is generated locally in your browser as a Windows command file and uses verified WinGet package IDs. Nothing is executed by this website.</p>
+                      <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup"></textarea>
                     </details>
                   </div>
 

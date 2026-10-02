@@ -55,6 +55,84 @@ export function getSetupPackages(items) {
     );
 }
 
+export function generateCommandSetup(items) {
+    const packages = getSetupPackages(items);
+
+    if (packages.length === 0) {
+        throw new Error('Select at least one winget-compatible application.');
+    }
+
+    const packageComments = packages
+        .map(pkg => `rem - ${pkg.name || pkg.wingetId}: ${pkg.wingetId}`)
+        .join('\r\n');
+
+    const installCalls = packages
+        .map(pkg => `call :install "${pkg.wingetId}"`)
+        .join('\r\n');
+
+    return `@echo off
+setlocal EnableExtensions
+title ZEROfilez Windows Setup
+
+rem Generated locally in your browser.
+rem Selected packages:
+${packageComments}
+
+where winget >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: winget is not available.
+    echo Install or update App Installer from Microsoft, then run this setup again.
+    echo.
+    echo Press any key to close this window.
+    pause >nul
+    exit /b 1
+)
+
+set "FAILED_PACKAGES="
+
+${installCalls}
+
+echo.
+if defined FAILED_PACKAGES (
+    echo Completed with failures:%FAILED_PACKAGES%
+    echo The programs above were not installed. The other selections may have completed successfully.
+    echo.
+    echo Press any key to close this window.
+    pause >nul
+    exit /b 1
+)
+
+echo Windows setup completed successfully.
+echo.
+echo Press any key to close this window.
+pause >nul
+exit /b 0
+
+:install
+set "PACKAGE_ID=%~1"
+echo.
+echo ==^> %PACKAGE_ID%
+
+winget list --id "%PACKAGE_ID%" --exact --accept-source-agreements --disable-interactivity 2>nul | findstr /I /C:"%PACKAGE_ID%" >nul
+if not errorlevel 1 (
+    echo Already installed; skipping.
+    exit /b 0
+)
+
+echo Installing...
+winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+
+if errorlevel 1 (
+    echo WARNING: Installation failed for %PACKAGE_ID%. Continuing with the remaining programs.
+    set "FAILED_PACKAGES=%FAILED_PACKAGES% %PACKAGE_ID%"
+) else (
+    echo Installed successfully.
+)
+
+exit /b 0
+`;
+}
+
 export function generatePowerShellSetup(items) {
     const packages = getSetupPackages(items);
 
