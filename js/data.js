@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-0850e0ff5cee8442e38f3ef6aa7280142171f611/rpcs3-v0.0.43-20160-0850e0ff_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-e8b4646145c76da683d39cd019ae7dd57e77cfac/rpcs3-v0.0.43-20185-e8b46461_win64_msvc.7z"
             },
             "android": null
         },
@@ -246,7 +246,7 @@ export const ITEMS = {
         "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
-        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.0/win/x86_64/LibreOffice_26.8.0_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
+        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "wingetId": "RARLab.WinRAR", "icon": ICONS.winrar },
         "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d1ya6fb9ltsosh.cloudfront.net/DwtYwfn/jsog.exe", "icon": ICONS.cheatEngine },
 
