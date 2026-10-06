@@ -19,6 +19,9 @@ export class StartupManager {
         this.setupStep = 1;
         this.selectedSetupItems = new Set();
         this.generatedSetupScript = '';
+        this.programInfoPopover = null;
+        this.programInfoButton = null;
+        this.programInfoPinned = false;
         this.data = this.buildData();
         this.initialize();
     }
@@ -39,6 +42,127 @@ export class StartupManager {
         this.renderAllSections();
         this.initializeSearch();
         this.initializeWindowsSetup();
+        this.initializeProgramInfoPopover();
+    }
+
+    initializeProgramInfoPopover() {
+        const popover = document.createElement('div');
+        popover.id = 'programInfoPopover';
+        popover.className = 'program-info-popover';
+        popover.setAttribute('role', 'tooltip');
+        popover.hidden = true;
+        document.body.appendChild(popover);
+        this.programInfoPopover = popover;
+
+        document.addEventListener('pointerdown', (event) => {
+            if (!this.programInfoPinned || !this.programInfoButton) return;
+            if (!this.programInfoButton.contains(event.target)) {
+                this.hideProgramInfoPopover();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.hideProgramInfoPopover();
+            }
+        });
+
+        document.addEventListener('scroll', () => this.hideProgramInfoPopover(), true);
+        window.addEventListener('resize', () => this.hideProgramInfoPopover());
+    }
+
+    showProgramInfoPopover(button, pin = false) {
+        if (!this.programInfoPopover || !button?.dataset.description) return;
+
+        if (this.programInfoButton && this.programInfoButton !== button) {
+            this.programInfoButton.setAttribute('aria-expanded', 'false');
+            this.programInfoButton.removeAttribute('aria-describedby');
+        }
+
+        this.programInfoButton = button;
+        this.programInfoPinned = pin;
+        this.programInfoPopover.textContent = button.dataset.description;
+        this.programInfoPopover.hidden = false;
+        this.programInfoPopover.style.visibility = 'hidden';
+        button.setAttribute('aria-expanded', 'true');
+        button.setAttribute('aria-describedby', this.programInfoPopover.id);
+
+        const buttonRect = button.getBoundingClientRect();
+        const popoverRect = this.programInfoPopover.getBoundingClientRect();
+        const edge = 12;
+        const gap = 8;
+
+        let left = buttonRect.left + (buttonRect.width - popoverRect.width) / 2;
+        left = Math.max(edge, Math.min(left, window.innerWidth - popoverRect.width - edge));
+
+        let top = buttonRect.top - popoverRect.height - gap;
+        if (top < edge) {
+            top = buttonRect.bottom + gap;
+        }
+
+        this.programInfoPopover.style.left = `${Math.round(left)}px`;
+        this.programInfoPopover.style.top = `${Math.round(top)}px`;
+        this.programInfoPopover.style.visibility = 'visible';
+    }
+
+    hideProgramInfoPopover() {
+        if (!this.programInfoPopover) return;
+
+        if (this.programInfoButton) {
+            this.programInfoButton.setAttribute('aria-expanded', 'false');
+            this.programInfoButton.removeAttribute('aria-describedby');
+        }
+
+        this.programInfoPopover.hidden = true;
+        this.programInfoPopover.style.visibility = '';
+        this.programInfoButton = null;
+        this.programInfoPinned = false;
+    }
+
+    createProgramInfoButton(item) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'program-info-btn icon-only-btn';
+        button.dataset.description = item.description;
+        button.setAttribute('aria-label', `About ${item.name}`);
+        button.setAttribute('aria-expanded', 'false');
+        button.innerHTML = `<img src="${ICONS.info}" alt="" aria-hidden="true">`;
+
+        button.addEventListener('mouseenter', () => {
+            if (!this.programInfoPinned) {
+                this.showProgramInfoPopover(button);
+            }
+        });
+
+        button.addEventListener('mouseleave', () => {
+            if (!this.programInfoPinned) {
+                this.hideProgramInfoPopover();
+            }
+        });
+
+        button.addEventListener('focus', () => {
+            if (!this.programInfoPinned) {
+                this.showProgramInfoPopover(button);
+            }
+        });
+
+        button.addEventListener('blur', () => {
+            if (!this.programInfoPinned) {
+                this.hideProgramInfoPopover();
+            }
+        });
+
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
+
+            if (this.programInfoPinned && this.programInfoButton === button) {
+                this.hideProgramInfoPopover();
+            } else {
+                this.showProgramInfoPopover(button, true);
+            }
+        });
+
+        return button;
     }
 
     initializeWindowsSetup() {
@@ -675,6 +799,11 @@ export class StartupManager {
         // Buttons Container
         const btnDiv = document.createElement('div');
         btnDiv.className = 'dual-buttons';
+
+        if (dataKey === 'pc-programs' && item.description) {
+            btnDiv.appendChild(this.createProgramInfoButton(item));
+        }
+
         const btn = document.createElement('button');
         btn.className = `download-btn ${type}-btn icon-only-btn`; // Add icon-only-btn class
         // Replace text with Icon

@@ -238,37 +238,37 @@ export const ITEMS = {
     },
     "pc-programs": {
         // Browsers
-        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "url": "https://laptop-updates.brave.com/latest/win64", "wingetId": "Brave.Brave", "icon": ICONS.brave },
-        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "wingetId": "Google.Chrome", "icon": ICONS.chrome },
-        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
+        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "description": "Block ads and trackers automatically while browsing the web, without installing extra extensions.", "url": "https://laptop-updates.brave.com/latest/win64", "wingetId": "Brave.Brave", "icon": ICONS.brave },
+        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "description": "Keep bookmarks, passwords, and open tabs available across your devices while browsing the web.", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "wingetId": "Google.Chrome", "icon": ICONS.chrome },
+        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "description": "Customize your browser with themes and extensions, and browse with built-in tracking protection.", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.04/7z2604-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
-        "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
-        "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
-        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
-        "winrar": { "id": "winrar", "name": "WinRAR", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "wingetId": "RARLab.WinRAR", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "url": "https://d1ya6fb9ltsosh.cloudfront.net/DwtYwfn/jsog.exe", "icon": ICONS.cheatEngine },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "description": "Open compressed files or pack folders into smaller archives for storage and sharing.", "url": "https://github.com/ip7z/7zip/releases/download/26.04/7z2604-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
+        "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "description": "Play videos and music in most formats, with support for subtitles and DVDs.", "url": "https://mirror.init7.net/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
+        "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "description": "Uninstall unwanted programs, then find and remove the files and settings left behind.", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
+        "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "description": "Create and edit documents, spreadsheets, and presentations, including files made with Microsoft Office.", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
+        "winrar": { "id": "winrar", "name": "WinRAR", "description": "Open RAR and ZIP files, compress folders, and protect archives with a password.", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "wingetId": "RARLab.WinRAR", "icon": ICONS.winrar },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "description": "Find and change values such as health or money in offline single-player games.", "url": "https://d1ya6fb9ltsosh.cloudfront.net/DwtYwfn/jsog.exe", "icon": ICONS.cheatEngine },
 
         // Utilities
-        "sharex": { "id": "sharex", "name": "ShareX", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
-        "wiztree": { "id": "wiztree", "name": "WizTree", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
-        "powertoys": { "id": "powertoys", "name": "PowerToys", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.101.2362.0/PowerToysUserSetup-0.101.2362.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
-        "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
-        "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
-        "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
-        "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
-        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/Obsidian-1.14.4.exe", "icon": ICONS.obsidian },
-        "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
-        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.1/Bitwarden-Installer-2026.9.1.exe", "icon": ICONS.bitwarden },
-        "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
+        "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v19.0.2/ShareX-19.0.2-setup.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
+        "wiztree": { "id": "wiztree", "name": "WizTree", "description": "See which files and folders take up the most space on your drives.", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
+        "powertoys": { "id": "powertoys", "name": "PowerToys", "description": "Arrange windows, change what keyboard keys do, and rename multiple files at once.", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.101.2362.0/PowerToysUserSetup-0.101.2362.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
+        "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "description": "Install and update supported programs together without opening each installer one by one.", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
+        "everything": { "id": "everything", "name": "Everything", "description": "Find files and folders by name, with matching results appearing as you type.", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
+        "espanso": { "id": "espanso", "name": "Espanso", "description": "Typed keywords expand into full phrases, email addresses, or other text you use often.", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
+        "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
+        "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/Obsidian-1.14.4.exe", "icon": ICONS.obsidian },
+        "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.1/Bitwarden-Installer-2026.9.1.exe", "icon": ICONS.bitwarden },
+        "discord": { "id": "discord", "name": "Discord", "description": "Chat with friends and communities through text, voice, or video, and share your screen.", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
 
         // Development
-        "visual-studio-code": { "id": "visual-studio-code", "name": "Visual Studio Code", "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable", "wingetId": "Microsoft.VisualStudioCode", "icon": ICONS.visualStudioCode },
+        "visual-studio-code": { "id": "visual-studio-code", "name": "Visual Studio Code", "description": "Write code for websites, apps, and scripts, with tools to find and fix errors.", "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable", "wingetId": "Microsoft.VisualStudioCode", "icon": ICONS.visualStudioCode },
 
         // Custom
-        "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.5-4923483625488384/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
+        "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools.", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
+        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "description": "Build apps with AI help to write code, fix errors, and run tests.", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.5-4923483625488384/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
         "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },

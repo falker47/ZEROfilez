@@ -378,6 +378,57 @@ section h2 {
   background: #353535;
 }
 
+.program-info-btn {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.program-info-btn:hover,
+.program-info-btn:focus-visible,
+.program-info-btn[aria-expanded="true"] {
+  background: var(--bg-button-hover);
+  border-color: var(--border-light);
+}
+
+.program-info-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.program-info-btn img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.program-info-popover {
+  position: fixed;
+  z-index: 1000;
+  width: min(290px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: 7px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: var(--shadow-card-hover);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: left;
+  pointer-events: none;
+}
+
 
 /* PC Setup Builder */
 .pc-setup-entry,

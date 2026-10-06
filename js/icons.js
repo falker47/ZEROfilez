@@ -13,6 +13,7 @@ export const ICONS = {
     close: 'https://api.iconify.design/lucide:x.svg?color=white',
     copy: 'https://api.iconify.design/lucide:copy.svg?color=white',
     setup: 'https://api.iconify.design/lucide:wand-sparkles.svg?color=white',
+    info: 'https://api.iconify.design/lucide:info.svg?color=white',
 
     // Platform Icons
     windows: 'https://api.iconify.design/uim:windows.svg?color=white',
