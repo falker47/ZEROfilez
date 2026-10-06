@@ -59,7 +59,8 @@ class App {
             // Switch to Cloud Decryptor
             quickStartupPage.classList.add('hidden');
             cloudDecryptorPage.classList.remove('hidden');
-            mainTitle.innerHTML = '<span class="brand-zero">ZERO</span><span class="brand-filez">filez</span><span class="brand-suffix"> Cloud Decryptor</span>';
+            mainTitle.classList.add('with-suffix');
+            mainTitle.innerHTML = '<img class="brand-wordmark" src="assets/zerofilez-wordmark.svg" alt="ZEROfilez"><span class="brand-suffix">Cloud Decryptor</span>';
             mainSubtitle.textContent = 'Secure system to manage encrypted files';
             // Highlight right icon (Cloud Decryptor)
             toggleIconLeft.style.opacity = '0.4';
@@ -68,7 +69,8 @@ class App {
             // Switch to Quick Startup
             cloudDecryptorPage.classList.add('hidden');
             quickStartupPage.classList.remove('hidden');
-            mainTitle.innerHTML = '<span class="brand-zero">ZERO</span><span class="brand-filez">filez</span>';
+            mainTitle.classList.remove('with-suffix');
+            mainTitle.innerHTML = '<img class="brand-wordmark" src="assets/zerofilez-wordmark.svg" alt="ZEROfilez">';
             mainSubtitle.textContent = 'Download useful files for free';
             // Highlight left icon (Quick Startup)
             toggleIconLeft.style.opacity = '1';
