@@ -43,8 +43,7 @@ export const ORDER = {
         "claude-desktop",
         "bitwarden-desktop",
         "discord",
-        "antigravity",
-        "cluely"
+        "antigravity"
     ],
     "apk-files": [
         "lucky-patcher",

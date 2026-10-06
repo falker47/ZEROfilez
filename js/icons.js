@@ -50,17 +50,18 @@ export const ICONS = {
     // Basics
     sevenZip: 'https://api.iconify.design/simple-icons:7zip.svg?color=white',
     vlc: 'https://cdn.simpleicons.org/vlcmediaplayer/white',
-    revo: 'https://api.iconify.design/arcticons:multi-app-uninstaller.svg?color=white',
+    revo: 'https://f057a20f961f56a72089-b74530d2d26278124f446233f95622ef.ssl.cf1.rackcdn.com/site/icons/rup5-64.png',
     libreoffice: 'https://cdn.simpleicons.org/libreoffice/white',
-    winrar: 'https://api.iconify.design/solar:winrar-outline.svg?color=white',
-    cheatEngine: 'https://api.iconify.design/mdi:memory.svg?color=white',
+    winrar: 'https://api.iconify.design/solar:win-rar-linear.svg?color=white',
+    cheatEngine: 'https://raw.githubusercontent.com/cheat-engine/cheat-engine/ec45d5f47f92a239ba0bf51ec5d04a7509c3fd37/Cheat%20Engine/cheatengine.ico',
 
     // Utilities
     sharex: 'https://cdn.simpleicons.org/sharex/white',
-    wiztree: 'https://api.iconify.design/streamline-cyber:harddisk-4.svg?color=white',
-    patchmypc: 'https://api.iconify.design/mdi:update.svg?color=white',
-    everything: 'https://api.iconify.design/mdi:text-box-search-outline.svg?color=white',
+    wiztree: 'https://api.iconify.design/mdi:file-tree.svg?color=white',
+    patchmypc: 'https://patchmypc.com/app/uploads/2025/06/Patch-My-PC-Logo__Logomark-Dark-Bckg.svg',
+    everything: 'https://www.voidtools.com/Everything.ico',
     pcloud: 'https://api.iconify.design/arcticons:pcloud.svg?color=white',
+    espanso: 'https://raw.githubusercontent.com/espanso/espanso/0cadaeaddf9aeb6d128668ea5db354b7c635ec20/espanso/src/res/logo_no_background.png',
     obsidian: 'https://cdn.simpleicons.org/obsidian/white',
     powertoys: 'https://api.iconify.design/simple-icons:powertoys.svg?color=white',
     claude: 'https://cdn.simpleicons.org/claude/white',
@@ -78,6 +79,5 @@ export const ICONS = {
     pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
     web: 'https://api.iconify.design/mdi:web.svg?color=white',
     panacea: 'panacea_icon_white.png',
-    antigravity: 'https://api.iconify.design/codicon:code.svg?color=white',
-    cluely: 'https://api.iconify.design/mdi:eye-outline.svg?color=white'
+    antigravity: 'https://www.antigravity.google/assets/image/brand/antigravity-icon__white.png'
 };

@@ -8,7 +8,7 @@ const SETUP_CATEGORY_GROUPS = [
     { label: 'Essentials', ids: ['7-zip', 'vlc-media-player', 'revo-uninstaller', 'libreoffice', 'winrar'] },
     { label: 'Utilities', ids: ['cheat-engine', 'sharex', 'wiztree', 'powertoys', 'patch-my-pc', 'everything', 'espanso', 'pcloud', 'obsidian', 'bitwarden-desktop'] },
     { label: 'Communication', ids: ['discord'] },
-    { label: 'Development & AI', ids: ['visual-studio-code', 'claude-desktop', 'antigravity', 'cluely'] },
+    { label: 'Development & AI', ids: ['visual-studio-code', 'claude-desktop', 'antigravity'] },
     { label: 'Personal', ids: ['panacea'] }
 ];
 
