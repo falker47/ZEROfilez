@@ -72,16 +72,34 @@ header h1 {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-#mainTitle .brand-zero {
-  color: var(--white);
+
+#mainTitle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
 }
 
-#mainTitle .brand-filez {
-  color: var(--accent-color);
+#mainTitle .brand-wordmark {
+  display: block;
+  width: 330px;
+  max-width: 68vw;
+  height: auto;
+  flex: 0 1 auto;
 }
 
 #mainTitle .brand-suffix {
   color: var(--text-heading);
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+#mainTitle.with-suffix .brand-wordmark {
+  width: 285px;
+  max-width: 52vw;
 }
 
 header p {
