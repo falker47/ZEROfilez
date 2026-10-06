@@ -40,6 +40,7 @@ export const ORDER = {
         "pcloud",
         "obsidian",
         "visual-studio-code",
+        "notepad-plus-plus",
         "claude-desktop",
         "bitwarden-desktop",
         "discord",

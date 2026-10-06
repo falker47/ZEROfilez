@@ -26,6 +26,14 @@ test('one compatible selection produces one package', () => {
     assert.equal((script.match(/'Google\.Chrome'/g) || []).length, 1);
 });
 
+test('Notepad++ retains its official package ID in both setup formats', () => {
+    const selection = [{ name: 'Notepad++', wingetId: 'Notepad++.Notepad++' }];
+
+    assert.deepEqual(getSetupPackages(selection), selection);
+    assert.ok(generateCommandSetup(selection).includes('call :install "Notepad++.Notepad++"'));
+    assert.ok(generatePowerShellSetup(selection).includes("'Notepad++.Notepad++'"));
+});
+
 test('multiple selections are emitted in deterministic winget ID order', () => {
     const packages = getSetupPackages([
         { name: 'VLC', wingetId: 'VideoLAN.VLC' },
@@ -63,7 +71,8 @@ test('winget IDs use a strict data whitelist', () => {
         'Google.Chrome',
         '7zip.7zip',
         'TheDocumentFoundation.LibreOffice',
-        'Microsoft.PowerToys'
+        'Microsoft.PowerToys',
+        'Notepad++.Notepad++'
     ]) {
         assert.equal(isValidWingetId(valid), true, valid);
     }
@@ -77,7 +86,10 @@ test('winget IDs use a strict data whitelist', () => {
         'Google..Chrome',
         '.Google.Chrome',
         'Google.Chrome.',
-        'Google.Chrome\nWrite-Host hacked'
+        'Google.Chrome\nWrite-Host hacked',
+        'Notepad++.Notepad++&whoami',
+        'Notepad++.Notepad++|whoami',
+        'Notepad++.Notepad++%PATH%'
     ]) {
         assert.equal(isValidWingetId(invalid), false, invalid);
     }

@@ -69,6 +69,7 @@ export const ICONS = {
     bitwarden: 'https://cdn.simpleicons.org/bitwarden/white',
     discord: 'https://cdn.simpleicons.org/discord/white',
     visualStudioCode: 'https://api.iconify.design/cib:visual-studio-code.svg?color=white',
+    notepadPlusPlus: 'https://api.iconify.design/simple-icons:notepadplusplus.svg?color=white',
 
     // Android/APK
     luckyPatcher: 'https://api.iconify.design/raphael:smile.svg?color=white',

@@ -152,6 +152,12 @@ const PROGRAMS = [
 
     // --- PC PROGRAMS (GitHub API) ---
     {
+        name: "Notepad++",
+        repo: "notepad-plus-plus/notepad-plus-plus",
+        filter: asset => /^npp\.[0-9.]+\.Installer\.x64\.exe$/.test(asset.name),
+        regex: /("notepad-plus-plus"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
         name: "ShareX",
         repo: "ShareX/ShareX",
         filter: asset => asset.name.includes('setup.exe'),
