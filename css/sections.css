@@ -884,7 +884,7 @@ section h2 {
   }
 
   #quickStartupPage .downloads-section {
-    height: clamp(330px, calc(100dvh - 300px), 690px);
+    height: clamp(330px, calc(100dvh - 260px), 730px);
     min-height: 0;
     display: flex;
     flex-direction: column;
