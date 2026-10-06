@@ -89,23 +89,22 @@ header h1 {
   flex: 0 1 auto;
 }
 
-#mainTitle .brand-suffix {
-  color: var(--text-heading);
-  font-size: 0.72em;
-  font-weight: 600;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-
-#mainTitle.with-suffix .brand-wordmark {
-  width: 260px;
-  max-width: 52vw;
-}
 
 header p {
   font-size: 1.05em; /* slightly smaller */
   color: var(--text-secondary);
   font-weight: 300;
+}
+
+#mainSubtitle .mode-label {
+  color: var(--text-heading);
+  font-weight: 600;
+}
+
+#mainSubtitle .mode-separator {
+  color: var(--accent-color);
+  font-weight: 600;
+  padding: 0 0.32em;
 }
 
 main {
