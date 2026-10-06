@@ -83,7 +83,7 @@ header h1 {
 
 #mainTitle .brand-wordmark {
   display: block;
-  width: 330px;
+  width: 300px;
   max-width: 68vw;
   height: auto;
   flex: 0 1 auto;
@@ -98,7 +98,7 @@ header h1 {
 }
 
 #mainTitle.with-suffix .brand-wordmark {
-  width: 285px;
+  width: 260px;
   max-width: 52vw;
 }
 
