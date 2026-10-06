@@ -238,9 +238,9 @@ export const ITEMS = {
     },
     "pc-programs": {
         // Browsers
-        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "description": "Block ads and trackers automatically while browsing the web, without installing extra extensions.", "url": "https://laptop-updates.brave.com/latest/win64", "wingetId": "Brave.Brave", "icon": ICONS.brave },
-        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "description": "Keep bookmarks, passwords, and open tabs available across your devices while browsing the web.", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "wingetId": "Google.Chrome", "icon": ICONS.chrome },
-        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "description": "Customize your browser with themes and extensions, and browse with built-in tracking protection.", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
+        "brave-browser": { "id": "brave-browser", "name": "Brave Browser", "description": "Browse the web with built-in ad and tracker blocking.", "url": "https://laptop-updates.brave.com/latest/win64", "wingetId": "Brave.Brave", "icon": ICONS.brave },
+        "google-chrome": { "id": "google-chrome", "name": "Google Chrome", "description": "Browse the web and sync bookmarks, passwords, and tabs across your devices.", "url": "https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi", "wingetId": "Google.Chrome", "icon": ICONS.chrome },
+        "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "description": "Browse the web with built-in tracking protection and extensions.", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
 
         // Basics
         "7-zip": { "id": "7-zip", "name": "7-Zip", "description": "Open compressed files or pack folders into smaller archives for storage and sharing.", "url": "https://github.com/ip7z/7zip/releases/download/26.04/7z2604-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
