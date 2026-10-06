@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-46aee28f85b9cecc8fd0e5dee0c771f9c88cd27a/rpcs3-v0.0.43-20206-46aee28f_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4dfdda978976e75e6bd446c39442bd5099ceae6c/rpcs3-v0.0.43-20231-4dfdda97_win64_msvc.7z"
             },
             "android": null
         },
@@ -243,7 +243,7 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "url": "https://github.com/ip7z/7zip/releases/download/26.04/7z2604-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "url": "https://mirror.init7.net/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
@@ -258,7 +258,7 @@ export const ITEMS = {
         "everything": { "id": "everything", "name": "Everything", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
-        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.13.7/Obsidian-1.13.7.exe", "icon": ICONS.obsidian },
+        "obsidian": { "id": "obsidian", "name": "Obsidian", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/Obsidian-1.14.4.exe", "icon": ICONS.obsidian },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.1/Bitwarden-Installer-2026.9.1.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
