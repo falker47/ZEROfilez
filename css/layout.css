@@ -72,6 +72,18 @@ header h1 {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+#mainTitle .brand-zero {
+  color: var(--white);
+}
+
+#mainTitle .brand-filez {
+  color: var(--accent-color);
+}
+
+#mainTitle .brand-suffix {
+  color: var(--text-heading);
+}
+
 header p {
   font-size: 1.05em; /* slightly smaller */
   color: var(--text-secondary);
