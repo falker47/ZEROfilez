@@ -263,6 +263,9 @@ export const ITEMS = {
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.1/Bitwarden-Installer-2026.9.1.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
 
+        // Development
+        "visual-studio-code": { "id": "visual-studio-code", "name": "Visual Studio Code", "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable", "wingetId": "Microsoft.VisualStudioCode", "icon": ICONS.visualStudioCode },
+
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
         "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.5-4923483625488384/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity },

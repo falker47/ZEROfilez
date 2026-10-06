@@ -39,6 +39,7 @@ export const ORDER = {
         "espanso",
         "pcloud",
         "obsidian",
+        "visual-studio-code",
         "claude-desktop",
         "bitwarden-desktop",
         "discord",
