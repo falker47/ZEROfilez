@@ -268,7 +268,7 @@ export const ITEMS = {
         "notepad-plus-plus": { "id": "notepad-plus-plus", "name": "Notepad++", "description": "Write and edit text files, scripts, and code in many programming languages.", "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.8.1/npp.8.9.8.1.Installer.x64.exe", "wingetId": "Notepad++.Notepad++", "icon": ICONS.notepadPlusPlus },
 
         // Custom
-        "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools.", "url": "https://raw.githubusercontent.com/falker47/panacea/main/dist/Panacea.exe", "icon": ICONS.panacea },
+        "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools.", "url": "https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe", "icon": ICONS.panacea },
         "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "description": "Build apps with AI help to write code, fix errors, and run tests.", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.5.5-4923483625488384/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
