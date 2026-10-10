@@ -38,7 +38,7 @@ export const ITEMS = {
             "icon": ICONS.gbc,
             "subtext": "💻: SameBoy\n📱: Pizza Boy GBC",
             "pc": {
-                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.3/sameboy_winsdl_v1.0.3.zip"
+                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.4/sameboy_winsdl_v1.0.4.zip"
             },
             "android": {
                 "appId": "it.dbtecno.pizzaboy",
@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4c7d08582aba15fe0ed9941d66944daa8aeda873/rpcs3-v0.0.43-20251-4c7d0858_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-ff91404b7ce1dad03fa022c1f2ab5cf885c97f64/rpcs3-v0.0.43-20267-ff91404b_win64_msvc.7z"
             },
             "android": null
         },
