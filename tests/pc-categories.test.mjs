@@ -21,6 +21,16 @@ test('PC programs render with alphabetically sorted categories and names', () =>
     }
 });
 
+test('Panacea belongs to Essentials in both catalog views', () => {
+    const categories = PC_PROGRAM_CATEGORIES.map(group => group.label);
+    assert.equal(categories.includes('Personal'), false);
+
+    const essentials = groupPcPrograms(items).find(group => group.label === 'Essentials');
+    assert.ok(essentials);
+    assert.equal(essentials.items.some(item => item.id === 'panacea'), true);
+    assert.equal(groupPcPrograms(items, 'panacea')[0].label, 'Essentials');
+});
+
 test('every downloadable PC program appears exactly once', () => {
     const foundIds = groupPcPrograms(items).flatMap(group => group.items.map(item => item.id));
     assert.equal(foundIds.length, items.length);
