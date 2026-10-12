@@ -64,7 +64,7 @@ export const ITEMS = {
             "icon": ICONS.scummvm,
             "subtext": "ScummVM",
             "pc": {
-                "url": "https://downloads.scummvm.org/frs/scummvm/2026.3.0/scummvm-2026.3.0-win32.exe"
+                "url": "https://downloads.scummvm.org/frs/scummvm/2026.4.0/scummvm-2026.4.0-win32.exe"
             },
             "android": {
                 "appId": "org.scummvm.scummvm",
@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-26098fb42d090cd522b4afcf3b754dd987c82978/rpcs3-v0.0.43-20283-26098fb4_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-2ba2f75bcea7ef6bdd687046c7fcfb790faf9853/rpcs3-v0.0.43-20284-2ba2f75b_win64_msvc.7z"
             },
             "android": null
         },
