@@ -164,7 +164,7 @@ test('ChatGPT Desktop stays a manual download until msstore is supported by the 
 
     assert.equal(app.name, 'ChatGPT Desktop');
     assert.equal(app.url, 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi');
-    assert.match(app.icon, /simpleicons\.org\/openai\/white$/);
+    assert.equal(app.icon, 'chatgpt_icon_white.svg');
     assert.equal(app.wingetId, undefined);
     assert.deepEqual(getSetupPackages([app]), []);
 
@@ -173,8 +173,13 @@ test('ChatGPT Desktop stays a manual download until msstore is supported by the 
         readFile(new URL('../js/startup.js', import.meta.url), 'utf8')
     ]);
 
+    const logo = await readFile(new URL('../chatgpt_icon_white.svg', import.meta.url), 'utf8');
+    assert.match(logo, /<svg[^>]*viewBox="0 0 24 24"/);
+    assert.match(logo, /<path d="M9\.205/);
+    assert.doesNotMatch(logo, /<script|onload=|xlink:href=/i);
+
     assert.match(ordering, /"claude-desktop",\s*"chatgpt-desktop"/);
-    assert.match(startup, /label: 'Development & AI', ids: \[[^\]]*'chatgpt-desktop'/);
+    assert.match(startup, /groupPcPrograms\(this\.data\['pc-programs'\]/);
 });
 
 test('all catalog winget IDs are valid and unique', () => {
@@ -251,7 +256,10 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.match(iconsJs, /copy:/);
 
     assert.match(startupJs, /pcProgramsToolbar/);
-    assert.match(startupJs, /SETUP_CATEGORY_GROUPS/);
+    assert.match(startupJs, /renderPcProgramsCatalog/);
+    assert.match(sectionsCss, /#pc-programs-list \.pc-program-category-heading/);
+    assert.match(sectionsCss, /#pc-programs-list \.pc-program-grid/);
+    assert.match(startupJs, /groupPcPrograms/);
     assert.match(startupJs, /badge\.textContent = item\.wingetId \? 'Auto' : 'Manual'/);
     assert.match(startupJs, /generateCommandSetup\(automatic\)/);
     assert.match(startupJs, /setupManualDownloads/);
