@@ -114,7 +114,8 @@ test('generated setups execute safely against an isolated native WinGet stub', {
                 cwd: root, env: { ...env, ZF_STUB_MODE: mode, ZF_STUB_LOG: log, ZF_SETUP_FILE: file,
                     ...(inheritedErrorLevel !== undefined ? { ERRORLEVEL: inheritedErrorLevel } : {}),
                     ...(mode === 'unavailable' ? { PATH: system32 } : {}) },
-                encoding: 'utf8', input: '\r\n\r\n', timeout: 15000
+                // Hosted Windows runners can take over 15s on a cold PS 5.1 start.
+                encoding: 'utf8', input: '\r\n\r\n', timeout: 45000
             });
         assert.ifError(result.error);
         const calls = readFileSync(log, 'utf8').trim().split(/\r?\n/).filter(Boolean).map(line => line.split('\t'));
