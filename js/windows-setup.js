@@ -86,6 +86,7 @@ export function generateCommandSetup(items) {
 
     return `@echo off
 setlocal EnableExtensions
+set "ERRORLEVEL="
 title ZEROfilez Windows Setup
 
 rem Generated locally in your browser.
@@ -129,8 +130,8 @@ if not defined PACKAGE_SOURCE set "PACKAGE_SOURCE=winget"
 echo.
 echo ==^> %PACKAGE_ID%
 
-winget list --id "%PACKAGE_ID%" --exact --source %PACKAGE_SOURCE% --accept-source-agreements --disable-interactivity 2>nul | findstr /I /C:"%PACKAGE_ID%" >nul
-if not errorlevel 1 (
+winget list --id "%PACKAGE_ID%" --exact --source %PACKAGE_SOURCE% --accept-source-agreements --disable-interactivity >nul 2>&1
+if "%ERRORLEVEL%"=="0" (
     echo Already installed; skipping.
     exit /b 0
 )
@@ -142,8 +143,8 @@ if /I "%PACKAGE_SOURCE%"=="msstore" (
     winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
 )
 
-if errorlevel 1 (
-    echo WARNING: Installation failed for %PACKAGE_ID%. Continuing with the remaining programs.
+if not "%ERRORLEVEL%"=="0" (
+    echo WARNING: Installation failed for %PACKAGE_ID% with exit code %ERRORLEVEL%. Continuing with the remaining programs.
     set "FAILED_PACKAGES=%FAILED_PACKAGES% %PACKAGE_ID%"
 ) else (
     echo Installed successfully.
