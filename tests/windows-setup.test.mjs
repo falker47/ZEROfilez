@@ -159,7 +159,25 @@ test('generated script omits risky legacy OnePunch behaviors', () => {
     }
 });
 
-test('all catalog winget IDs are valid and unique', () => {
+test('all catalog winget IDs are valid and unique',test('ChatGPT Desktop stays a manual download until msstore is supported by the setup generator', async () => {
+    const app = ITEMS['pc-programs']['chatgpt-desktop'];
+
+    assert.equal(app.name, 'ChatGPT Desktop');
+    assert.equal(app.url, 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi');
+    assert.match(app.icon, /simpleicons\.org\/openai\/white$/);
+    assert.equal(app.wingetId, undefined);
+    assert.deepEqual(getSetupPackages([app]), []);
+
+    const [ordering, startup] = await Promise.all([
+        readFile(new URL('../js/array.js', import.meta.url), 'utf8'),
+        readFile(new URL('../js/startup.js', import.meta.url), 'utf8')
+    ]);
+
+    assert.match(ordering, /"claude-desktop",\s*"chatgpt-desktop"/);
+    assert.match(startup, /label: 'Development & AI', ids: \[[^\]]*'chatgpt-desktop'/);
+});
+
+ () => {
     const items = Object.values(ITEMS['pc-programs']);
     const withWinget = items.filter(item => item.wingetId);
 
