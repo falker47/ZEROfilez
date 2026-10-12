@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -86,14 +86,16 @@ test('generated setups execute safely against an isolated native WinGet stub', {
     });
     assert.ifError(resolution.error);
     assert.equal(resolution.status, 0);
-    assert.deepEqual(resolution.stdout.trim().split(/\r?\n/).map(value => value.toLowerCase()), [stubPath.toLowerCase()]);
+    // Windows may report the long path for a short 8.3 TEMP directory alias.
+    const canonicalStub = realpathSync.native(stubPath).toLowerCase();
+    assert.deepEqual(resolution.stdout.trim().split(/\r?\n/).map(value => realpathSync.native(value).toLowerCase()), [canonicalStub]);
     const psResolution = spawnSync(powershell, ['-NoLogo', '-NoProfile', '-NonInteractive', '-Command',
         '(Get-Command winget -CommandType Application).Source'], {
         cwd: root, env, encoding: 'utf8', timeout: 10000
     });
     assert.ifError(psResolution.error);
     assert.equal(psResolution.status, 0);
-    assert.equal(psResolution.stdout.trim().toLowerCase(), stubPath.toLowerCase());
+    assert.equal(realpathSync.native(psResolution.stdout.trim()).toLowerCase(), canonicalStub);
 
     function run(format, mode, selection, inheritedErrorLevel) {
         const file = path.join(root, 'setup.' + format);
