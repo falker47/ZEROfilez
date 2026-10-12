@@ -42,6 +42,7 @@ export const ORDER = {
         "visual-studio-code",
         "notepad-plus-plus",
         "claude-desktop",
+        "chatgpt-desktop",
         "bitwarden-desktop",
         "discord",
         "antigravity"
