@@ -3,8 +3,7 @@ export const PC_PROGRAM_CATEGORIES = [
     { label: 'Browsers', ids: ['brave-browser', 'google-chrome', 'mozilla-firefox'] },
     { label: 'Communication', ids: ['discord'] },
     { label: 'Development & AI', ids: ['visual-studio-code', 'notepad-plus-plus', 'claude-desktop', 'chatgpt-desktop', 'antigravity'] },
-    { label: 'Essentials', ids: ['7-zip', 'vlc-media-player', 'revo-uninstaller', 'libreoffice', 'winrar'] },
-    { label: 'Personal', ids: ['panacea'] },
+    { label: 'Essentials', ids: ['7-zip', 'vlc-media-player', 'revo-uninstaller', 'libreoffice', 'winrar', 'panacea'] },
     { label: 'Utilities', ids: ['cheat-engine', 'sharex', 'wiztree', 'powertoys', 'patch-my-pc', 'everything', 'espanso', 'pcloud', 'obsidian', 'bitwarden-desktop'] }
 ];
 
