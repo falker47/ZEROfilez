@@ -159,7 +159,7 @@ test('generated script omits risky legacy OnePunch behaviors', () => {
     }
 });
 
-test('all catalog winget IDs are valid and unique',test('ChatGPT Desktop stays a manual download until msstore is supported by the setup generator', async () => {
+test('ChatGPT Desktop stays a manual download until msstore is supported by the setup generator', async () => {
     const app = ITEMS['pc-programs']['chatgpt-desktop'];
 
     assert.equal(app.name, 'ChatGPT Desktop');
@@ -177,7 +177,7 @@ test('all catalog winget IDs are valid and unique',test('ChatGPT Desktop stays a
     assert.match(startup, /label: 'Development & AI', ids: \[[^\]]*'chatgpt-desktop'/);
 });
 
- () => {
+test('all catalog winget IDs are valid and unique', () => {
     const items = Object.values(ITEMS['pc-programs']);
     const withWinget = items.filter(item => item.wingetId);
 
