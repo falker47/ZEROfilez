@@ -33,7 +33,7 @@ Download URLs that change with releases are maintained by `scripts/update-links.
 
 The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the programs you want, review the selection, and let ZEROfilez split the result into automatic installs and normal manual downloads.
 
-Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`). The file is generated entirely in the browser, skips packages already installed, installs the remaining exact package IDs from the `winget` source, and pauses before closing so installation errors remain visible. ZEROfilez does **not** execute commands on the PC from the browser.
+Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`). Packages use the `winget` community source by default, while entries with `wingetSource: 'msstore'` use the Microsoft Store catalog (for example, ChatGPT Desktop). The file is generated entirely in the browser, checks for already installed packages using their declared source, installs exact IDs and pauses before closing so failures remain visible. Store installation can require Windows Store services, an account or a confirmation; the normal direct download links remain available in the PC catalog. ZEROfilez does **not** execute commands on the PC from the browser.
 
 Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow. The generated command file remains available under **Technical details** for users who want to inspect it.
 
@@ -103,12 +103,14 @@ The updater uses official release APIs or upstream download pages where possible
 │   ├── data.js                  # Curated software/emulator links
 │   ├── array.js                 # Display ordering
 │   ├── icons.js                 # Icon sources and fallbacks
-│   ├── windows-setup.js         # Validated winget setup generators
+│   ├── windows-setup.js         # Validated winget/msstore setup generators
+│   ├── pc-categories.js        # Shared categories and alphabetical PC listing
 │   └── decryptor.js             # Client-side vault/decryption logic
 ├── scripts/
 │   └── update-links.js          # Release/link updater
 ├── tests/
-│   └── windows-setup.test.mjs   # Zero-dependency generator/regression tests
+│   ├── windows-setup.test.mjs   # Zero-dependency generator/regression tests
+│   └── pc-categories.test.mjs   # Category/catalog regression tests
 ├── .github/workflows/
 │   ├── ci.yml                   # Syntax + Node built-in tests
 │   └── update_links.yml         # Scheduled updater
@@ -125,5 +127,5 @@ Private keys, encrypted personal indexes and personal packaging scripts are inte
 - Keep `user.key` private and backed up.
 - Keep independent backups of original files; the browser decryptor is not a backup system.
 - Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
-- Generated Windows setup scripts contain only validated `winget` package IDs from the curated catalog; review the script before running it.
+- Generated Windows setup scripts contain only validated package IDs and explicitly approved `winget`/`msstore` sources from the curated catalog; review the script before running it. Windows Store installation behavior must be validated on a real Windows machine.
 - No explicit software license is currently granted in this repository.
