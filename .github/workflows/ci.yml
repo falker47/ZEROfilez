@@ -27,3 +27,20 @@ jobs:
 
       - name: Run tests
         run: node --test tests/*.test.mjs
+
+  windows-test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run tests with isolated WinGet stub
+        shell: pwsh
+        run: |
+          $testFiles = Get-ChildItem tests/*.test.mjs | ForEach-Object FullName
+          node --test $testFiles

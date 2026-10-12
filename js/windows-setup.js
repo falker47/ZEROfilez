@@ -1,4 +1,5 @@
 const WINGET_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]{1,126}[A-Za-z0-9+]$/;
+const MSSTORE_ID_PATTERN = /^[A-Z0-9]{12}$/;
 
 export function isValidWingetId(value) {
     return typeof value === 'string'
@@ -9,10 +10,15 @@ export function isValidWingetId(value) {
         && WINGET_ID_PATTERN.test(value);
 }
 
+export function isValidStoreId(value) {
+    return typeof value === 'string' && MSSTORE_ID_PATTERN.test(value);
+}
+
 function sanitizeComment(value) {
     return String(value ?? '')
         .replace(/[\r\n\u2028\u2029]+/g, ' ')
         .replace(/[\u0000-\u001f\u007f]/g, '')
+        .replace(/[&|<>^%!()\"]/g, ' ')
         .trim();
 }
 
@@ -32,25 +38,31 @@ export function getSetupPackages(items) {
     }
 
     const unique = new Map();
-
     for (const item of items) {
         const wingetId = item?.wingetId;
         if (!wingetId) continue;
 
-        if (!isValidWingetId(wingetId)) {
-            throw new Error(`Invalid winget package ID: ${String(wingetId)}`);
+        const source = item?.wingetSource ?? 'winget';
+        if (source !== 'winget' && source !== 'msstore') {
+            throw new Error(`Unsupported winget source: ${String(source)}`);
+        }
+        const valid = source === 'msstore' ? isValidStoreId(wingetId) : isValidWingetId(wingetId);
+        if (!valid) {
+            throw new Error(`Invalid ${source} package ID: ${String(wingetId)}`);
         }
 
-        const key = wingetId.toLowerCase();
+        const key = `${source}:${wingetId.toLowerCase()}`;
         if (!unique.has(key)) {
             unique.set(key, {
                 name: sanitizeComment(item?.name || wingetId),
-                wingetId
+                wingetId,
+                ...(source === 'msstore' ? { wingetSource: 'msstore' } : {})
             });
         }
     }
 
     return [...unique.values()].sort((a, b) =>
+        compareAsciiCaseInsensitive(a.wingetSource ?? 'winget', b.wingetSource ?? 'winget') ||
         compareAsciiCaseInsensitive(a.wingetId, b.wingetId)
     );
 }
@@ -63,15 +75,18 @@ export function generateCommandSetup(items) {
     }
 
     const packageComments = packages
-        .map(pkg => `rem - ${pkg.name || pkg.wingetId}: ${pkg.wingetId}`)
+        .map(pkg => `rem - ${pkg.name || pkg.wingetId}: ${pkg.wingetId} [${pkg.wingetSource || 'winget'}]`)
         .join('\r\n');
 
     const installCalls = packages
-        .map(pkg => `call :install "${pkg.wingetId}"`)
+        .map(pkg => pkg.wingetSource === 'msstore'
+            ? `call :install "${pkg.wingetId}" "msstore"`
+            : `call :install "${pkg.wingetId}"`)
         .join('\r\n');
 
     return `@echo off
 setlocal EnableExtensions
+set "ERRORLEVEL="
 title ZEROfilez Windows Setup
 
 rem Generated locally in your browser.
@@ -110,20 +125,26 @@ exit /b 0
 
 :install
 set "PACKAGE_ID=%~1"
+set "PACKAGE_SOURCE=%~2"
+if not defined PACKAGE_SOURCE set "PACKAGE_SOURCE=winget"
 echo.
 echo ==^> %PACKAGE_ID%
 
-winget list --id "%PACKAGE_ID%" --exact --accept-source-agreements --disable-interactivity 2>nul | findstr /I /C:"%PACKAGE_ID%" >nul
-if not errorlevel 1 (
+winget list --id "%PACKAGE_ID%" --exact --source %PACKAGE_SOURCE% --accept-source-agreements --disable-interactivity >nul 2>&1
+if "%ERRORLEVEL%"=="0" (
     echo Already installed; skipping.
     exit /b 0
 )
 
 echo Installing...
-winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+if /I "%PACKAGE_SOURCE%"=="msstore" (
+    winget install --id "%PACKAGE_ID%" --exact --source msstore --accept-package-agreements --accept-source-agreements
+) else (
+    winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+)
 
-if errorlevel 1 (
-    echo WARNING: Installation failed for %PACKAGE_ID%. Continuing with the remaining programs.
+if not "%ERRORLEVEL%"=="0" (
+    echo WARNING: Installation failed for %PACKAGE_ID% with exit code %ERRORLEVEL%. Continuing with the remaining programs.
     set "FAILED_PACKAGES=%FAILED_PACKAGES% %PACKAGE_ID%"
 ) else (
     echo Installed successfully.
@@ -141,11 +162,11 @@ export function generatePowerShellSetup(items) {
     }
 
     const packageComments = packages
-        .map(pkg => `# - ${pkg.name || pkg.wingetId}: ${pkg.wingetId}`)
+        .map(pkg => `# - ${pkg.name || pkg.wingetId}: ${pkg.wingetId} [${pkg.wingetSource || 'winget'}]`)
         .join('\n');
 
     const packageIds = packages
-        .map(pkg => `    '${pkg.wingetId}'`)
+        .map(pkg => `    @{ Id = '${pkg.wingetId}'; Source = '${pkg.wingetSource || 'winget'}' }`)
         .join(',\n');
 
     return `# ZEROfilez Windows Setup
@@ -160,17 +181,19 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-$packageIds = @(
+$packages = @(
 ${packageIds}
 )
 
 $failedPackages = @()
 
-foreach ($packageId in $packageIds) {
+foreach ($package in $packages) {
+    $packageId = $package.Id
+    $source = $package.Source
     Write-Host ''
     Write-Host "==> $packageId"
 
-    $installedOutput = & winget list --id $packageId --exact --source winget --accept-source-agreements --disable-interactivity 2>&1
+    $installedOutput = & winget list --id $packageId --exact --source $source --accept-source-agreements --disable-interactivity 2>&1
     $installedExitCode = $LASTEXITCODE
     $installedText = $installedOutput -join "\`n"
 
@@ -180,7 +203,11 @@ foreach ($packageId in $packageIds) {
     }
 
     Write-Host 'Installing...'
-    & winget install --id $packageId --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+    if ($source -eq 'msstore') {
+        & winget install --id $packageId --exact --source msstore --accept-package-agreements --accept-source-agreements
+    } else {
+        & winget install --id $packageId --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+    }
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host 'Installed successfully.'

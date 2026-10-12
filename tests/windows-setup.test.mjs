@@ -7,6 +7,7 @@ import {
     generateCommandSetup,
     generatePowerShellSetup,
     getSetupPackages,
+    isValidStoreId,
     isValidWingetId
 } from '../js/windows-setup.js';
 
@@ -110,7 +111,7 @@ test('command setup avoids PowerShell execution-policy friction and keeps errors
 
     assert.match(script, /^@echo off/);
     assert.match(script, /where winget >nul 2>&1/);
-    assert.match(script, /winget list --id "%PACKAGE_ID%" --exact --accept-source-agreements --disable-interactivity/);
+    assert.match(script, /winget list --id "%PACKAGE_ID%" --exact --source %PACKAGE_SOURCE% --accept-source-agreements --disable-interactivity/);
     assert.match(script, /winget install --id "%PACKAGE_ID%" --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);
     assert.match(script, /Already installed; skipping\./);
     assert.match(script, /pause >nul/);
@@ -133,7 +134,7 @@ test('generated script checks winget, skips installed packages, and installs exa
     ]);
 
     assert.match(script, /Get-Command winget -ErrorAction SilentlyContinue/);
-    assert.match(script, /winget list --id \$packageId --exact --source winget --accept-source-agreements --disable-interactivity/);
+    assert.match(script, /winget list --id \$packageId --exact --source \$source --accept-source-agreements --disable-interactivity/);
     assert.match(script, /Already installed; skipping\./);
     assert.match(script, /winget install --id \$packageId --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);
     assert.match(script, /Continuing with the remaining packages/);
@@ -159,14 +160,18 @@ test('generated script omits risky legacy OnePunch behaviors', () => {
     }
 });
 
-test('ChatGPT Desktop stays a manual download until msstore is supported by the setup generator', async () => {
+test('ChatGPT Desktop is a verified msstore package and retains its official manual download', async () => {
     const app = ITEMS['pc-programs']['chatgpt-desktop'];
 
     assert.equal(app.name, 'ChatGPT Desktop');
     assert.equal(app.url, 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi');
     assert.equal(app.icon, 'chatgpt_icon_white.svg');
-    assert.equal(app.wingetId, undefined);
-    assert.deepEqual(getSetupPackages([app]), []);
+    assert.equal(app.wingetId, '9PLM9XGG6VKS');
+    assert.equal(app.wingetSource, 'msstore');
+    assert.deepEqual(getSetupPackages([app]).map(({ wingetId, wingetSource }) => ({ wingetId, wingetSource })), [
+        { wingetId: '9PLM9XGG6VKS', wingetSource: 'msstore' }
+    ]);
+    assert.match(generateCommandSetup([app]), /call :install "9PLM9XGG6VKS" "msstore"/);
 
     const [ordering, startup] = await Promise.all([
         readFile(new URL('../js/array.js', import.meta.url), 'utf8'),
@@ -188,13 +193,59 @@ test('all catalog winget IDs are valid and unique', () => {
 
     assert.ok(withWinget.length > 0);
     assert.equal(
-        new Set(withWinget.map(item => item.wingetId.toLowerCase())).size,
+        new Set(withWinget.map(item => `${item.wingetSource || 'winget'}:${item.wingetId.toLowerCase()}`)).size,
         withWinget.length
     );
 
     for (const item of withWinget) {
-        assert.equal(isValidWingetId(item.wingetId), true, item.wingetId);
+        const valid = item.wingetSource === 'msstore' ? isValidStoreId(item.wingetId) : isValidWingetId(item.wingetId);
+        assert.equal(valid, true, item.wingetId);
     }
+});
+
+test('Store IDs require the documented twelve-character uppercase alphanumeric format', () => {
+    assert.equal(isValidStoreId('9PLM9XGG6VKS'), true);
+    assert.equal(isValidStoreId('XP9KHM4BK9FZ'), true);
+    for (const invalid of ['9PLM9XGG6VKS&', '9plm9xgg6vks', '9PLM9XGG6VK',
+        '9PLM9XGG6VKS;whoami', 'Google.Chrome', '9PLM9XGG6VKS\nrem hack']) {
+        assert.equal(isValidStoreId(invalid), false, invalid);
+    }
+});
+
+test('mixed source packages are deterministic and use explicit approved sources', () => {
+    const store = ITEMS['pc-programs']['chatgpt-desktop'];
+    const chrome = { name: 'Chrome', wingetId: 'Google.Chrome' };
+    const packages = getSetupPackages([store, chrome, store, chrome]);
+    assert.deepEqual(packages.map(item => item.wingetId), ['9PLM9XGG6VKS', 'Google.Chrome']);
+    const cmd = generateCommandSetup([store, chrome]);
+    assert.match(cmd, /call :install "9PLM9XGG6VKS" "msstore"/);
+    assert.match(cmd, /call :install "Google\.Chrome"/);
+    assert.match(cmd, /winget list --id "%PACKAGE_ID%" --exact --source %PACKAGE_SOURCE%/);
+    assert.match(cmd, /--source msstore --accept-package-agreements --accept-source-agreements/);
+    assert.match(cmd, /--source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);
+    const ps = generatePowerShellSetup([store, chrome]);
+    assert.match(ps, /Id = '9PLM9XGG6VKS'; Source = 'msstore'/);
+    assert.match(ps, /Id = 'Google\.Chrome'; Source = 'winget'/);
+    assert.match(ps, /--source \$source --accept-source-agreements/);
+    assert.match(ps, /if \(\$source -eq 'msstore'\)/);
+});
+
+test('untrusted sources and invalid store IDs never reach an installer script', () => {
+    for (const source of ['other', 'msstore&whoami', '', 'MSSTORE']) {
+        assert.throws(() => generateCommandSetup([{ wingetId: '9PLM9XGG6VKS', wingetSource: source }]), /Unsupported winget source/);
+    }
+    assert.throws(() => generatePowerShellSetup([{ wingetId: '9PLM9XGG6VKS;echo', wingetSource: 'msstore' }]), /Invalid msstore package ID/);
+    const cmd = generateCommandSetup([{ name: 'App & echo HACKED', wingetId: 'Valid.Package' }]);
+    assert.doesNotMatch(cmd, /rem - .*&/);
+});
+
+test('Store packages keep their source and manual fallback URL without affecting manual items', () => {
+    const store = ITEMS['pc-programs']['chatgpt-desktop'];
+    const manual = ITEMS['pc-programs']['bitwarden-desktop'];
+    assert.equal(store.wingetSource, 'msstore');
+    assert.match(store.url, /^https:\/\/get\.microsoft\.com\/installer\/download\//);
+    assert.equal(manual.wingetId, undefined);
+    assert.deepEqual(getSetupPackages([store, manual]).map(item => item.wingetId), ['9PLM9XGG6VKS']);
 });
 
 test('legacy FileStorage packages remain in the canonical catalog', () => {
