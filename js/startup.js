@@ -2,15 +2,7 @@ import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
 import { generateCommandSetup } from './windows-setup.js';
-
-const SETUP_CATEGORY_GROUPS = [
-    { label: 'Browsers', ids: ['brave-browser', 'google-chrome', 'mozilla-firefox'] },
-    { label: 'Essentials', ids: ['7-zip', 'vlc-media-player', 'revo-uninstaller', 'libreoffice', 'winrar'] },
-    { label: 'Utilities', ids: ['cheat-engine', 'sharex', 'wiztree', 'powertoys', 'patch-my-pc', 'everything', 'espanso', 'pcloud', 'obsidian', 'bitwarden-desktop'] },
-    { label: 'Communication', ids: ['discord'] },
-    { label: 'Development & AI', ids: ['visual-studio-code', 'notepad-plus-plus', 'claude-desktop', 'chatgpt-desktop', 'antigravity'] },
-    { label: 'Personal', ids: ['panacea'] }
-];
+import { groupPcPrograms } from './pc-categories.js';
 
 export class StartupManager {
     constructor() {
@@ -228,7 +220,8 @@ export class StartupManager {
     }
 
     getSelectedSetupItems() {
-        return (this.data['pc-programs'] || [])
+        return groupPcPrograms(this.data['pc-programs'] || [])
+            .flatMap(group => group.items)
             .filter(item => this.selectedSetupItems.has(item.id));
     }
 
@@ -245,12 +238,11 @@ export class StartupManager {
         const container = document.getElementById('setupBuilderSelectionList');
         if (!container) return;
 
-        const itemMap = new Map((this.data['pc-programs'] || []).map(item => [item.id, item]));
+        const groups = groupPcPrograms(this.data['pc-programs'] || []);
         container.innerHTML = '';
 
-        for (const group of SETUP_CATEGORY_GROUPS) {
-            const items = group.ids.map(id => itemMap.get(id)).filter(Boolean);
-            if (items.length === 0) continue;
+        for (const group of groups) {
+            const items = group.items;
 
             const category = document.createElement('div');
             category.className = 'setup-category';
@@ -262,7 +254,7 @@ export class StartupManager {
             title.textContent = group.label;
 
             const count = document.createElement('span');
-            count.textContent = `${items.length} programs`;
+            count.textContent = `${items.length} program${items.length === 1 ? '' : 's'}`;
 
             heading.appendChild(title);
             heading.appendChild(count);
@@ -595,6 +587,11 @@ export class StartupManager {
         const container = document.getElementById(containerId);
         if (!container) return;
 
+        if (dataKey === 'pc-programs') {
+            this.renderPcProgramsCatalog(container, document.getElementById('pcSearchInput')?.value || '');
+            return;
+        }
+
         const items = this.data[dataKey] || [];
         if (items.length === 0) {
             this.renderEmptyState(container, dataKey);
@@ -602,21 +599,68 @@ export class StartupManager {
         }
 
         container.innerHTML = '<div class="files-grid"></div>';
-        const grid = container.querySelector('.files-grid');
+        this.renderGridItems(container.querySelector('.files-grid'), items, dataKey);
+    }
 
-        this.renderGridItems(grid, items, dataKey);
+    renderPcProgramsCatalog(container, query = '') {
+        const groups = groupPcPrograms(this.data['pc-programs'] || [], query);
+        container.innerHTML = '';
+
+        if (groups.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'no-results';
+            empty.setAttribute('role', 'status');
+            empty.textContent = 'No results found.';
+            container.appendChild(empty);
+            return;
+        }
+
+        for (const group of groups) {
+            const category = document.createElement('div');
+            category.className = 'pc-program-category';
+            category.setAttribute('role', 'group');
+
+            const headingRow = document.createElement('div');
+            headingRow.className = 'pc-program-category-heading';
+
+            const title = document.createElement('h3');
+            title.id = `pc-category-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+            title.textContent = group.label;
+            category.setAttribute('aria-labelledby', title.id);
+
+            const count = document.createElement('span');
+            count.textContent = `${group.items.length} program${group.items.length === 1 ? '' : 's'}`;
+
+            headingRow.appendChild(title);
+            headingRow.appendChild(count);
+            category.appendChild(headingRow);
+
+            const grid = document.createElement('div');
+            grid.className = 'files-grid pc-program-grid';
+            for (const item of group.items) {
+                grid.appendChild(this.createSimpleFileCard(item, 'pc-programs'));
+            }
+
+            category.appendChild(grid);
+            container.appendChild(category);
+        }
     }
 
     filterSection(dataKey, containerId, query) {
         const container = document.getElementById(containerId);
         if (!container) return;
 
-        let grid = container.querySelector('.files-grid');
+        if (dataKey === 'pc-programs') {
+            this.renderPcProgramsCatalog(container, query);
+            container.scrollTop = 0;
+            return;
+        }
+
+        const grid = container.querySelector('.files-grid');
         if (!grid) return;
 
         const items = this.data[dataKey] || [];
         const filteredItems = items.filter(item => item.name.toLowerCase().includes(query));
-
         this.renderGridItems(grid, filteredItems, dataKey);
     }
 

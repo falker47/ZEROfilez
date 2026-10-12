@@ -1052,3 +1052,74 @@ section h2 {
     margin-bottom: 0;
   }
 }
+
+
+/* PC Programs: categorized catalog with a single scroll surface. */
+#pc-programs-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 6px 4px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+#pc-programs-list .pc-program-category {
+  flex: 0 0 auto;
+}
+
+#pc-programs-list .pc-program-category + .pc-program-category {
+  margin-top: 14px;
+}
+
+#pc-programs-list .pc-program-category-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 2px 7px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border-dark);
+}
+
+#pc-programs-list .pc-program-category-heading h3 {
+  margin: 0;
+  color: var(--text-heading);
+  font-size: 0.88em;
+  font-weight: 700;
+}
+
+#pc-programs-list .pc-program-category-heading span {
+  color: var(--text-muted);
+  font-size: 0.72em;
+  white-space: nowrap;
+}
+
+#quickStartupPage #pc-programs-list .pc-program-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 12px;
+  flex: 0 0 auto;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  align-content: start;
+}
+
+#pc-programs-list .no-results {
+  margin: 0;
+  padding: 28px 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #pc-programs-list {
+    max-height: 65vh;
+  }
+
+  #quickStartupPage #pc-programs-list .pc-program-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}
