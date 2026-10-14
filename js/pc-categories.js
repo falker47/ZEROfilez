@@ -1,3 +1,6 @@
+// One canonical catalog item can have a featured placement without a second data entry.
+export const FEATURED_PC_ID = 'panacea';
+
 // The PC catalog and Windows Setup share one category taxonomy.
 export const PC_PROGRAM_CATEGORIES = [
     { label: 'Browsers', ids: ['brave-browser', 'google-chrome', 'mozilla-firefox'] },
@@ -9,9 +12,20 @@ export const PC_PROGRAM_CATEGORIES = [
 
 const compareNames = (a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base', numeric: true });
 
+export function getFeaturedPcProgram(programs, query = '') {
+    const item = programs.find(program => program.id === FEATURED_PC_ID);
+    if (!item) return null;
+    const term = String(query).trim().toLowerCase();
+    const searchable = ['Featured', 'Essentials', 'Windows maintenance, simplified.',
+        'Cleanup, monitoring and repair tools in one place.', item.name, item.description || ''];
+    return !term || searchable.some(value => value.toLowerCase().includes(term)) ? item : null;
+}
+
 export function groupPcPrograms(programs, query = '') {
     const catalog = new Map(programs.map(item => [item.id, item]));
-    const assigned = new Set();
+    // Panacea has a featured visual placement, but keeps its Essentials membership
+    // for searches. It is not duplicated in ordinary categories or Other.
+    const assigned = new Set([FEATURED_PC_ID]);
     const term = String(query).trim().toLowerCase();
     const matches = (item, label) =>
         !term ||

@@ -35,7 +35,9 @@ The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the pro
 
 Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`). Packages use the `winget` community source by default, while entries with `wingetSource: 'msstore'` use the Microsoft Store catalog (for example, ChatGPT Desktop). The file is generated entirely in the browser, checks for already installed packages using their declared source, installs exact IDs and pauses before closing so failures remain visible. Store installation can require Windows Store services, an account or a confirmation; the normal direct download links remain available in the PC catalog. ZEROfilez does **not** execute commands on the PC from the browser.
 
-Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow. The generated command file remains available under **Technical details** for users who want to inspect it.
+Programs without `winget` metadata can still be selected. They appear at the end as a simple download checklist instead of silently disappearing from the setup flow.
+
+**Panacea Featured:** Panacea is displayed once, above the PC Programs categories, while remaining searchable through both *Featured* and *Essentials*. Install (recommended) uses the stable `PanaceaSetup.exe` endpoint, enabling future user-approved updates; Portable uses the stable `Panacea.exe` endpoint with manual updates. In PC Setup, include Panacea in **Choose** and select exactly one variant; **Review** and **Install** keep that choice. Panacea is always a manual download and never enters the generated WinGet command file. A manual-only setup needs no `.cmd`. The generated command file remains available under **Technical details** for users who want to inspect it.
 
 ### 2. 🔐 Personal Vault
 
