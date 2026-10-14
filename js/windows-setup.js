@@ -176,7 +176,11 @@ ${packageComments}
 
 $ErrorActionPreference = 'Continue'
 
-if (-not (Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+# Use the native executable resolver used by the CMD installer. PowerShell's
+# Get-Command lookup can stall when WinGet is absent on a restricted PATH.
+# where.exe searches executable locations without module/alias discovery.
+& where.exe winget.exe > $null 2>&1
+if ($LASTEXITCODE -ne 0) {
     Write-Error 'winget is not available. Install or update App Installer from Microsoft, then run this script again.'
     exit 1
 }

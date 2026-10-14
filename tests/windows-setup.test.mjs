@@ -133,7 +133,8 @@ test('generated script checks winget, skips installed packages, and installs exa
         { name: 'Firefox', wingetId: 'Mozilla.Firefox' }
     ]);
 
-    assert.match(script, /Get-Command winget\.exe -CommandType Application -ErrorAction SilentlyContinue/);
+    assert.match(script, /& where\.exe winget\.exe > \$null 2>&1/);
+    assert.match(script, /if \(\$LASTEXITCODE -ne 0\)/);
     assert.match(script, /winget list --id \$packageId --exact --source \$source --accept-source-agreements --disable-interactivity/);
     assert.match(script, /Already installed; skipping\./);
     assert.match(script, /winget install --id \$packageId --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);

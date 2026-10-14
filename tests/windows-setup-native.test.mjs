@@ -107,7 +107,7 @@ test('generated setups execute safely against an isolated native WinGet stub', {
         assert.deepEqual(commands, ['list', 'install', 'install']);
         // Allow only explicit executable discovery, never a direct winget.exe
         // invocation, absolute binary path, shell escalation or PATH rewrite.
-        const executableLookup = format === 'ps1' ? 'Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue' : '';
+        const executableLookup = format === 'ps1' ? '& where.exe winget.exe > $null 2>&1' : '';
         if (format === 'ps1') assert.ok(script.includes(executableLookup));
         assert.doesNotMatch(script.replace(executableLookup, ''),
             /winget\.exe|WindowsApps|Start-Process|Invoke-Expression|\biex\b|\bpowershell\b|\bpwsh\b|\bcmd\.exe\b|(?:set\s+"?PATH=|\$env:PATH\s*=)/i);
@@ -124,7 +124,7 @@ test('generated setups execute safely against an isolated native WinGet stub', {
                 // Hosted Windows runners can take over 15s on a cold PS 5.1 start.
                 encoding: 'utf8', input: '\r\n\r\n', timeout: 45000
             });
-        assert.ifError(result.error);
+        assert.ok(!result.error, `${result.error?.message || ''}\nstdout:\n${result.stdout || ''}\nstderr:\n${result.stderr || ''}`);
         const calls = readFileSync(log, 'utf8').trim().split(/\r?\n/).filter(Boolean).map(line => line.split('\t'));
         return { ...result, output: result.stdout + result.stderr, calls };
     }
