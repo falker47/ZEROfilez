@@ -57,3 +57,11 @@ test('release selectors target the correct Windows x64 installers', () => {
     assert.equal(sharex.filter({ name: 'ShareX-19.0.2-setup.exe' }), true);
     assert.equal(sharex.filter({ name: 'ShareX-21.0.0-portable-x64.zip' }), false);
 });
+
+test('Panacea offers stable installer and portable links without release-number rewrites', () => {
+    const panacea = ITEMS['pc-programs'].panacea;
+    assert.equal(panacea.url, 'https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe');
+    assert.equal(panacea.installerUrl, 'https://github.com/falker47/Panacea/releases/latest/download/PanaceaSetup.exe');
+    assert.notEqual(panacea.url, panacea.installerUrl);
+    assert.ok(!PROGRAMS.some(rule => rule.name === 'Panacea'));
+});

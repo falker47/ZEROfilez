@@ -329,5 +329,6 @@ test('Personal Vault and normal startup entry points remain wired', async () => 
     assert.match(indexHtml, /id="modeToggle"/);
     assert.match(mainJs, /import \{ CloudDecryptor \} from '\.\/decryptor\.js'/);
     assert.match(mainJs, /new CloudDecryptor\(\)/);
-    assert.match(startupJs, /window\.open\(item\.url, '_blank', 'noopener,noreferrer'\)/);
+    assert.match(startupJs, /handleSimpleDownload\(button, item, url = item\.url\)/);
+    assert.match(startupJs, /window\.open\(url, '_blank', 'noopener,noreferrer'\)/);
 });
