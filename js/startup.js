@@ -2,7 +2,7 @@ import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
 import { generateCommandSetup } from './windows-setup.js';
-import { groupPcPrograms } from './pc-categories.js';
+import { getFeaturedPcProgram, groupPcPrograms } from './pc-categories.js';
 import { getDownloadChoices } from './download-options.js';
 
 export class StartupManager {
@@ -11,6 +11,7 @@ export class StartupManager {
         this.setupBuilderOpen = false;
         this.setupStep = 1;
         this.selectedSetupItems = new Set();
+        this.setupVariants = new Map();
         this.generatedSetupScript = '';
         this.programInfoPopover = null;
         this.programInfoButton = null;
@@ -221,9 +222,10 @@ export class StartupManager {
     }
 
     getSelectedSetupItems() {
-        return groupPcPrograms(this.data['pc-programs'] || [])
-            .flatMap(group => group.items)
-            .filter(item => this.selectedSetupItems.has(item.id));
+        const programs = this.data['pc-programs'] || [];
+        const featured = getFeaturedPcProgram(programs);
+        return [featured, ...groupPcPrograms(programs).flatMap(group => group.items)]
+            .filter(item => item && this.selectedSetupItems.has(item.id));
     }
 
     getSetupBreakdown() {
@@ -235,12 +237,169 @@ export class StartupManager {
         };
     }
 
+
+    getPanaceaVariant() {
+        return this.setupVariants?.get('panacea') === 'portable' ? 'portable' : 'install';
+    }
+
+    setPanaceaIncluded(included) {
+        if (included) {
+            if (!this.selectedSetupItems.has('panacea')) {
+                // A new inclusion always resets to the recommended installer.
+                this.setupVariants ??= new Map();
+                this.setupVariants.set('panacea', 'install');
+            }
+            this.selectedSetupItems.add('panacea');
+        } else {
+            this.selectedSetupItems.delete('panacea');
+            this.setupVariants?.delete('panacea');
+        }
+        this.generatedSetupScript = '';
+        this.updateSetupSelectionCount();
+    }
+
+    setPanaceaVariant(kind) {
+        if (kind !== 'install' && kind !== 'portable') {
+            throw new Error('Unsupported Panacea download variant.');
+        }
+        this.setPanaceaIncluded(true);
+        this.setupVariants ??= new Map();
+        this.setupVariants.set('panacea', kind);
+    }
+
+    getSetupItemLabel(item) {
+        if (item.id !== 'panacea') return item.name;
+        const variant = this.getPanaceaVariant();
+        return `${item.name} — ${variant === 'install' ? 'Install' : 'Portable'}`;
+    }
+
+    createPanaceaFeaturedCard(item, mode = 'catalog') {
+        const setup = mode === 'setup';
+        const card = document.createElement('section');
+        card.className = 'panacea-featured-card' + (setup ? ' panacea-setup-featured' : '');
+        const titleId = setup ? 'setup-panacea-title' : 'catalog-panacea-title';
+        card.setAttribute('aria-labelledby', titleId);
+
+        const mark = document.createElement('div');
+        mark.className = 'panacea-featured-mark';
+        const logo = document.createElement('img');
+        logo.src = 'assets/panacea-icon.png';
+        logo.alt = '';
+        logo.width = setup ? 44 : 56;
+        logo.height = setup ? 44 : 56;
+        // Do not apply file-icon-img: its global filter would turn the chalice white.
+        mark.appendChild(logo);
+
+        const copy = document.createElement('div');
+        copy.className = 'panacea-featured-copy';
+        const eyebrow = document.createElement('span');
+        eyebrow.className = 'panacea-featured-eyebrow';
+        eyebrow.textContent = 'FEATURED';
+        const title = document.createElement('h3');
+        title.id = titleId;
+        title.textContent = item.name;
+        const tagline = document.createElement('p');
+        tagline.className = 'panacea-featured-tagline';
+        tagline.textContent = 'Windows maintenance, simplified.';
+        const description = document.createElement('p');
+        description.className = 'panacea-featured-description';
+        description.textContent = 'Cleanup, monitoring and repair tools in one place.';
+        copy.appendChild(eyebrow);
+        copy.appendChild(title);
+        copy.appendChild(tagline);
+        copy.appendChild(description);
+        card.appendChild(mark);
+        card.appendChild(copy);
+
+        if (!setup) {
+            const actions = document.createElement('div');
+            actions.className = 'panacea-featured-actions';
+            for (const choice of getDownloadChoices(item)) {
+                actions.appendChild(this.createDownloadChoiceButton(item, choice));
+            }
+            const details = document.createElement('a');
+            details.href = 'https://github.com/falker47/Panacea';
+            details.target = '_blank';
+            details.rel = 'noopener noreferrer';
+            details.className = 'panacea-details-link';
+            details.textContent = 'Details';
+            details.setAttribute('aria-label', 'Panacea details on GitHub');
+            actions.appendChild(details);
+            card.appendChild(actions);
+            return card;
+        }
+
+        const controls = document.createElement('div');
+        controls.className = 'panacea-featured-controls';
+        const include = document.createElement('label');
+        include.className = 'panacea-include';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        const includeText = document.createElement('span');
+        includeText.textContent = 'Include Panacea in setup';
+        include.appendChild(checkbox);
+        include.appendChild(includeText);
+
+        const variantGroup = document.createElement('fieldset');
+        variantGroup.className = 'panacea-variant-group';
+        const legend = document.createElement('legend');
+        legend.textContent = 'Package';
+        variantGroup.appendChild(legend);
+        const radios = [];
+        for (const choice of getDownloadChoices(item)) {
+            const label = document.createElement('label');
+            label.className = 'panacea-variant-label';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'panacea-variant';
+            radio.value = choice.kind;
+            const labelText = document.createElement('span');
+            labelText.textContent = choice.kind === 'install' ? 'Install · Recommended' : 'Portable';
+            label.appendChild(radio);
+            label.appendChild(labelText);
+            variantGroup.appendChild(label);
+            radios.push(radio);
+            radio.addEventListener('change', () => {
+                if (!radio.checked) return;
+                this.setPanaceaVariant(choice.kind);
+                syncState();
+            });
+        }
+
+        const note = document.createElement('p');
+        note.className = 'panacea-manual-note';
+        note.textContent = 'Manual download · Not a WinGet package';
+        controls.appendChild(include);
+        controls.appendChild(variantGroup);
+        controls.appendChild(note);
+        card.appendChild(controls);
+
+        const syncState = () => {
+            const selected = this.selectedSetupItems.has('panacea');
+            card.classList.toggle('selected', selected);
+            checkbox.checked = selected;
+            for (const radio of radios) {
+                radio.checked = radio.value === this.getPanaceaVariant();
+            }
+        };
+        checkbox.addEventListener('change', () => {
+            this.setPanaceaIncluded(checkbox.checked);
+            syncState();
+        });
+        syncState();
+        return card;
+    }
+
     renderSetupSelection() {
         const container = document.getElementById('setupBuilderSelectionList');
         if (!container) return;
 
-        const groups = groupPcPrograms(this.data['pc-programs'] || []);
+        const programs = this.data['pc-programs'] || [];
+        const groups = groupPcPrograms(programs);
         container.innerHTML = '';
+
+        const featured = getFeaturedPcProgram(programs);
+        if (featured) container.appendChild(this.createPanaceaFeaturedCard(featured, 'setup'));
 
         for (const group of groups) {
             const items = group.items;
@@ -344,6 +503,7 @@ export class StartupManager {
 
     clearWindowsSetupSelection() {
         this.selectedSetupItems.clear();
+        this.setupVariants?.clear();
         this.generatedSetupScript = '';
         this.renderSetupSelection();
         this.updateSetupSelectionCount();
@@ -380,7 +540,7 @@ export class StartupManager {
 
         for (const item of items) {
             const row = document.createElement('span');
-            row.textContent = item.name;
+            row.textContent = this.getSetupItemLabel(item);
             container.appendChild(row);
         }
     }
@@ -447,7 +607,7 @@ export class StartupManager {
             row.className = 'setup-manual-row';
 
             const name = document.createElement('strong');
-            name.textContent = item.name;
+            name.textContent = this.getSetupItemLabel(item);
 
             const button = document.createElement('button');
             button.type = 'button';
@@ -460,13 +620,15 @@ export class StartupManager {
 
             row.appendChild(name);
             const choices = getDownloadChoices(item);
-            if (choices.length > 1) {
-                const actions = document.createElement('div');
-                actions.className = 'setup-manual-choices';
-                for (const choice of choices) {
-                    actions.appendChild(this.createDownloadChoiceButton(item, choice));
+            if (item.id === 'panacea') {
+                const choice = choices.find(option => option.kind === this.getPanaceaVariant());
+                if (choice) {
+                    const download = this.createDownloadChoiceButton(item, choice);
+                    download.textContent = 'Download';
+                    download.classList.add('setup-panacea-download');
+                    download.setAttribute('aria-label', `Download ${this.getSetupItemLabel(item)}`);
+                    row.appendChild(download);
                 }
-                row.appendChild(actions);
             } else {
                 row.appendChild(button);
             }
@@ -627,10 +789,14 @@ export class StartupManager {
     }
 
     renderPcProgramsCatalog(container, query = '') {
-        const groups = groupPcPrograms(this.data['pc-programs'] || [], query);
+        const programs = this.data['pc-programs'] || [];
+        const featured = getFeaturedPcProgram(programs, query);
+        const groups = groupPcPrograms(programs, query);
         container.innerHTML = '';
 
-        if (groups.length === 0) {
+        if (featured) container.appendChild(this.createPanaceaFeaturedCard(featured));
+
+        if (!featured && groups.length === 0) {
             const empty = document.createElement('p');
             empty.className = 'no-results';
             empty.setAttribute('role', 'status');

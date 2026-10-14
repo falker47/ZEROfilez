@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { ITEMS } from '../js/data.js';
 import { ORDER } from '../js/array.js';
-import { PC_PROGRAM_CATEGORIES, groupPcPrograms } from '../js/pc-categories.js';
+import { PC_PROGRAM_CATEGORIES, getFeaturedPcProgram, groupPcPrograms } from '../js/pc-categories.js';
 
 const items = Object.values(ITEMS['pc-programs']);
 const alphabetically = names => [...names].sort((a, b) =>
@@ -21,18 +21,23 @@ test('PC programs render with alphabetically sorted categories and names', () =>
     }
 });
 
-test('Panacea belongs to Essentials in both catalog views', () => {
-    const categories = PC_PROGRAM_CATEGORIES.map(group => group.label);
-    assert.equal(categories.includes('Personal'), false);
-
-    const essentials = groupPcPrograms(items).find(group => group.label === 'Essentials');
-    assert.ok(essentials);
-    assert.equal(essentials.items.some(item => item.id === 'panacea'), true);
-    assert.equal(groupPcPrograms(items, 'panacea')[0].label, 'Essentials');
+test('Panacea keeps Essentials search membership but has one distinct Featured placement', () => {
+    assert.equal(PC_PROGRAM_CATEGORIES.find(group => group.label === 'Essentials').ids.includes('panacea'), true);
+    const groups = groupPcPrograms(items);
+    assert.equal(groups.find(group => group.label === 'Essentials').items.length, 5);
+    assert.equal(groups.some(group => group.items.some(item => item.id === 'panacea')), false);
+    assert.equal(getFeaturedPcProgram(items), ITEMS['pc-programs'].panacea);
+    for (const query of ['Panacea', 'Featured', 'Essentials', 'cleanup', 'repair', 'maintenance']) {
+        assert.equal(getFeaturedPcProgram(items, query)?.id, 'panacea', query);
+    }
+    assert.equal(getFeaturedPcProgram(items, 'unrelated-abc'), null);
+    assert.deepEqual(groupPcPrograms(items, 'Featured'), []);
+    assert.deepEqual(groupPcPrograms(items, 'panacea'), []);
+    assert.equal(groupPcPrograms(items, 'Essentials')[0].items.length, 5);
 });
 
 test('every downloadable PC program appears exactly once', () => {
-    const foundIds = groupPcPrograms(items).flatMap(group => group.items.map(item => item.id));
+    const foundIds = [getFeaturedPcProgram(items)?.id, ...groupPcPrograms(items).flatMap(group => group.items.map(item => item.id))];
     assert.equal(foundIds.length, items.length);
     assert.deepEqual(new Set(foundIds), new Set(items.map(item => item.id)));
     assert.deepEqual(new Set(ORDER['pc-programs']), new Set(foundIds));

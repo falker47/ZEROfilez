@@ -133,7 +133,8 @@ test('generated script checks winget, skips installed packages, and installs exa
         { name: 'Firefox', wingetId: 'Mozilla.Firefox' }
     ]);
 
-    assert.match(script, /Get-Command winget -CommandType Application -ErrorAction SilentlyContinue/);
+    assert.match(script, /& where\.exe winget\.exe > \$null 2>&1/);
+    assert.match(script, /if \(\$LASTEXITCODE -ne 0\)/);
     assert.match(script, /winget list --id \$packageId --exact --source \$source --accept-source-agreements --disable-interactivity/);
     assert.match(script, /Already installed; skipping\./);
     assert.match(script, /winget install --id \$packageId --exact --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity/);
@@ -184,7 +185,8 @@ test('ChatGPT Desktop is a verified msstore package and retains its official man
     assert.doesNotMatch(logo, /<script|onload=|xlink:href=/i);
 
     assert.match(ordering, /"claude-desktop",\s*"chatgpt-desktop"/);
-    assert.match(startup, /groupPcPrograms\(this\.data\['pc-programs'\]/);
+    assert.match(startup, /groupPcPrograms\(programs\)/);
+    assert.match(startup, /getFeaturedPcProgram\(programs/);
 });
 
 test('all catalog winget IDs are valid and unique', () => {

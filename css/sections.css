@@ -1213,3 +1213,211 @@ section h2 {
     padding: 5px 7px;
   }
 }
+
+
+/* Panacea: one featured placement, shared by catalog and PC Setup. */
+.panacea-featured-card {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  min-height: 124px;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(215, 177, 94, 0.35);
+  border-radius: 12px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-inset);
+}
+.panacea-featured-mark {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+}
+.panacea-featured-mark img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  max-width: 100%;
+  object-fit: contain;
+  /* The source asset is already gold; never use the global white icon filter. */
+  filter: none;
+}
+.panacea-featured-copy { min-width: 0; }
+.panacea-featured-eyebrow {
+  display: block;
+  color: #d9bd80;
+  font-size: 0.65em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.panacea-featured-copy h3 {
+  margin: 2px 0 3px;
+  color: var(--text-heading);
+  font-size: 1.35em;
+  line-height: 1.15;
+}
+.panacea-featured-copy p {
+  margin: 0;
+  line-height: 1.36;
+}
+.panacea-featured-tagline {
+  color: var(--text-main);
+  font-size: 0.84em;
+  font-weight: 500;
+}
+.panacea-featured-description {
+  color: var(--text-secondary);
+  font-size: 0.74em;
+}
+.panacea-featured-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+.panacea-featured-card .download-choice {
+  min-width: 88px;
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 0.84em;
+  font-weight: 600;
+}
+.panacea-featured-card .download-choice--install {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--white);
+}
+.panacea-featured-card .download-choice--install:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.panacea-featured-card .download-choice:focus-visible,
+.panacea-details-link:focus-visible,
+.panacea-include:focus-within,
+.panacea-variant-label:focus-within {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 3px;
+}
+.panacea-details-link {
+  color: var(--text-secondary);
+  font-size: 0.79em;
+  text-underline-offset: 3px;
+  padding: 10px 4px;
+}
+.panacea-details-link:hover { color: var(--text-heading); }
+.panacea-setup-featured {
+  grid-template-columns: 46px minmax(0, 1fr);
+  min-height: 0;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  gap: 8px 12px;
+}
+.panacea-setup-featured.selected { border-color: rgba(255, 85, 0, 0.7); }
+.panacea-setup-featured .panacea-featured-mark {
+  width: 46px;
+  height: 46px;
+}
+.panacea-setup-featured .panacea-featured-mark img {
+  width: 44px;
+  height: 44px;
+}
+.panacea-setup-featured .panacea-featured-copy h3 { font-size: 1.05em; }
+.panacea-setup-featured .panacea-featured-description { display: none; }
+.panacea-featured-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.panacea-include,
+.panacea-variant-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  color: var(--text-main);
+}
+.panacea-include { font-size: 0.8em; font-weight: 600; }
+.panacea-include input,
+.panacea-variant-label input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  flex: 0 0 auto;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+.panacea-variant-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.panacea-variant-group legend {
+  float: left;
+  margin: 0 6px 0 0;
+  padding: 7px 0;
+  color: var(--text-muted);
+  font-size: 0.7em;
+}
+.panacea-variant-label {
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: 7px;
+  font-size: 0.73em;
+}
+.panacea-variant-label:has(input:checked) {
+  border-color: var(--accent-color);
+  background: rgba(255, 85, 0, 0.10);
+}
+.panacea-manual-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.68em;
+}
+.setup-manual-row .setup-panacea-download {
+  min-width: 90px;
+  min-height: 36px;
+  background: var(--accent-color);
+  color: var(--white);
+  border: 1px solid var(--accent-color);
+  border-radius: 7px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .panacea-featured-card {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 8px 12px;
+    padding: 12px;
+    min-height: 0;
+  }
+  .panacea-featured-mark { width: 46px; height: 46px; }
+  .panacea-featured-mark img { width: 44px; height: 44px; }
+  .panacea-featured-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+  .panacea-featured-copy h3 { font-size: 1.12em; }
+}
+@media (max-width: 480px) {
+  .panacea-featured-card { gap: 8px 10px; padding: 10px; }
+  .panacea-featured-actions .download-choice { flex: 1 1 88px; min-width: 0; }
+  .panacea-featured-actions .panacea-details-link { flex: 0 0 auto; }
+  .panacea-featured-controls { gap: 8px; }
+  .panacea-variant-group { width: 100%; flex-wrap: wrap; }
+  .panacea-variant-group legend { width: 100%; padding: 0; }
+  .panacea-variant-label { flex: 1 1 auto; justify-content: center; }
+  .panacea-manual-note { width: 100%; }
+}
