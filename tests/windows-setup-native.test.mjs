@@ -90,7 +90,7 @@ test('generated setups execute safely against an isolated native WinGet stub', {
     const canonicalStub = realpathSync.native(stubPath).toLowerCase();
     assert.deepEqual(resolution.stdout.trim().split(/\r?\n/).map(value => realpathSync.native(value).toLowerCase()), [canonicalStub]);
     const psResolution = spawnSync(powershell, ['-NoLogo', '-NoProfile', '-NonInteractive', '-Command',
-        '(Get-Command winget -CommandType Application).Source'], {
+        '(Get-Command winget.exe -CommandType Application).Source'], {
         cwd: root, env, encoding: 'utf8', timeout: 10000
     });
     assert.ifError(psResolution.error);
@@ -108,10 +108,12 @@ test('generated setups execute safely against an isolated native WinGet stub', {
         assert.doesNotMatch(script, /winget\.exe|WindowsApps|Start-Process|Invoke-Expression|\biex\b|\bpowershell\b|\bpwsh\b|\bcmd\.exe\b|(?:set\s+"?PATH=|\$env:PATH\s*=)/i);
         writeFileSync(file, script);
         writeFileSync(log, '');
+        // Run the generated PowerShell file directly. The previous ScriptBlock.Create
+        // wrapper introduced an extra command-discovery path under the stripped CI
+        // environment, especially when winget was intentionally absent.
         const result = spawnSync(format === 'cmd' ? cmd : powershell,
-            format === 'cmd' ? ['/d', '/c', file] : ['-NoLogo', '-NoProfile', '-NonInteractive', '-Command',
-                '& ([scriptblock]::Create([IO.File]::ReadAllText($env:ZF_SETUP_FILE)))'], {
-                cwd: root, env: { ...env, ZF_STUB_MODE: mode, ZF_STUB_LOG: log, ZF_SETUP_FILE: file,
+            format === 'cmd' ? ['/d', '/c', file] : ['-NoLogo', '-NoProfile', '-NonInteractive', '-File', file], {
+                cwd: root, env: { ...env, ZF_STUB_MODE: mode, ZF_STUB_LOG: log,
                     ...(inheritedErrorLevel !== undefined ? { ERRORLEVEL: inheritedErrorLevel } : {}),
                     ...(mode === 'unavailable' ? { PATH: system32 } : {}) },
                 // Hosted Windows runners can take over 15s on a cold PS 5.1 start.

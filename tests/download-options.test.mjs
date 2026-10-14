@@ -27,13 +27,15 @@ test('all other PC programs keep one normal download and no alternate format', (
     assert.deepEqual(getDownloadChoices({ name: 'Missing' }), []);
 });
 
-test('catalog and PC Setup manual step use the same two explicit choices', async () => {
+test('catalog, Featured and PC Setup all reuse the existing download choices', async () => {
     const startup = await readFile(new URL('../js/startup.js', import.meta.url), 'utf8');
     const styles = await readFile(new URL('../css/sections.css', import.meta.url), 'utf8');
 
     assert.match(startup, /renderManualDownloads\(items\)[\s\S]*getDownloadChoices\(item\)/);
     assert.match(startup, /createSimpleFileCard\(item, dataKey\)[\s\S]*getDownloadChoices\(item\)/);
     assert.match(startup, /createDownloadChoiceButton\(item, choice\)/);
+    assert.match(startup, /createPanaceaFeaturedCard\(item, mode = 'catalog'\)/);
+    assert.match(startup, /choices\.find\(option => option\.kind === this\.getPanaceaVariant\(\)\)/);
     assert.match(startup, /handleSimpleDownload\(button, item, url = item\.url\)/);
     assert.match(startup, /window\.open\(url, '_blank', 'noopener,noreferrer'\)/);
     assert.match(styles, /\.download-choice--install/);
