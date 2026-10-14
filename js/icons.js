@@ -64,6 +64,7 @@ export const ICONS = {
     pcloud: 'https://api.iconify.design/arcticons:pcloud.svg?color=white',
     espanso: 'https://raw.githubusercontent.com/espanso/espanso/0cadaeaddf9aeb6d128668ea5db354b7c635ec20/espanso/src/res/logo_no_background.png',
     obsidian: 'https://cdn.simpleicons.org/obsidian/white',
+    marktext: 'https://api.iconify.design/mdi:language-markdown.svg?color=white',
     powertoys: 'https://api.iconify.design/simple-icons:powertoys.svg?color=white',
     claude: 'https://cdn.simpleicons.org/claude/white',
     chatgpt: 'chatgpt_icon_white.svg',
