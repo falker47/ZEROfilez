@@ -105,7 +105,12 @@ test('generated setups execute safely against an isolated native WinGet stub', {
         // a different executable, a new shell, or changing PATH.
         const commands = [...script.matchAll(/\bwinget (list|install)\b/g)].map(match => match[1]);
         assert.deepEqual(commands, ['list', 'install', 'install']);
-        assert.doesNotMatch(script, /winget\.exe|WindowsApps|Start-Process|Invoke-Expression|\biex\b|\bpowershell\b|\bpwsh\b|\bcmd\.exe\b|(?:set\s+"?PATH=|\$env:PATH\s*=)/i);
+        // Allow only explicit executable discovery, never a direct winget.exe
+        // invocation, absolute binary path, shell escalation or PATH rewrite.
+        const executableLookup = format === 'ps1' ? 'Get-Command winget.exe -CommandType Application -ErrorAction SilentlyContinue' : '';
+        if (format === 'ps1') assert.ok(script.includes(executableLookup));
+        assert.doesNotMatch(script.replace(executableLookup, ''),
+            /winget\.exe|WindowsApps|Start-Process|Invoke-Expression|\biex\b|\bpowershell\b|\bpwsh\b|\bcmd\.exe\b|(?:set\s+"?PATH=|\$env:PATH\s*=)/i);
         writeFileSync(file, script);
         writeFileSync(log, '');
         // Run the generated PowerShell file directly. The previous ScriptBlock.Create

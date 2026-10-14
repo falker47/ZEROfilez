@@ -177,7 +177,7 @@ test('original Panacea asset is a real PNG and stays independent from white icon
 
 test('Choose preserves one ID and resets variant on deselection, reinclusion and Clear', () => {
     fakeBrowser(({ manager, ids, opened }) => {
-        manager.renderSetupSelection();
+        manager.setSetupStep(1);
         let card = ids.get('setupBuilderSelectionList').children[0];
         let { checkbox, install, portable } = controls(card);
         assert.equal(checkbox.checked, false);

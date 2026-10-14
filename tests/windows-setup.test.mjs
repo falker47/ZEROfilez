@@ -184,7 +184,8 @@ test('ChatGPT Desktop is a verified msstore package and retains its official man
     assert.doesNotMatch(logo, /<script|onload=|xlink:href=/i);
 
     assert.match(ordering, /"claude-desktop",\s*"chatgpt-desktop"/);
-    assert.match(startup, /groupPcPrograms\(this\.data\['pc-programs'\]/);
+    assert.match(startup, /groupPcPrograms\(programs\)/);
+    assert.match(startup, /getFeaturedPcProgram\(programs/);
 });
 
 test('all catalog winget IDs are valid and unique', () => {
