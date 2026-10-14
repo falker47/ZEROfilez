@@ -176,7 +176,7 @@ ${packageComments}
 
 $ErrorActionPreference = 'Continue'
 
-if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+if (-not (Get-Command winget -CommandType Application -ErrorAction SilentlyContinue)) {
     Write-Error 'winget is not available. Install or update App Installer from Microsoft, then run this script again.'
     exit 1
 }

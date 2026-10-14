@@ -43,4 +43,5 @@ jobs:
         shell: pwsh
         run: |
           $testFiles = Get-ChildItem tests/*.test.mjs | ForEach-Object FullName
-          node --test $testFiles
+          # PowerShell native integration fixtures spawn many subprocesses; avoid cross-file contention.
+          node --test --test-concurrency=1 $testFiles
