@@ -87,7 +87,7 @@ The same script runs automatically from:
 .github/workflows/update_links.yml
 ```
 
-The updater uses official release APIs or upstream download pages where possible. Version-specific links are updated in `js/data.js`; stable vendor landing/latest endpoints are left unchanged when they are already designed not to require version maintenance.
+The updater uses official release APIs or upstream download pages where possible. Version-specific links are updated in `js/data.js`; stable vendor landing/latest endpoints are left unchanged when they are already designed not to require version maintenance. The catalog coverage test (`tests/download-links.test.mjs`) checks that every PC program has one of those two update strategies. Cheat Engine uses its official downloads page because the publisher does not provide a reliable permanent direct-installer URL.
 
 ---
 

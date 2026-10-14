@@ -39,6 +39,7 @@ export const ORDER = {
         "espanso",
         "pcloud",
         "obsidian",
+        "marktext",
         "visual-studio-code",
         "notepad-plus-plus",
         "claude-desktop",

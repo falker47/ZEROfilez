@@ -52,3 +52,12 @@ test('new programs without a category remain visible', () => {
     const groups = groupPcPrograms([...items, extra]);
     assert.deepEqual(groups.at(-1), { label: 'Other', items: [extra] });
 });
+
+test('MarkText is listed under Utilities with a Windows setup package', () => {
+    const marktext = ITEMS['pc-programs'].marktext;
+    assert.equal(marktext.wingetId, 'MarkText.MarkText');
+    assert.match(marktext.url, /marktext-win-x64-[\d.]+-setup\.exe$/);
+    const utilities = groupPcPrograms(items).find(group => group.label === 'Utilities');
+    assert.ok(utilities?.items.some(item => item.id === 'marktext'));
+    assert.deepEqual(groupPcPrograms(items, 'markdown').flatMap(group => group.items.map(item => item.id)), ['marktext']);
+});
