@@ -3,6 +3,7 @@ import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
 import { generateCommandSetup } from './windows-setup.js';
 import { groupPcPrograms } from './pc-categories.js';
+import { getDownloadChoices } from './download-options.js';
 
 export class StartupManager {
     constructor() {
@@ -420,6 +421,19 @@ export class StartupManager {
         this.renderManualDownloads(manual);
     }
 
+    createDownloadChoiceButton(item, choice) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `download-btn pc-btn download-choice download-choice--${choice.kind}`;
+        button.textContent = choice.label;
+        button.title = choice.hint;
+        button.setAttribute('aria-label', choice.ariaLabel);
+        button.disabled = !choice.url;
+        button.addEventListener('click', event =>
+            this.handleSimpleDownload(event.currentTarget, item, choice.url));
+        return button;
+    }
+
     renderManualDownloads(items) {
         const section = document.getElementById('setupManualSection');
         const container = document.getElementById('setupManualDownloads');
@@ -445,7 +459,17 @@ export class StartupManager {
             button.addEventListener('click', (event) => this.handleSimpleDownload(event.currentTarget, item));
 
             row.appendChild(name);
-            row.appendChild(button);
+            const choices = getDownloadChoices(item);
+            if (choices.length > 1) {
+                const actions = document.createElement('div');
+                actions.className = 'setup-manual-choices';
+                for (const choice of choices) {
+                    actions.appendChild(this.createDownloadChoiceButton(item, choice));
+                }
+                row.appendChild(actions);
+            } else {
+                row.appendChild(button);
+            }
             container.appendChild(row);
         }
     }
@@ -848,15 +872,27 @@ export class StartupManager {
             btnDiv.appendChild(this.createProgramInfoButton(item));
         }
 
-        const btn = document.createElement('button');
-        btn.className = `download-btn ${type}-btn icon-only-btn`; // Add icon-only-btn class
-        // Replace text with Icon
-        // btn.textContent = 'Download';
-        btn.innerHTML = `<img src="${ICONS.download}" alt="Download" style="width: 1.2em; height: 1.2em;">`;
-        btn.setAttribute('aria-label', 'Download');
+        const downloadChoices = dataKey === 'pc-programs' ? getDownloadChoices(item) : [];
+        if (downloadChoices.length > 1) {
+            card.classList.add('multi-download-card');
+            btnDiv.classList.add('multi-download-actions');
 
-        btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item)); // Use currentTarget to get the button, not likely the img
-        btnDiv.appendChild(btn);
+            const hint = document.createElement('p');
+            hint.className = 'download-choice-hint';
+            hint.textContent = 'Install recommended · Portable available';
+            infoDiv.appendChild(hint);
+
+            for (const choice of downloadChoices) {
+                btnDiv.appendChild(this.createDownloadChoiceButton(item, choice));
+            }
+        } else {
+            const btn = document.createElement('button');
+            btn.className = `download-btn ${type}-btn icon-only-btn`;
+            btn.innerHTML = `<img src="${ICONS.download}" alt="" aria-hidden="true" style="width: 1.2em; height: 1.2em;">`;
+            btn.setAttribute('aria-label', `Download ${item.name}`);
+            btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item));
+            btnDiv.appendChild(btn);
+        }
 
         if (setupSelector) card.appendChild(setupSelector);
         card.appendChild(iconDiv);
@@ -905,13 +941,13 @@ export class StartupManager {
         }
     }
 
-    handleSimpleDownload(button, item) {
+    handleSimpleDownload(button, item, url = item.url) {
         if (button.disabled) return;
 
         button.disabled = true;
 
-        if (item.url) {
-            window.open(item.url, '_blank', 'noopener,noreferrer');
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
             this.resetButton(button, 1000);
         } else {
             this.resetButton(button, 1500);

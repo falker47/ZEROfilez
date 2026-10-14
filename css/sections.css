@@ -1123,3 +1123,93 @@ section h2 {
     gap: 8px;
   }
 }
+
+/* A program with two release channels: a clear, compact choice without extra scrolling. */
+#pc-programs-tab .file-card.multi-download-card {
+  height: auto;
+  min-height: 112px;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  row-gap: 7px;
+}
+
+.file-card.multi-download-card .file-icon {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.file-card.multi-download-card .file-info {
+  grid-column: 2;
+  grid-row: 1;
+  height: auto;
+}
+
+.file-card.multi-download-card .download-choice-hint {
+  font-size: 0.70em;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.file-card.multi-download-card .multi-download-actions {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  gap: 7px;
+}
+
+.file-card.multi-download-card .multi-download-actions .download-choice,
+.setup-manual-choices .download-choice {
+  min-width: 76px;
+  min-height: 32px;
+  padding: 6px 9px;
+  font-size: 0.77em;
+  font-weight: 600;
+}
+
+.file-card.multi-download-card .multi-download-actions .download-choice--install,
+.setup-manual-choices .download-choice--install {
+  background: var(--accent-color);
+  border-color: var(--accent-hover);
+  color: var(--white);
+}
+
+.file-card.multi-download-card .multi-download-actions .download-choice--install:hover,
+.setup-manual-choices .download-choice--install:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.multi-download-card .download-choice:focus-visible,
+.setup-manual-choices .download-choice:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.setup-manual-choices {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.setup-manual-row:has(.setup-manual-choices) {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  #pc-programs-tab .file-card.multi-download-card {
+    min-height: 110px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 5px 8px;
+  }
+  .file-card.multi-download-card .multi-download-actions .download-choice {
+    min-width: 72px;
+    padding: 5px 7px;
+  }
+}

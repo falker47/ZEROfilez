@@ -129,3 +129,10 @@ Private keys, encrypted personal indexes and personal packaging scripts are inte
 - Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
 - Generated Windows setup scripts contain only validated package IDs and explicitly approved `winget`/`msstore` sources from the curated catalog; review the script before running it. Windows Store installation behavior must be validated on a real Windows machine.
 - No explicit software license is currently granted in this repository.
+
+
+## Panacea: installed or portable
+
+The Panacea entry in **PC Programs → Essentials** (and the manual step of **PC Setup**) offers **Install** (recommended) and **Portable**. Install downloads `PanaceaSetup.exe`, which places Panacea in a protected Windows directory and supports guided future updates. Portable downloads the standalone `Panacea.exe` and requires manual updates. Both stable GitHub URLs automatically target the newest *published stable* release, with no hardcoded version number.
+
+**Release order:** this dual-download UI should go live only after the GitHub Panacea v2.0.0 stable release publishes *both* assets. Until then, the public v1.47 release does not contain the installer and the new installer URL would return a 404. The existing portable link remains valid throughout.
