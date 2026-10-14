@@ -160,7 +160,7 @@ const PROGRAMS = [
     {
         name: "ShareX",
         repo: "ShareX/ShareX",
-        filter: asset => asset.name.includes('setup.exe'),
+        filter: asset => /^ShareX-[0-9.]+-setup(?:-x64)?\.exe$/i.test(asset.name),
         regex: /("sharex"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
@@ -182,6 +182,12 @@ const PROGRAMS = [
         regex: /("obsidian"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
+        name: "MarkText",
+        repo: "marktext/marktext",
+        filter: asset => /^marktext-win-x64-[0-9]+(?:\.[0-9]+)+-setup\.exe$/i.test(asset.name),
+        regex: /("marktext"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
         name: "Bitwarden",
         repo: "bitwarden/clients",
         tagPrefix: "desktop-v",
@@ -193,11 +199,6 @@ const PROGRAMS = [
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     },
-    {
-        name: "Cheat Engine",
-        mode: "cheatengine",
-        regex: /("cheat-engine"[\s\S]*?"url":\s*")([^"]+)(")/
-    }
 ];
 
 
@@ -288,10 +289,6 @@ async function main() {
                 'https://www.voidtools.com/downloads/',
                 /Everything-[0-9\.]+\.x64-Setup\.exe/i,
                 'https://www.voidtools.com/');
-        } else if (prog.mode === 'cheatengine') {
-            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
-                'https://www.cheatengine.org/downloads.php',
-                /https:\/\/[a-z0-9]+\.cloudfront\.net\/[a-z0-9]+\/[a-z0-9]+\.exe/i);
         } else {
             // Default: GitHub Release Asset
             updatesCount += await updateGithubRelease(
@@ -765,4 +762,9 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
     return 0;
 }
 
-main();
+// Expose release rules for offline catalog coverage tests without running network requests.
+module.exports = { PROGRAMS };
+
+if (require.main === module) {
+    main();
+}
