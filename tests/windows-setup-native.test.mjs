@@ -109,7 +109,13 @@ test('generated setups execute safely against an isolated native WinGet stub', {
         // invocation, absolute binary path, shell escalation or PATH rewrite.
         const executableLookup = format === 'ps1' ? '& where.exe winget.exe > $null 2>&1' : '';
         if (format === 'ps1') assert.ok(script.includes(executableLookup));
-        assert.doesNotMatch(script.replace(executableLookup, ''),
+        // A comment describing a shell is not a shell invocation. Scan only
+        // executable lines while retaining the fail-closed checks.
+        const executableLines = script.replace(executableLookup, '')
+            .split(/\r?\n/)
+            .filter(line => !/^\s*(?:#|rem\s)/i.test(line))
+            .join('\n');
+        assert.doesNotMatch(executableLines,
             /winget\.exe|WindowsApps|Start-Process|Invoke-Expression|\biex\b|\bpowershell\b|\bpwsh\b|\bcmd\.exe\b|(?:set\s+"?PATH=|\$env:PATH\s*=)/i);
         writeFileSync(file, script);
         writeFileSync(log, '');
