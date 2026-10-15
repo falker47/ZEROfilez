@@ -70,6 +70,7 @@ export const ICONS = {
     chatgpt: 'chatgpt_icon_white.svg',
     bitwarden: 'https://cdn.simpleicons.org/bitwarden/white',
     discord: 'https://cdn.simpleicons.org/discord/white',
+    whatsapp: 'https://cdn.simpleicons.org/whatsapp/white',
     visualStudioCode: 'https://api.iconify.design/cib:visual-studio-code.svg?color=white',
     notepadPlusPlus: 'https://api.iconify.design/simple-icons:notepadplusplus.svg?color=white',
 

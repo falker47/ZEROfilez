@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { ITEMS } from '../js/data.js';
@@ -49,7 +50,7 @@ test('catalog search matches program names, categories and descriptions', () => 
     assert.equal(groups[0].label, 'Development & AI');
     assert.deepEqual(groups[0].items.map(item => item.name), ['ChatGPT Desktop']);
     assert.deepEqual(groupPcPrograms(items, 'never-a-match-539f'), []);
-    assert.deepEqual(groupPcPrograms(items, 'Communication')[0].items.map(item => item.name), ['Discord']);
+    assert.deepEqual(groupPcPrograms(items, 'Communication')[0].items.map(item => item.name), ['Discord', 'Telegram Desktop', 'WhatsApp Desktop']);
 });
 
 test('new programs without a category remain visible', () => {
@@ -65,4 +66,32 @@ test('MarkText is listed under Utilities with a Windows setup package', () => {
     const utilities = groupPcPrograms(items).find(group => group.label === 'Utilities');
     assert.ok(utilities?.items.some(item => item.id === 'marktext'));
     assert.deepEqual(groupPcPrograms(items, 'markdown').flatMap(group => group.items.map(item => item.id)), ['marktext']);
+});
+
+test('Telegram and WhatsApp Desktop are in Communication and available in Windows Setup', () => {
+    const telegram = ITEMS['pc-programs']['telegram-desktop'];
+    const whatsapp = ITEMS['pc-programs']['whatsapp-desktop'];
+    assert.equal(telegram.wingetId, 'Telegram.TelegramDesktop');
+    assert.equal(whatsapp.wingetId, '9NKSQGP7F2NH');
+    assert.equal(whatsapp.wingetSource, 'msstore');
+    assert.ok(telegram.description && whatsapp.description);
+    assert.deepEqual(
+        groupPcPrograms(items, 'Communication')[0].items.map(item => item.id),
+        ['discord', 'telegram-desktop', 'whatsapp-desktop']
+    );
+    assert.deepEqual(groupPcPrograms(items, 'telegram').flatMap(group => group.items.map(item => item.id)), ['telegram-desktop']);
+    assert.deepEqual(groupPcPrograms(items, 'whatsapp').flatMap(group => group.items.map(item => item.id)), ['whatsapp-desktop']);
+    assert.ok(ORDER['pc-programs'].includes(telegram.id) && ORDER['pc-programs'].includes(whatsapp.id));
+});
+
+test('PC Programs is the only initially active and visible main tab', () => {
+    const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const activeTabs = [...html.matchAll(/<button class="([^"]+)" data-tab="([^"]+)">/g)]
+        .filter(([, classes]) => classes.split(' ').includes('active'))
+        .map(([, , id]) => id);
+    const visibleSections = [...html.matchAll(/<section class="([^"]+)" id="([^"]+-tab)">/g)]
+        .filter(([, classes]) => !classes.split(' ').includes('hidden'))
+        .map(([, , id]) => id);
+    assert.deepEqual(activeTabs, ['pc-programs']);
+    assert.deepEqual(visibleSections, ['pc-programs-tab']);
 });

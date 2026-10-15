@@ -21,6 +21,8 @@ const STABLE_PC_URLS = new Map([
     ['claude-desktop', 'https://downloads.claude.ai/releases/win32/ClaudeSetup.exe'],
     ['chatgpt-desktop', 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi'],
     ['discord', 'https://discord.com/api/download?platform=win'],
+    ['telegram-desktop', 'https://telegram.org/dl/desktop/win64'],
+    ['whatsapp-desktop', 'https://get.microsoft.com/installer/download/9NKSQGP7F2NH'],
     ['visual-studio-code', 'https://update.code.visualstudio.com/latest/win32-x64-user/stable'],
     ['panacea', 'https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe']
 ]);
