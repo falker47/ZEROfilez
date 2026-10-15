@@ -272,7 +272,8 @@ test('PC setup builder exposes a compact component-based three-step flow', async
 
     assert.match(indexHtml, /id="pcProgramsToolbar"/);
     assert.match(indexHtml, /class="input-group search-container pc-search-container"/);
-    assert.match(indexHtml, /New PC · Set up multiple programs in a few clicks/);
+    assert.match(indexHtml, /Set up multiple programs in a few clicks/);
+    assert.doesNotMatch(indexHtml, /New PC · Set up multiple programs/);
     assert.doesNotMatch(indexHtml, /<span class="setup-entry-kicker">Windows setup<\/span>/);
     assert.match(indexHtml, /<h2>PC Setup<\/h2>/);
     assert.match(indexHtml, /data-setup-step="1"/);
