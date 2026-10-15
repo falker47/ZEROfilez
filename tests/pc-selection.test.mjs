@@ -74,8 +74,8 @@ test('preset CTA is visible in Choose, wired to real selections and responsive s
     assert.match(choose, /id="zeroFilezSelectionStatus"[^>]*>7 recommended apps/);
     assert.match(choose, /id="zeroFilezSelectionAction"[^>]*>Select 7 apps/);
     assert.match(startup, /addZeroFilezSelection\(this\.selectedSetupItems/);
-    assert.match(startup, /addPanaceaInstaller[\\s\\S]*!this\\.selectedSetupItems\\.has\\('panacea'\\)/);
-    assert.match(startup, /if \\(addPanaceaInstaller\\) this\\.setupVariants\\.set\\('panacea', 'install'\\)/);
+    assert.match(startup, /addPanaceaInstaller[\s\S]*!this\.selectedSetupItems\.has\('panacea'\)/);
+    assert.match(startup, /if \(addPanaceaInstaller\) this\.setupVariants\.set\('panacea', 'install'\)/);
     assert.match(startup, /this\.renderSetupSelection\(\)/);
     assert.match(startup, /this\.updateSetupSelectionCount\(\)/);
     assert.match(css, /\.setup-preset-card/);
