@@ -629,6 +629,71 @@ section h2 {
   border-radius: 999px;
 }
 
+/* Opt-in preset sits in Choose, directly above the editable catalog. */
+.setup-preset-card {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  min-height: 50px;
+  box-sizing: border-box;
+  margin: 2px 0 9px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255,85,0,0.34);
+  border-radius: 10px;
+  background: rgba(255,85,0,0.055);
+}
+
+.setup-preset-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,85,0,0.13);
+}
+
+.setup-preset-icon img {
+  width: 16px;
+  height: 16px;
+}
+
+.setup-preset-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.setup-preset-copy strong {
+  color: var(--text-heading);
+  font-size: 0.77em;
+  line-height: 1.1;
+}
+
+.setup-preset-copy small {
+  color: var(--text-muted);
+  font-size: 0.62em;
+  line-height: 1.15;
+}
+
+.setup-preset-button {
+  min-height: 31px;
+  min-width: 100px;
+  padding: 6px 9px;
+  white-space: nowrap;
+  font-size: 0.70em;
+}
+
+.setup-preset-button:disabled {
+  opacity: 0.8;
+  cursor: default;
+  color: var(--accent-hover);
+  border-color: rgba(255,85,0,0.35);
+  background: rgba(255,85,0,0.09);
+}
+
 .setup-category + .setup-category {
   margin-top: 9px;
 }

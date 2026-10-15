@@ -163,7 +163,7 @@
                   <img data-icon="setup" alt="" />
                 </div>
                 <div class="pc-setup-entry-copy">
-                  <p class="pc-setup-single-label">New PC · Set up multiple programs in a few clicks</p>
+                  <p class="pc-setup-single-label">Set up multiple programs in a few clicks</p>
                 </div>
                 <button type="button" class="ui-button ui-button--primary" id="startWindowsSetup">
                   <span>Build</span>
@@ -196,6 +196,19 @@
 
               <div class="setup-step" data-setup-step="1">
                 <div class="setup-step-body" id="setupChooseBody">
+                  <div class="setup-preset-card">
+                    <span class="setup-preset-icon" aria-hidden="true">
+                      <img data-icon="setup" alt="" />
+                    </span>
+                    <span class="setup-preset-copy">
+                      <strong>ZEROfilez Selection</strong>
+                      <small id="zeroFilezSelectionStatus" aria-live="polite">5 recommended apps</small>
+                    </span>
+                    <button type="button" class="ui-button ui-button--primary setup-preset-button"
+                      id="applyZeroFilezSelection" aria-label="Apply ZEROfilez Selection">
+                      <span id="zeroFilezSelectionAction">Select 5 apps</span>
+                    </button>
+                  </div>
                   <div id="setupBuilderSelectionList"></div>
                 </div>
                 <div class="setup-step-footer">

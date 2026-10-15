@@ -21,6 +21,7 @@ jobs:
       - name: Syntax checks
         run: |
           node --check js/windows-setup.js
+          node --check js/pc-selection.js
           node --check js/startup.js
           node --check js/main.js
           node --check scripts/update-links.js

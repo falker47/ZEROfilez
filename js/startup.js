@@ -3,6 +3,7 @@ import { ORDER } from './array.js';
 import { ICONS } from './icons.js';
 import { generateCommandSetup } from './windows-setup.js';
 import { getFeaturedPcProgram, groupPcPrograms } from './pc-categories.js';
+import { addZeroFilezSelection, getZeroFilezSelection } from './pc-selection.js';
 import { getDownloadChoices } from './download-options.js';
 
 export class StartupManager {
@@ -167,6 +168,7 @@ export class StartupManager {
         document.getElementById('exitWindowsSetup')?.addEventListener('click', () => this.closeWindowsSetupBuilder());
         document.getElementById('finishWindowsSetup')?.addEventListener('click', () => this.closeWindowsSetupBuilder());
         document.getElementById('clearSetupSelection')?.addEventListener('click', () => this.clearWindowsSetupSelection());
+        document.getElementById('applyZeroFilezSelection')?.addEventListener('click', () => this.applyZeroFilezSelection());
         document.getElementById('setupStep1Next')?.addEventListener('click', () => this.setSetupStep(2));
         document.getElementById('setupStep2Back')?.addEventListener('click', () => this.setSetupStep(1));
         document.getElementById('setupStep2Next')?.addEventListener('click', () => this.setSetupStep(3));
@@ -195,6 +197,18 @@ export class StartupManager {
         document.getElementById('pc-programs-list')?.classList.remove('hidden');
         document.getElementById('windowsSetupBuilder')?.classList.add('hidden');
 
+        this.setWindowsSetupStatus('');
+    }
+
+    applyZeroFilezSelection() {
+        const programs = this.data['pc-programs'] || [];
+        if (!getZeroFilezSelection(programs).length) return;
+
+        // Add missing recommendations without removing manual choices.
+        this.selectedSetupItems = addZeroFilezSelection(this.selectedSetupItems, programs);
+        this.generatedSetupScript = '';
+        this.renderSetupSelection();
+        this.updateSetupSelectionCount();
         this.setWindowsSetupStatus('');
     }
 
@@ -499,6 +513,30 @@ export class StartupManager {
         if (countLabel) countLabel.textContent = `${count} selected`;
         if (nextButton) nextButton.disabled = count === 0;
         if (clearButton) clearButton.disabled = count === 0;
+
+        const recommended = getZeroFilezSelection(this.data['pc-programs'] || []);
+        const included = recommended.filter(item => this.selectedSetupItems.has(item.id)).length;
+        const remaining = recommended.length - included;
+        const presetButton = document.getElementById('applyZeroFilezSelection');
+        const presetAction = document.getElementById('zeroFilezSelectionAction');
+        const presetStatus = document.getElementById('zeroFilezSelectionStatus');
+        if (presetButton) {
+            presetButton.disabled = remaining === 0;
+            presetButton.setAttribute('aria-label', remaining === 0
+                ? 'ZEROfilez Selection applied'
+                : `Add ${remaining} recommended apps with ZEROfilez Selection`);
+        }
+        if (presetAction) {
+            presetAction.textContent = recommended.length === 0
+                ? 'Unavailable'
+                : remaining === 0 ? 'Selected' : `Select ${remaining} app${remaining === 1 ? '' : 's'}`;
+        }
+        if (presetStatus) {
+            presetStatus.textContent = recommended.length === 0
+                ? 'No recommended apps available'
+                : remaining === 0 ? `${recommended.length} recommended apps selected`
+                    : `${recommended.length} recommended · ${included} selected`;
+        }
     }
 
     clearWindowsSetupSelection() {
