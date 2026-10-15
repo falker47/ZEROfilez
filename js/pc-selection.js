@@ -5,7 +5,9 @@ export const ZEROFILEZ_SELECTION_IDS = Object.freeze([
     'discord',
     'notepad-plus-plus',
     '7-zip',
-    'everything'
+    'everything',
+    'revo-uninstaller',
+    'panacea'
 ]);
 
 export function getZeroFilezSelection(programs) {
