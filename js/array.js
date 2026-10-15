@@ -46,6 +46,8 @@ export const ORDER = {
         "chatgpt-desktop",
         "bitwarden-desktop",
         "discord",
+        "telegram-desktop",
+        "whatsapp-desktop",
         "antigravity"
     ],
     "apk-files": [
