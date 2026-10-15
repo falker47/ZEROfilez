@@ -202,10 +202,17 @@ export class StartupManager {
 
     applyZeroFilezSelection() {
         const programs = this.data['pc-programs'] || [];
-        if (!getZeroFilezSelection(programs).length) return;
+        const recommended = getZeroFilezSelection(programs);
+        if (!recommended.length) return;
+
+        // The first inclusion of Panacea must use its recommended installer.
+        // Preserve a previously selected Portable variant if the user chose it.
+        const addPanaceaInstaller = recommended.some(item => item.id === 'panacea')
+            && !this.selectedSetupItems.has('panacea');
 
         // Add missing recommendations without removing manual choices.
         this.selectedSetupItems = addZeroFilezSelection(this.selectedSetupItems, programs);
+        if (addPanaceaInstaller) this.setupVariants.set('panacea', 'install');
         this.generatedSetupScript = '';
         this.renderSetupSelection();
         this.updateSetupSelectionCount();
