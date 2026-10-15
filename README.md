@@ -31,7 +31,7 @@ Download URLs that change with releases are maintained by `scripts/update-links.
 
 #### Windows Setup
 
-The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the programs you want, review the selection, and let ZEROfilez split the result into automatic installs and normal manual downloads.
+The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the programs you want, review the selection, and let ZEROfilez split the result into automatic installs and normal manual downloads. In **Choose**, the optional **ZEROfilez Selection** shortcut preselects Brave Browser, Discord, Notepad++, 7-Zip, and Everything. It only adds recommendations: other selected programs remain selected, individual choices are editable, and **Clear** resets everything. The shortcut does not initiate installation.
 
 Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`). Packages use the `winget` community source by default, while entries with `wingetSource: 'msstore'` use the Microsoft Store catalog (for example, ChatGPT Desktop). The file is generated entirely in the browser, checks for already installed packages using their declared source, installs exact IDs and pauses before closing so failures remain visible. Store installation can require Windows Store services, an account or a confirmation; the normal direct download links remain available in the PC catalog. ZEROfilez does **not** execute commands on the PC from the browser.
 
