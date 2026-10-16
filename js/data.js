@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4d5def5880217135554ed434cd5055cceebe9cc2/rpcs3-v0.0.43-20310-4d5def58_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-fcdebf988adfb64f457ea97bcd44e1123bd89e89/rpcs3-v0.0.43-20312-fcdebf98_win64_msvc.7z"
             },
             "android": null
         },
@@ -262,7 +262,7 @@ export const ITEMS = {
         "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.21.2/marktext-win-x64-0.21.2-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "chatgpt-desktop": { "id": "chatgpt-desktop", "name": "ChatGPT Desktop", "description": "Use ChatGPT on Windows to work with conversations, projects, files, and AI-powered coding tools.", "url": "https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi", "wingetId": "9PLM9XGG6VKS", "wingetSource": "msstore", "icon": ICONS.chatgpt },
-        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.9.1/Bitwarden-Installer-2026.9.1.exe", "icon": ICONS.bitwarden },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.0/Bitwarden-Installer-2026.10.0.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "description": "Chat with friends and communities through text, voice, or video, and share your screen.", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
         "telegram-desktop": { "id": "telegram-desktop", "name": "Telegram Desktop", "description": "Message contacts, join groups and channels, and make calls from Windows.", "url": "https://telegram.org/dl/desktop/win64", "wingetId": "Telegram.TelegramDesktop", "icon": ICONS.telegram },
         "whatsapp-desktop": { "id": "whatsapp-desktop", "name": "WhatsApp Desktop", "description": "Send messages and make voice or video calls from your PC, linked to your phone.", "url": "https://get.microsoft.com/installer/download/9NKSQGP7F2NH", "wingetId": "9NKSQGP7F2NH", "wingetSource": "msstore", "icon": ICONS.whatsapp },
