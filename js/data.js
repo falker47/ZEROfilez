@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-cbfcf1f6b5de6aed8db54b9a59a5e99b9277e2b3/rpcs3-v0.0.43-20332-cbfcf1f6_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-1b1b7dea308e8385a636ddf208c77498b01bc061/rpcs3-v0.0.43-20337-1b1b7dea_win64_msvc.7z"
             },
             "android": null
         },
@@ -259,7 +259,7 @@ export const ITEMS = {
         "espanso": { "id": "espanso", "name": "Espanso", "description": "Typed keywords expand into full phrases, email addresses, or other text you use often.", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/Obsidian-1.14.4.exe", "icon": ICONS.obsidian },
-        "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.21.2/marktext-win-x64-0.21.2-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
+        "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.22.0/marktext-win-x64-0.22.0-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "chatgpt-desktop": { "id": "chatgpt-desktop", "name": "ChatGPT Desktop", "description": "Use ChatGPT on Windows to work with conversations, projects, files, and AI-powered coding tools.", "url": "https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi", "wingetId": "9PLM9XGG6VKS", "wingetSource": "msstore", "icon": ICONS.chatgpt },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.0/Bitwarden-Installer-2026.10.0.exe", "icon": ICONS.bitwarden },
