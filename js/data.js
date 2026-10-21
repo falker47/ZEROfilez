@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-58317c9350983d71f18df2b0a346433161d6b13c/rpcs3-v0.0.43-20344-58317c93_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4024ea31e049f3205ae406eb3f37fe7625e1bc98/rpcs3-v0.0.43-20355-4024ea31_win64_msvc.7z"
             },
             "android": null
         },
@@ -176,7 +176,7 @@ export const ITEMS = {
             "icon": ICONS.xbox,
             "subtext": "Xemu",
             "pc": {
-                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.137/xemu-0.8.137-windows-x86_64.zip"
+                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.138/xemu-0.8.138-windows-x86_64.zip"
             },
             "android": null
         },
@@ -253,13 +253,13 @@ export const ITEMS = {
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v21.0.0/ShareX-21.0.0-setup-x64.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
         "wiztree": { "id": "wiztree", "name": "WizTree", "description": "See which files and folders take up the most space on your drives.", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
-        "powertoys": { "id": "powertoys", "name": "PowerToys", "description": "Arrange windows, change what keyboard keys do, and rename multiple files at once.", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.101.2362.0/PowerToysUserSetup-0.101.2362.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
+        "powertoys": { "id": "powertoys", "name": "PowerToys", "description": "Arrange windows, change what keyboard keys do, and rename multiple files at once.", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.102.2933.0/PowerToysUserSetup-0.102.2933.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "description": "Install and update supported programs together without opening each installer one by one.", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "description": "Find files and folders by name, with matching results appearing as you type.", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "description": "Typed keywords expand into full phrases, email addresses, or other text you use often.", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.4/Obsidian-1.14.4.exe", "icon": ICONS.obsidian },
-        "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.22.0/marktext-win-x64-0.22.0-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
+        "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.23.0/marktext-win-x64-0.23.0-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "chatgpt-desktop": { "id": "chatgpt-desktop", "name": "ChatGPT Desktop", "description": "Use ChatGPT on Windows to work with conversations, projects, files, and AI-powered coding tools.", "url": "https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi", "wingetId": "9PLM9XGG6VKS", "wingetSource": "msstore", "icon": ICONS.chatgpt },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.0/Bitwarden-Installer-2026.10.0.exe", "icon": ICONS.bitwarden },
