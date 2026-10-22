@@ -166,7 +166,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-4024ea31e049f3205ae406eb3f37fe7625e1bc98/rpcs3-v0.0.43-20355-4024ea31_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-e53ac18f8ddd4cfd0e92a57d15740d4170c1e744/rpcs3-v0.0.43-20372-e53ac18f_win64_msvc.7z"
             },
             "android": null
         },
@@ -176,7 +176,7 @@ export const ITEMS = {
             "icon": ICONS.xbox,
             "subtext": "Xemu",
             "pc": {
-                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.138/xemu-0.8.138-windows-x86_64.zip"
+                "url": "https://github.com/xemu-project/xemu/releases/download/v0.8.139/xemu-0.8.139-windows-x86_64.zip"
             },
             "android": null
         },
@@ -243,7 +243,7 @@ export const ITEMS = {
         "mozilla-firefox": { "id": "mozilla-firefox", "name": "Mozilla Firefox", "description": "Browse the web with built-in tracking protection and extensions.", "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US", "wingetId": "Mozilla.Firefox", "icon": ICONS.firefox },
 
         // Basics
-        "7-zip": { "id": "7-zip", "name": "7-Zip", "description": "Open compressed files or pack folders into smaller archives for storage and sharing.", "url": "https://github.com/ip7z/7zip/releases/download/26.04/7z2604-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
+        "7-zip": { "id": "7-zip", "name": "7-Zip", "description": "Open compressed files or pack folders into smaller archives for storage and sharing.", "url": "https://github.com/ip7z/7zip/releases/download/26.05/7z2605-x64.exe", "wingetId": "7zip.7zip", "icon": ICONS.sevenZip },
         "vlc-media-player": { "id": "vlc-media-player", "name": "VLC Media Player", "description": "Play videos and music in most formats, with support for subtitles and DVDs.", "url": "https://mirror.init7.net/videolan/vlc/3.0.24/win64/vlc-3.0.24-win64.exe", "wingetId": "VideoLAN.VLC", "icon": ICONS.vlc },
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "description": "Uninstall unwanted programs, then find and remove the files and settings left behind.", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "description": "Create and edit documents, spreadsheets, and presentations, including files made with Microsoft Office.", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
