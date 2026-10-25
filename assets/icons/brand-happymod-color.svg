@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="HappyMod logo">
+  <!-- Faithful green-and-grey mascot illustration, stored locally for a consistent catalog. -->
+  <path d="M5 7C5 20 9 31 16 42L25 30 17 21C12 15 9 9 5 7Z" fill="#707070"/>
+  <path d="M123 7C123 20 119 31 112 42L103 30 111 21C116 15 119 9 123 7Z" fill="#707070"/>
+  <circle cx="64" cy="70" r="53" fill="#57c21c"/>
+  <circle cx="45" cy="59" r="10" fill="#ffffff"/>
+  <circle cx="83" cy="59" r="10" fill="#ffffff"/>
+  <path d="M48 86L64 101 80 86" fill="none" stroke="#ffffff" stroke-linecap="square" stroke-linejoin="miter" stroke-width="10"/>
+</svg>

@@ -3,7 +3,7 @@
 All entries in `js/icons.js` are local: remote icon services are not required at runtime.
 
 - `lucide-*.svg`: [Lucide](https://github.com/lucide-icons/lucide), white stroke applied for the existing site design. Licensing: ISC, with some original Feather icons under MIT. See `LICENSE-LUCIDE.txt` for both notices.
-- `brand-*.svg`: [Simple Icons](https://github.com/simple-icons/simple-icons), monochrome white, CC0 1.0. Brand names/logos remain the marks of their owners.
+- Legacy monochrome `brand-*.svg` files without `-color`: [Simple Icons](https://github.com/simple-icons/simple-icons), CC0 1.0. Brand names/logos remain the marks of their owners. The newer `brand-*-color.svg` files use the color renditions attributed below.
 - `windows.svg`, `nintendo-switch.svg`: original simplified UI pictograms drawn for ZEROfilez (not official brand logos).
 - Existing Panacea and ChatGPT assets are kept in their original location.
 
@@ -45,3 +45,53 @@ External image hosts are not required.
 The brand names and logos are trademarks of their respective owners. Inclusion in this
 third-party catalog does not imply endorsement. The original icon set and license notices
 remain in this directory.
+
+## Colored product marks and icon formats (October 2026)
+
+Product and platform marks should use the original palette/appearance wherever a
+suitable reusable asset can be verified. The Lucide *interface controls* remain
+monochrome by design. `css/brand-icons.css` no longer flattens product logos to white.
+
+- **Brave, Chrome, Firefox, Obsidian, Claude, Bitwarden, Discord, WhatsApp, Telegram,
+  Windows 11 and Android:** full-color brand renditions from
+  [Dashboard Icons](https://github.com/homarr-labs/dashboard-icons), Apache-2.0.
+  These are community-maintained renderings of vendor marks, not vendor-original files.
+- **VLC:** authentic traffic-cone SVG from [VideoLAN's VLC repository](https://github.com/videolan/vlc/blob/master/extras/package/macosx/asset_sources/vlc_app_icon.svg);
+  copyright/licensing stays with the upstream project.
+- **Patch My PC:** publisher-provided full-color mark from
+  [PatchMyPC-Brand-Resources](https://github.com/PatchMyPCTeam/PatchMyPC-Brand-Resources),
+  replacing the monochrome white variant.
+- **Notepad++:** original 256px PNG extracted without recoloring from the PNG frame of
+  the installer's `npp_inst.ico` in the [Notepad++ source](https://github.com/notepad-plus-plus/notepad-plus-plus).
+- **ShareX:** original transparent RGB app logo from
+  [ShareX.HelpersLib/Resources](https://github.com/ShareX/ShareX).
+- **Everything and Cheat Engine:** PNGs extracted / converted from their
+  repository-owned original ICO files (the ICOs remain as source archives,
+  not as catalog image references). Everything's ICO embeds a PNG frame;
+  Cheat Engine's 32-bit BMP icon frame was converted to PNG losslessly.
+- **Lucky Patcher:** recognizable third-party vector rendition from
+  [JabberLabs/awesome-dashboard-icons](https://github.com/JabberLabs/awesome-dashboard-icons),
+  Apache-2.0 (not publisher-authored).
+- **Google Antigravity:** multicolor icon from
+  [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme),
+  a third-party rendition, distributed under its GPL-3.0 icon license.
+
+The colored assets are each separate graphic files. Reproducing product marks to
+identify curated software does not imply endorsement. Black-and-white marks that
+are the vendor's actual brand design are kept as such; items for which no suitable
+redistributable identity was verified retain simple generic category symbols.
+
+## Further original-brand icons (October 2026)
+
+- **Revo Uninstaller** and **WinRAR:** software icon artwork reused from
+  [WINSLIM CENTER STORE](https://github.com/Christianlg97/WINSLIM_CENTER_STORE/tree/main/src/assets/catalog);
+  these are community-held copies of the recognizable application artwork,
+  not files obtained directly from the publishers.
+- **WizTree:** recognizable application logo from
+  [RepairKit](https://github.com/Foulest/RepairKit/tree/main/src/main/resources/icons),
+  a third-party repository distributing a local program PNG.
+- **HappyMod:** a locally drawn green/grey mascot mark following the commonly
+  used HappyMod face-and-horns visual identity; this is a small SVG rendition,
+  not a claim of a publisher-issued or endorsed logo.
+
+All these assets remain local, and no catalog image reference uses `.ico`.

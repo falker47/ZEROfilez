@@ -1,6 +1,6 @@
 import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
-import { ICONS } from './icons.js';
+import { ICONS, isImageIcon } from './icons.js';
 import { generateCommandSetup } from './windows-setup.js';
 import { getFeaturedPcProgram, groupPcPrograms } from './pc-categories.js';
 import { addZeroFilezSelection, getZeroFilezSelection } from './pc-selection.js';
@@ -466,7 +466,7 @@ export class StartupManager {
         const iconDiv = document.createElement('div');
         iconDiv.className = 'setup-program-icon';
 
-        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
+        if (isImageIcon(item.icon)) {
             const img = document.createElement('img');
             img.src = item.icon;
             img.alt = '';
@@ -955,7 +955,7 @@ export class StartupManager {
         `;
 
         const iconContainer = card.querySelector('.file-icon');
-        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
+        if (isImageIcon(item.icon)) {
             const [fallbackImg, fallbackEmoji] = this.getFallbackChain('emulation');
 
             const img = document.createElement('img');
@@ -1034,7 +1034,7 @@ export class StartupManager {
         const iconDiv = document.createElement('div');
         iconDiv.className = 'file-icon';
 
-        if (item.icon && (item.icon.startsWith('http') || item.icon.endsWith('.png') || item.icon.endsWith('.jpg') || item.icon.endsWith('.svg'))) {
+        if (isImageIcon(item.icon)) {
             const [fallbackImg, fallbackEmoji] = this.getFallbackChain(dataKey);
 
             const img = document.createElement('img');
