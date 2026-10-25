@@ -16,12 +16,12 @@ export const ICONS = {
     info: 'assets/icons/lucide-info.svg',
 
     // Platforms and fallbacks
-    windows: 'assets/icons/windows.svg',
-    android: 'assets/icons/brand-android.svg',
+    windows: 'assets/icons/brand-windows-color.svg',
+    android: 'assets/icons/brand-android-color.svg',
     nintendoFallback: 'assets/icons/lucide-gamepad-2.svg',
-    windowsFallback: 'assets/icons/windows.svg',
+    windowsFallback: 'assets/icons/brand-windows-color.svg',
     laptop: 'assets/icons/lucide-laptop.svg',
-    androidFallback: 'assets/icons/brand-android.svg',
+    androidFallback: 'assets/icons/brand-android-color.svg',
 
     // Emulators
     nintendoDs: 'assets/icons/official-nintendo-ds.svg',
@@ -41,44 +41,53 @@ export const ICONS = {
     psvita: 'assets/icons/brand-playstationvita.svg',
 
     // Browsers
-    brave: 'assets/icons/brand-brave.svg',
-    chrome: 'assets/icons/brand-googlechrome.svg',
-    firefox: 'assets/icons/brand-firefox.svg',
+    brave: 'assets/icons/brand-brave-color.svg',
+    chrome: 'assets/icons/brand-chrome-color.svg',
+    firefox: 'assets/icons/brand-firefox-color.svg',
 
     // Programs
     sevenZip: 'assets/icons/brand-7zip.svg',
-    vlc: 'assets/icons/brand-vlcmediaplayer.svg',
-    revo: 'assets/icons/lucide-wrench.svg',
+    vlc: 'assets/icons/original-vlc.svg',
+    revo: 'assets/icons/original-revo.png',
     libreoffice: 'assets/icons/brand-libreoffice.svg',
-    winrar: 'assets/icons/lucide-archive.svg',
-    cheatEngine: 'assets/icons/official-cheatengine.ico',
-    sharex: 'assets/icons/brand-sharex.svg',
-    wiztree: 'assets/icons/lucide-folder-tree.svg',
-    patchmypc: 'assets/icons/official-patchmypc.svg',
-    everything: 'assets/icons/official-everything.ico',
+    winrar: 'assets/icons/original-winrar.png',
+    cheatEngine: 'assets/icons/original-cheatengine.png',
+    sharex: 'assets/icons/original-sharex.png',
+    wiztree: 'assets/icons/original-wiztree.png',
+    patchmypc: 'assets/icons/original-patchmypc-color.svg',
+    everything: 'assets/icons/original-everything.png',
     pcloud: 'assets/icons/official-pcloud.svg',
     espanso: 'assets/icons/official-espanso.png',
-    obsidian: 'assets/icons/brand-obsidian.svg',
+    obsidian: 'assets/icons/brand-obsidian-color.svg',
     marktext: 'assets/icons/official-marktext.png',
     powertoys: 'assets/icons/official-powertoys.png',
-    claude: 'assets/icons/brand-claude.svg',
+    claude: 'assets/icons/brand-claude-color.svg',
     chatgpt: 'chatgpt_icon_white.svg',
-    bitwarden: 'assets/icons/brand-bitwarden.svg',
-    discord: 'assets/icons/brand-discord.svg',
-    whatsapp: 'assets/icons/brand-whatsapp.svg',
+    bitwarden: 'assets/icons/brand-bitwarden-color.svg',
+    discord: 'assets/icons/brand-discord-color.svg',
+    whatsapp: 'assets/icons/brand-whatsapp-color.svg',
     visualStudioCode: 'assets/icons/official-vscode.svg',
-    notepadPlusPlus: 'assets/icons/brand-notepadplusplus.svg',
+    notepadPlusPlus: 'assets/icons/original-notepadplusplus.png',
 
     // Android
-    luckyPatcher: 'assets/icons/lucide-wrench.svg',
-    happyMod: 'assets/icons/lucide-gamepad-2.svg',
-    telegram: 'assets/icons/brand-telegram.svg',
+    luckyPatcher: 'assets/icons/brand-luckypatcher.svg',
+    happyMod: 'assets/icons/brand-happymod-color.svg',
+    telegram: 'assets/icons/brand-telegram-color.svg',
 
     // Other
     tools: 'assets/icons/lucide-wrench.svg',
     pkhex: 'assets/icons/lucide-save.svg',
     web: 'assets/icons/lucide-globe.svg',
     panacea: 'panacea_icon_white.png',
-    antigravity: 'assets/icons/lucide-sparkles.svg',
+    antigravity: 'assets/icons/brand-antigravity-color.svg',
 
 };
+
+// The catalog renderer uses the same image-source check for every card layout.
+// .ico is recognized defensively, but entries in ICONS must use SVG/PNG instead.
+export function isImageIcon(source) {
+    return typeof source === 'string' && (
+        /^https?:\/\//i.test(source) ||
+        /\.(?:svg|png|jpe?g|webp|gif|ico)(?:[?#].*)?$/i.test(source)
+    );
+}
