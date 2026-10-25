@@ -1,88 +1,84 @@
-// Iconify: https://icon-sets.iconify.design/
-// Simple Icons: https://simpleicons.org/
+// Local icons: no runtime dependency on external icon CDNs.
+// See assets/icons/README.md for source attribution and licenses.
 export const ICONS = {
-    // UI Icons
-    search: 'https://api.iconify.design/line-md:search-twotone.svg?color=white',
-    download: 'https://api.iconify.design/ri:download-2-fill.svg?color=white',
-    lock: 'https://api.iconify.design/material-symbols:lock.svg?color=white',
-    emulationTab: 'https://api.iconify.design/solar:gamepad-bold.svg?color=white',
-    arrowLeft: 'https://api.iconify.design/lucide:arrow-left.svg?color=white',
-    arrowRight: 'https://api.iconify.design/lucide:arrow-right.svg?color=white',
-    check: 'https://api.iconify.design/lucide:check.svg?color=white',
-    reset: 'https://api.iconify.design/lucide:rotate-ccw.svg?color=white',
-    close: 'https://api.iconify.design/lucide:x.svg?color=white',
-    copy: 'https://api.iconify.design/lucide:copy.svg?color=white',
-    setup: 'https://api.iconify.design/lucide:wand-sparkles.svg?color=white',
-    info: 'https://api.iconify.design/lucide:info.svg?color=white',
+    // UI
+    search: 'assets/icons/lucide-search.svg',
+    download: 'assets/icons/lucide-download.svg',
+    lock: 'assets/icons/lucide-lock.svg',
+    emulationTab: 'assets/icons/lucide-gamepad-2.svg',
+    arrowLeft: 'assets/icons/lucide-arrow-left.svg',
+    arrowRight: 'assets/icons/lucide-arrow-right.svg',
+    check: 'assets/icons/lucide-check.svg',
+    reset: 'assets/icons/lucide-rotate-ccw.svg',
+    close: 'assets/icons/lucide-x.svg',
+    copy: 'assets/icons/lucide-copy.svg',
+    setup: 'assets/icons/lucide-wand-sparkles.svg',
+    info: 'assets/icons/lucide-info.svg',
 
-    // Platform Icons
-    windows: 'https://api.iconify.design/uim:windows.svg?color=white',
-    android: 'https://api.iconify.design/uiw:android.svg?color=white',
-
-
-    // Fallback Icons
-    nintendoFallback: 'https://cdn.simpleicons.org/nintendo/white',
-    windowsFallback: 'https://cdn.simpleicons.org/windows/white',
-    laptop: 'https://api.iconify.design/tdesign:laptop.svg?color=white',
-    androidFallback: 'https://cdn.simpleicons.org/android/white',
+    // Platforms and fallbacks
+    windows: 'assets/icons/windows.svg',
+    android: 'assets/icons/brand-android.svg',
+    nintendoFallback: 'assets/icons/lucide-gamepad-2.svg',
+    windowsFallback: 'assets/icons/windows.svg',
+    laptop: 'assets/icons/lucide-laptop.svg',
+    androidFallback: 'assets/icons/brand-android.svg',
 
     // Emulators
-    nintendoDs: 'https://api.iconify.design/cib:nintendo-3ds.svg?color=white',
-    gba: 'https://api.iconify.design/mage:gameboy-fill.svg?color=white',
-    gbc: 'https://api.iconify.design/mdi:nintendo-game-boy.svg?color=white',
-    switch: 'https://api.iconify.design/streamline-logos:nintendo-switch-logo-block.svg?color=white',
-    wii: 'https://api.iconify.design/cib:wii.svg?color=white',
-    nintendo3ds: 'https://api.iconify.design/cib:nintendo-3ds.svg?color=white',
-    psp: 'https://cdn.simpleicons.org/playstationportable/white',
-    ps1: 'https://cdn.simpleicons.org/playstation/white',
-    ps2: 'https://cdn.simpleicons.org/playstation2/white',
-    ps3: 'https://cdn.simpleicons.org/playstation3/white',
-    xbox: 'https://api.iconify.design/fa-brands:xbox.svg?color=white',
-    retroArch: 'https://cdn.simpleicons.org/retroarch/white',
-    scummvm: 'https://api.iconify.design/codicon:vm-running.svg?color=white',
-    wiiu: 'https://api.iconify.design/cib:wiiu.svg?color=white',
-    psvita: 'https://api.iconify.design/simple-icons:playstationvita.svg?color=white',
+    nintendoDs: 'assets/icons/lucide-gamepad-2.svg',
+    gba: 'assets/icons/lucide-gamepad.svg',
+    gbc: 'assets/icons/lucide-gamepad.svg',
+    switch: 'assets/icons/nintendo-switch.svg',
+    wii: 'assets/icons/lucide-gamepad-2.svg',
+    nintendo3ds: 'assets/icons/lucide-gamepad-2.svg',
+    psp: 'assets/icons/brand-playstationportable.svg',
+    ps1: 'assets/icons/brand-playstation.svg',
+    ps2: 'assets/icons/brand-playstation2.svg',
+    ps3: 'assets/icons/brand-playstation3.svg',
+    xbox: 'assets/icons/lucide-gamepad.svg',
+    retroArch: 'assets/icons/brand-retroarch.svg',
+    scummvm: 'assets/icons/lucide-monitor-play.svg',
+    wiiu: 'assets/icons/lucide-gamepad-2.svg',
+    psvita: 'assets/icons/brand-playstationvita.svg',
 
     // Browsers
-    brave: 'https://cdn.simpleicons.org/brave/white',
-    chrome: 'https://cdn.simpleicons.org/googlechrome/white',
-    firefox: 'https://cdn.simpleicons.org/firefox/white',
+    brave: 'assets/icons/brand-brave.svg',
+    chrome: 'assets/icons/brand-googlechrome.svg',
+    firefox: 'assets/icons/brand-firefox.svg',
 
-    // Basics
-    sevenZip: 'https://api.iconify.design/simple-icons:7zip.svg?color=white',
-    vlc: 'https://cdn.simpleicons.org/vlcmediaplayer/white',
-    revo: 'https://f057a20f961f56a72089-b74530d2d26278124f446233f95622ef.ssl.cf1.rackcdn.com/site/icons/rup5-64.png',
-    libreoffice: 'https://cdn.simpleicons.org/libreoffice/white',
-    winrar: 'https://api.iconify.design/solar:win-rar-linear.svg?color=white',
-    cheatEngine: 'https://raw.githubusercontent.com/cheat-engine/cheat-engine/ec45d5f47f92a239ba0bf51ec5d04a7509c3fd37/Cheat%20Engine/cheatengine.ico',
-
-    // Utilities
-    sharex: 'https://cdn.simpleicons.org/sharex/white',
-    wiztree: 'https://api.iconify.design/mdi:file-tree.svg?color=white',
-    patchmypc: 'https://patchmypc.com/app/uploads/2025/06/Patch-My-PC-Logo__Logomark-Dark-Bckg.svg',
-    everything: 'https://www.voidtools.com/Everything.ico',
-    pcloud: 'https://api.iconify.design/arcticons:pcloud.svg?color=white',
-    espanso: 'https://raw.githubusercontent.com/espanso/espanso/0cadaeaddf9aeb6d128668ea5db354b7c635ec20/espanso/src/res/logo_no_background.png',
-    obsidian: 'https://cdn.simpleicons.org/obsidian/white',
-    marktext: 'https://api.iconify.design/mdi:language-markdown.svg?color=white',
-    powertoys: 'https://api.iconify.design/simple-icons:powertoys.svg?color=white',
-    claude: 'https://cdn.simpleicons.org/claude/white',
+    // Programs
+    sevenZip: 'assets/icons/brand-7zip.svg',
+    vlc: 'assets/icons/brand-vlcmediaplayer.svg',
+    revo: 'assets/icons/lucide-wrench.svg',
+    libreoffice: 'assets/icons/brand-libreoffice.svg',
+    winrar: 'assets/icons/lucide-archive.svg',
+    cheatEngine: 'assets/icons/lucide-cpu.svg',
+    sharex: 'assets/icons/brand-sharex.svg',
+    wiztree: 'assets/icons/lucide-folder-tree.svg',
+    patchmypc: 'assets/icons/lucide-shield-check.svg',
+    everything: 'assets/icons/lucide-search.svg',
+    pcloud: 'assets/icons/lucide-cloud.svg',
+    espanso: 'assets/icons/lucide-text-cursor-input.svg',
+    obsidian: 'assets/icons/brand-obsidian.svg',
+    marktext: 'assets/icons/lucide-file-text.svg',
+    powertoys: 'assets/icons/lucide-app-window.svg',
+    claude: 'assets/icons/brand-claude.svg',
     chatgpt: 'chatgpt_icon_white.svg',
-    bitwarden: 'https://cdn.simpleicons.org/bitwarden/white',
-    discord: 'https://cdn.simpleicons.org/discord/white',
-    whatsapp: 'https://cdn.simpleicons.org/whatsapp/white',
-    visualStudioCode: 'https://api.iconify.design/cib:visual-studio-code.svg?color=white',
-    notepadPlusPlus: 'https://api.iconify.design/simple-icons:notepadplusplus.svg?color=white',
+    bitwarden: 'assets/icons/brand-bitwarden.svg',
+    discord: 'assets/icons/brand-discord.svg',
+    whatsapp: 'assets/icons/brand-whatsapp.svg',
+    visualStudioCode: 'assets/icons/lucide-file-text.svg',
+    notepadPlusPlus: 'assets/icons/brand-notepadplusplus.svg',
 
-    // Android/APK
-    luckyPatcher: 'https://api.iconify.design/raphael:smile.svg?color=white',
-    happyMod: 'https://api.iconify.design/arcticons:happymod.svg?color=white',
-    telegram: 'https://cdn.simpleicons.org/telegram/white',
+    // Android
+    luckyPatcher: 'assets/icons/lucide-wrench.svg',
+    happyMod: 'assets/icons/lucide-gamepad-2.svg',
+    telegram: 'assets/icons/brand-telegram.svg',
 
-    // New Icons
-    tools: 'https://api.iconify.design/mdi:tools.svg?color=white',
-    pkhex: 'https://api.iconify.design/mdi:content-save-edit.svg?color=white',
-    web: 'https://api.iconify.design/mdi:web.svg?color=white',
+    // Other
+    tools: 'assets/icons/lucide-wrench.svg',
+    pkhex: 'assets/icons/lucide-save.svg',
+    web: 'assets/icons/lucide-globe.svg',
     panacea: 'panacea_icon_white.png',
-    antigravity: 'https://www.antigravity.google/assets/image/brand/antigravity-icon__white.png'
+    antigravity: 'assets/icons/lucide-sparkles.svg',
+
 };
