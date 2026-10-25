@@ -1,0 +1,16 @@
+/* Preserve authentic brand palettes when the source image already provides them.
+   The default monochrome .file-icon-img treatment remains for other icons. */
+.file-icon-img:is(
+  [src$="official-nintendo-switch.svg"],
+  [src$="official-xbox.svg"],
+  [src$="official-scummvm.svg"],
+  [src$="official-pcloud.svg"],
+  [src$="official-vscode.svg"],
+  [src$="official-espanso.png"],
+  [src$="official-powertoys.png"],
+  [src$="official-everything.ico"],
+  [src$="official-marktext.png"],
+  [src$="official-cheatengine.ico"]
+) {
+  filter: none;
+}
