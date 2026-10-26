@@ -95,3 +95,28 @@ redistributable identity was verified retain simple generic category symbols.
   not a claim of a publisher-issued or endorsed logo.
 
 All these assets remain local, and no catalog image reference uses `.ico`.
+
+## Catalog icon refinements (October 26, 2026)
+
+- **PKHeX:** the 64 × 64 `icon.png` from the actual
+  [kwsch/PKHeX repository](https://github.com/kwsch/PKHeX/blob/master/icon.png)
+  (GPL-3.0; see `LICENSE-GPL-3.0.txt`). This identifies PKHeX, rather than a generic save icon.
+- **PMD Save Editor / SkyEditor:** the 64 × 64, 32-bit application image from the
+  [SkyEditor.UI.WPF resource icon](https://github.com/evandixon/SkyEditor.UI.WPF/blob/master/SkyEditor.UI.WPF/Resources/favicon.ico)
+  by Evan Dixon. Converted from the original ICO bitmap to a transparent PNG;
+  original licensing notice in `LICENSE-SKYEDITOR-MIT.txt`. This identifies the desktop
+  package named `SkyEditor.SaveEditor.zip`, not the separate web editor.
+- **WinRAR:** the existing familiar stacked-books artwork was preserved. Its
+  original indexed-color PNG is now rendered with palette index 0 (white backdrop)
+  transparent via a `tRNS` chunk. No logo recoloring or resampling.
+  Source remains the community-held artwork attributed above.
+- **LibreOffice:** the existing Simple Icons-style document-outline mark is
+  rendered in LibreOffice green (`#18A303`), keeping the recognizable form and a
+  transparent SVG background. This is a locally color-adapted brand rendition,
+  *not* an assertion that the SVG is publisher-authored.
+- **Emulation tab:** a locally adapted color gamepad pictogram derived from
+  the existing Lucide gamepad shape. It represents a catalog category and is not
+  an official emblem for any particular emulator.
+
+The five catalog icon references are repository-local; they require no remote
+icon service, and third-party software names/marks remain with their owners.

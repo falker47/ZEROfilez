@@ -217,7 +217,7 @@ export const ITEMS = {
         "pmd-save-editor": {
             "id": "pmd-save-editor",
             "name": "PMD Save Editor",
-            "icon": ICONS.pkhex,
+            "icon": ICONS.pmdSaveEditor,
             "subtext": "Pokémon Mystery Dungeon",
             "pc": {
                 "url": "https://github.com/falker47/FileStorage/raw/main/SkyEditor.SaveEditor.zip"

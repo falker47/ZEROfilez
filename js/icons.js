@@ -5,7 +5,7 @@ export const ICONS = {
     search: 'assets/icons/lucide-search.svg',
     download: 'assets/icons/lucide-download.svg',
     lock: 'assets/icons/lucide-lock.svg',
-    emulationTab: 'assets/icons/lucide-gamepad-2.svg',
+    emulationTab: 'assets/icons/emulation-controller-color.svg',
     arrowLeft: 'assets/icons/lucide-arrow-left.svg',
     arrowRight: 'assets/icons/lucide-arrow-right.svg',
     check: 'assets/icons/lucide-check.svg',
@@ -49,7 +49,7 @@ export const ICONS = {
     sevenZip: 'assets/icons/brand-7zip.svg',
     vlc: 'assets/icons/original-vlc.svg',
     revo: 'assets/icons/original-revo.png',
-    libreoffice: 'assets/icons/brand-libreoffice.svg',
+    libreoffice: 'assets/icons/brand-libreoffice-color.svg',
     winrar: 'assets/icons/original-winrar.png',
     cheatEngine: 'assets/icons/original-cheatengine.png',
     sharex: 'assets/icons/original-sharex.png',
@@ -76,7 +76,8 @@ export const ICONS = {
 
     // Other
     tools: 'assets/icons/lucide-wrench.svg',
-    pkhex: 'assets/icons/lucide-save.svg',
+    pkhex: 'assets/icons/official-pkhex.png',
+    pmdSaveEditor: 'assets/icons/official-skyeditor.png',
     web: 'assets/icons/lucide-globe.svg',
     panacea: 'panacea_icon_white.png',
     antigravity: 'assets/icons/brand-antigravity-color.svg',

@@ -97,3 +97,31 @@ test('the converted ICO logos are real PNGs with decodable pixel data', async ()
     assert.ok(inflateSync(Buffer.concat(idats)).length >= (width * 4 + 1) * height, name);
   }
 });
+
+
+test('catalog corrections retain distinctive editor brands and transparent WinRAR', async () => {
+  assert.equal(ICONS.pkhex, 'assets/icons/official-pkhex.png');
+  assert.equal(ICONS.pmdSaveEditor, 'assets/icons/official-skyeditor.png');
+  assert.notEqual(ICONS.pkhex, ICONS.pmdSaveEditor);
+  assert.equal(ICONS.emulationTab, 'assets/icons/emulation-controller-color.svg');
+  assert.equal(ICONS.libreoffice, 'assets/icons/brand-libreoffice-color.svg');
+
+  const data = await readFile(path.join(root, 'js/data.js'), 'utf8');
+  assert.match(data, /"pmd-save-editor":\s*\{[\s\S]*?"icon":\s*ICONS\.pmdSaveEditor/);
+
+  const winrar = await readFile(path.join(root, ICONS.winrar));
+  assert.equal(winrar[25], 3, 'WinRAR must retain its indexed palette');
+  let offset = 8;
+  let transparentBackground = false;
+  while (offset < winrar.length) {
+    const length = winrar.readUInt32BE(offset);
+    const type = winrar.toString('ascii', offset + 4, offset + 8);
+    if (type === 'tRNS') {
+      assert.equal(length, 1, 'Only the pure white palette index should be transparent');
+      transparentBackground = winrar[offset + 8] === 0;
+    }
+    offset += length + 12;
+    if (type === 'IEND') break;
+  }
+  assert.ok(transparentBackground, 'WinRAR background must be transparent');
+});
