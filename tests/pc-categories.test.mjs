@@ -84,6 +84,17 @@ test('Telegram and WhatsApp Desktop are in Communication and available in Window
     assert.ok(ORDER['pc-programs'].includes(telegram.id) && ORDER['pc-programs'].includes(whatsapp.id));
 });
 
+test('Hermes Agent appears once in Development & AI with an official manual link', () => {
+    const hermes = ITEMS['pc-programs']['hermes-agent'];
+    assert.equal(hermes.name, 'Hermes Agent');
+    assert.equal(hermes.url, 'https://hermes-agent.nousresearch.com/');
+    assert.equal(hermes.icon, 'assets/icons/official-hermes-agent.png');
+    assert.equal(Object.hasOwn(hermes, 'wingetId'), false);
+    assert.ok(PC_PROGRAM_CATEGORIES.find(group => group.label === 'Development & AI').ids.includes(hermes.id));
+    assert.ok(ORDER['pc-programs'].includes(hermes.id));
+    assert.deepEqual(groupPcPrograms(items, 'Hermes').flatMap(group => group.items.map(item => item.id)), ['hermes-agent']);
+});
+
 test('PC Programs is the only initially active and visible main tab', () => {
     const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
     const activeTabs = [...html.matchAll(/<button class="([^"]+)" data-tab="([^"]+)">/g)]

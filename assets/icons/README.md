@@ -83,6 +83,8 @@ redistributable identity was verified retain simple generic category symbols.
 
 ## Further original-brand icons (October 2026)
 
+- **Hermes Agent:** official Nous Research desktop `icon.png` from [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent/blob/main/apps/desktop/assets/icon.png). Kept locally for catalog identification; see `LICENSE-HERMES-MIT.txt`. Product marks belong to their owners; inclusion does not imply endorsement.
+
 - **Revo Uninstaller** and **WinRAR:** software icon artwork reused from
   [WINSLIM CENTER STORE](https://github.com/Christianlg97/WINSLIM_CENTER_STORE/tree/main/src/assets/catalog);
   these are community-held copies of the recognizable application artwork,
