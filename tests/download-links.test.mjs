@@ -98,10 +98,14 @@ test('emulator PC downloads target files except the explicitly labelled PKHeX pu
 });
 
 test('Hermes updater extracts only the official Windows installer URL and never links to landing pages', () => {
-    const expected = 'https://hermes-assets.nousresearch.com/Hermes-Setup.exe?build=ee7e0f517232';
+    const current = ITEMS['pc-programs']['hermes-agent'].url;
     const rule = PROGRAMS.find(rule => rule.name === 'Hermes Agent');
     assert.equal(rule?.mode, 'hermes');
-    assert.equal(catalogSource.match(rule.regex)?.[2], expected);
-    assert.equal(extractHermesInstallerUrl('<a href="' + expected + '">Download</a>'), expected);
+    assert.equal(catalogSource.match(rule.regex)?.[2], current);
+    assert.equal(new URL(current).hostname, 'hermes-assets.nousresearch.com');
+    assert.equal(new URL(current).pathname, '/Hermes-Setup.exe');
+    assert.equal(extractHermesInstallerUrl('<a href="' + current + '">Download</a>'), current);
+    const updatedBuild = 'https://hermes-assets.nousresearch.com/Hermes-Setup.exe?build=new-release';
+    assert.equal(extractHermesInstallerUrl('<a href="' + updatedBuild + '">Download</a>'), updatedBuild);
     assert.equal(extractHermesInstallerUrl('<a href="https://hermes-agent.nousresearch.com/">Download</a>'), null);
 });
