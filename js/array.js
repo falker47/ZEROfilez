@@ -44,6 +44,7 @@ export const ORDER = {
         "notepad-plus-plus",
         "claude-desktop",
         "chatgpt-desktop",
+        "hermes-agent",
         "bitwarden-desktop",
         "discord",
         "telegram-desktop",

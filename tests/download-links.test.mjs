@@ -20,6 +20,7 @@ const STABLE_PC_URLS = new Map([
     ['pcloud', 'https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit'],
     ['claude-desktop', 'https://downloads.claude.ai/releases/win32/ClaudeSetup.exe'],
     ['chatgpt-desktop', 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi'],
+    ['hermes-agent', 'https://hermes-agent.nousresearch.com/'],
     ['discord', 'https://discord.com/api/download?platform=win'],
     ['telegram-desktop', 'https://telegram.org/dl/desktop/win64'],
     ['whatsapp-desktop', 'https://get.microsoft.com/installer/download/9NKSQGP7F2NH'],
