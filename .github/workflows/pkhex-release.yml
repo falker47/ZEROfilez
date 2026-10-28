@@ -148,6 +148,14 @@ jobs:
         run: |
           set -euo pipefail
           tag="pkhex-${RELEASE_VERSION}"
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            :
+          elif git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            git fetch origin "refs/tags/$tag:refs/tags/$tag"
+          else
+            git tag "$tag" "$GITHUB_SHA"
+            git push origin "refs/tags/$tag"
+          fi
           package="$RUNNER_TEMP/pkhex-release/PKHeX.zip"
           source_archive="$RUNNER_TEMP/pkhex-release/PKHeX-Source-${RELEASE_VERSION}.zip"
           notes="$RUNNER_TEMP/pkhex-release-notes.md"
@@ -163,11 +171,19 @@ jobs:
           The framework-dependent executable requires the .NET 10 Windows Desktop Runtime, as specified by upstream.
           EOF
 
-          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}" 2>/dev/null || true)"
-          if ! jq -e 'type == "object" and (.id | type == "number")' <<<"$release_json" >/dev/null 2>&1; then
+          find_release() {
+            gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" |
+              jq -c --arg tag "$tag" '[.[] | select(.tag_name == $tag)][0] // empty'
+          }
+          release_json="$(find_release)"
+          if [[ -z "$release_json" ]]; then
             gh release create "$tag" --draft --title "PKHeX ${RELEASE_VERSION} — Windows x64" \
               --notes-file "$notes" --target "$GITHUB_SHA"
-            release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}")"
+            release_json="$(find_release)"
+          fi
+          if [[ -z "$release_json" ]]; then
+            echo "GitHub did not return the release for $tag after creation." >&2
+            exit 1
           fi
           release_id="$(jq -er '.id | numbers' <<<"$release_json" 2>/dev/null || true)"
           if [[ -z "$release_id" || "$release_id" == null ]]; then
