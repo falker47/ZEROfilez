@@ -139,6 +139,7 @@ jobs:
           path: ${{ runner.temp }}/pkhex-release
 
       - name: Create or complete the versioned GPL release
+        id: publish
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ needs.build.outputs.version }}
@@ -192,10 +193,12 @@ jobs:
           fi
 
           assets_to_upload=()
-          if ! jq -e '.assets[].name | select(. == "PKHeX.zip")' <<<"$release_json" >/dev/null; then
+          binary_uploaded=false
+          if ! jq -e '.assets[]? | select(.name == "PKHeX.zip")' <<<"$release_json" >/dev/null; then
             assets_to_upload+=("$package")
+            binary_uploaded=true
           fi
-          if ! jq -e --arg source "PKHeX-Source-${RELEASE_VERSION}.zip" '.assets[].name | select(. == $source)' <<<"$release_json" >/dev/null; then
+          if ! jq -e --arg source "PKHeX-Source-${RELEASE_VERSION}.zip" '.assets[]? | select(.name == $source)' <<<"$release_json" >/dev/null; then
             assets_to_upload+=("$source_archive")
           fi
           if (( ${#assets_to_upload[@]} > 0 )); then
@@ -209,17 +212,27 @@ jobs:
           jq -e --arg source "PKHeX-Source-${RELEASE_VERSION}.zip" \
             '.draft == false and ([.assets[].name] | index("PKHeX.zip") != null and index($source) != null)' \
             <<<"$published" >/dev/null
-          echo "Published PKHeX ${RELEASE_VERSION} from ${SOURCE_SHA}; binary ZIP SHA-256 ${PACKAGE_SHA256}."
+          release_sha256="$(jq -er '.assets[] | select(.name == "PKHeX.zip") | .digest | strings | sub("^sha256:"; "") | ascii_upcase' <<<"$published")"
+          if [[ ! "$release_sha256" =~ ^[0-9A-F]{64}$ ]]; then
+            echo 'GitHub did not return a valid SHA-256 digest for the published PKHeX ZIP.' >&2
+            exit 1
+          fi
+          if [[ "$binary_uploaded" == true && "$release_sha256" != "$PACKAGE_SHA256" ]]; then
+            echo 'The uploaded PKHeX ZIP digest does not match the Windows build artifact.' >&2
+            exit 1
+          fi
+          echo "release_sha256=$release_sha256" >> "$GITHUB_OUTPUT"
+          echo "Published PKHeX ${RELEASE_VERSION} from ${SOURCE_SHA}; release asset SHA-256 ${release_sha256}."
 
       - name: Download the public stable link and compare the complete ZIP
         env:
-          EXPECTED_SHA256: ${{ needs.build.outputs.package_sha256 }}
+          EXPECTED_SHA256: ${{ steps.publish.outputs.release_sha256 }}
         shell: bash
         run: |
           set -euo pipefail
           url='https://github.com/falker47/ZEROfilez/releases/latest/download/PKHeX.zip'
           output="$RUNNER_TEMP/published-PKHeX.zip"
-          curl --fail --location --retry 2 --max-time 180 --dump-header "$RUNNER_TEMP/pkhex-headers.txt" --output "$output" "$url"
+          curl --fail --location --retry 10 --retry-delay 15 --retry-max-time 180 --retry-all-errors --max-time 180 --dump-header "$RUNNER_TEMP/pkhex-headers.txt" --output "$output" "$url"
           grep -qi '^content-disposition:.*PKHeX.zip' "$RUNNER_TEMP/pkhex-headers.txt"
           test "$(od -An -tx1 -N2 "$output" | tr -d ' \n')" = '504b'
           actual="$(sha256sum "$output" | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
