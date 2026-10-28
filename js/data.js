@@ -208,7 +208,7 @@ export const ITEMS = {
             "icon": ICONS.pkhex,
             "subtext": "Pokémon Save Editor",
             "pc": {
-                "url": "https://projectpokemon.org/home/files/file/1-pkhex/"
+                "url": "https://projectpokemon.org/home/files/file/1-pkhex/", "linkType": "website"
             },
             "web": {
                 "url": "https://pkhex-web.github.io/"
@@ -248,7 +248,7 @@ export const ITEMS = {
         "revo-uninstaller": { "id": "revo-uninstaller", "name": "Revo Uninstaller", "description": "Uninstall unwanted programs, then find and remove the files and settings left behind.", "url": "https://download.revouninstaller.com/download/revosetup.exe", "wingetId": "RevoUninstaller.RevoUninstaller", "icon": ICONS.revo },
         "libreoffice": { "id": "libreoffice", "name": "LibreOffice", "description": "Create and edit documents, spreadsheets, and presentations, including files made with Microsoft Office.", "url": "https://download.documentfoundation.org/libreoffice/stable/26.8.1/win/x86_64/LibreOffice_26.8.1_Win_x86-64.msi", "wingetId": "TheDocumentFoundation.LibreOffice", "icon": ICONS.libreoffice },
         "winrar": { "id": "winrar", "name": "WinRAR", "description": "Open RAR and ZIP files, compress folders, and protect archives with a password.", "url": "https://www.rarlab.com/rar/winrar-x64-723.exe", "wingetId": "RARLab.WinRAR", "icon": ICONS.winrar },
-        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "description": "Find and change values such as health or money in offline single-player games.", "url": "https://cheatengine.org/downloads.php", "icon": ICONS.cheatEngine },
+        "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "description": "Find and change values such as health or money in offline single-player games.", "url": "https://cheatengine.org/downloads.php", "linkType": "website", "icon": ICONS.cheatEngine },
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v21.0.0/ShareX-21.0.0-setup-x64.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
@@ -257,12 +257,12 @@ export const ITEMS = {
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "description": "Install and update supported programs together without opening each installer one by one.", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "description": "Find files and folders by name, with matching results appearing as you type.", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "description": "Typed keywords expand into full phrases, email addresses, or other text you use often.", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
-        "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
+        "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://partner.pcloud.com/dl/win64", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
         "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.5/Obsidian-1.14.5.exe", "icon": ICONS.obsidian },
         "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.23.0/marktext-win-x64-0.23.0-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "chatgpt-desktop": { "id": "chatgpt-desktop", "name": "ChatGPT Desktop", "description": "Use ChatGPT on Windows to work with conversations, projects, files, and AI-powered coding tools.", "url": "https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi", "wingetId": "9PLM9XGG6VKS", "wingetSource": "msstore", "icon": ICONS.chatgpt },
-        "hermes-agent": { "id": "hermes-agent", "name": "Hermes Agent", "description": "Automate tasks with an AI agent that remembers context, uses tools, and improves from experience.", "url": "https://hermes-agent.nousresearch.com/", "icon": ICONS.hermes },
+        "hermes-agent": { "id": "hermes-agent", "name": "Hermes Agent", "description": "Automate tasks with an AI agent that remembers context, uses tools, and improves from experience.", "url": "https://hermes-assets.nousresearch.com/Hermes-Setup.exe?build=ee7e0f517232", "autoInstaller": "hermes-windows", "icon": ICONS.hermes },
         "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.1/Bitwarden-Installer-2026.10.1.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "description": "Chat with friends and communities through text, voice, or video, and share your screen.", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
         "telegram-desktop": { "id": "telegram-desktop", "name": "Telegram Desktop", "description": "Message contacts, join groups and channels, and make calls from Windows.", "url": "https://telegram.org/dl/desktop/win64", "wingetId": "Telegram.TelegramDesktop", "icon": ICONS.telegram },

@@ -22,7 +22,7 @@ test('all other PC programs keep one normal download and no alternate format', (
         const choices = getDownloadChoices(item);
         assert.equal(choices.length, 1, item.name);
         assert.equal(choices[0].url, item.url, item.name);
-        assert.equal(choices[0].label, 'Download', item.name);
+        assert.equal(choices[0].label, item.linkType === 'website' ? 'Official website' : 'Download', item.name);
     }
     assert.deepEqual(getDownloadChoices({ name: 'Missing' }), []);
 });

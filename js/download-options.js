@@ -1,6 +1,10 @@
 /** Download variants for a catalog item. Normal items retain a single download. */
 export function getDownloadChoices(item) {
     if (!item?.url) return [];
+    if (item.linkType === 'website') {
+        return [{ kind: 'website', label: 'Official website', url: item.url,
+            ariaLabel: `Visit ${item.name} official download page`, hint: 'Open the publisher website; this is not a direct file download' }];
+    }
     if (!item.installerUrl) {
         return [{
             kind: 'default',

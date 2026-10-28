@@ -1,7 +1,7 @@
 import { ITEMS } from './data.js';
 import { ORDER } from './array.js';
 import { ICONS, isImageIcon } from './icons.js';
-import { generateCommandSetup } from './windows-setup.js';
+import { generateCommandSetup, isAutomaticSetupItem } from './windows-setup.js';
 import { getFeaturedPcProgram, groupPcPrograms } from './pc-categories.js';
 import { addZeroFilezSelection, getZeroFilezSelection } from './pc-selection.js';
 import { getDownloadChoices } from './download-options.js';
@@ -253,8 +253,8 @@ export class StartupManager {
         const all = this.getSelectedSetupItems();
         return {
             all,
-            automatic: all.filter(item => Boolean(item.wingetId)),
-            manual: all.filter(item => !item.wingetId)
+            automatic: all.filter(isAutomaticSetupItem),
+            manual: all.filter(item => !isAutomaticSetupItem(item))
         };
     }
 
@@ -490,8 +490,8 @@ export class StartupManager {
         copy.appendChild(name);
 
         const badge = document.createElement('span');
-        badge.className = `setup-type-badge ${item.wingetId ? 'automatic' : 'manual'}`;
-        badge.textContent = item.wingetId ? 'Auto' : 'Manual';
+        badge.className = `setup-type-badge ${isAutomaticSetupItem(item) ? 'automatic' : 'manual'}`;
+        badge.textContent = isAutomaticSetupItem(item) ? 'Auto' : 'Manual';
 
         checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
@@ -657,9 +657,9 @@ export class StartupManager {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'ui-icon-button';
-            button.innerHTML = `<img src="${ICONS.download}" alt="">`;
-            button.setAttribute('aria-label', `Download ${item.name}`);
-            button.title = 'Download';
+            button.innerHTML = `<img src="${item.linkType === 'website' ? ICONS.web : ICONS.download}" alt="">`;
+            button.setAttribute('aria-label', item.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name}`);
+            button.title = item.linkType === 'website' ? 'Official download page' : 'Download';
             button.disabled = !item.url;
             button.addEventListener('click', (event) => this.handleSimpleDownload(event.currentTarget, item));
 
@@ -995,7 +995,7 @@ export class StartupManager {
         card.className = 'file-card';
 
         const type = dataKey === 'apk-files' ? 'android' : 'pc';
-        const canSelectForSetup = dataKey === 'pc-programs' && Boolean(item.wingetId);
+        const canSelectForSetup = dataKey === 'pc-programs' && isAutomaticSetupItem(item);
         let setupSelector = null;
 
         if (canSelectForSetup) {
@@ -1099,8 +1099,9 @@ export class StartupManager {
         } else {
             const btn = document.createElement('button');
             btn.className = `download-btn ${type}-btn icon-only-btn`;
-            btn.innerHTML = `<img src="${ICONS.download}" alt="" aria-hidden="true" style="width: 1.2em; height: 1.2em;">`;
-            btn.setAttribute('aria-label', `Download ${item.name}`);
+            btn.innerHTML = `<img src="${item.linkType === 'website' ? ICONS.web : ICONS.download}" alt="" aria-hidden="true" style="width: 1.2em; height: 1.2em;">`;
+            btn.setAttribute('aria-label', item.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name}`);
+            btn.title = item.linkType === 'website' ? 'Official download page' : 'Download';
             btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item));
             btnDiv.appendChild(btn);
         }
@@ -1116,7 +1117,7 @@ export class StartupManager {
     createButtonHtml(item, platform) {
         const data = item[platform];
         // Use icons instead of text text
-        const iconSrc = platform === 'pc' ? ICONS.windows :
+        const iconSrc = data?.linkType === 'website' ? ICONS.web : platform === 'pc' ? ICONS.windows :
             platform === 'web' ? ICONS.web :
                 ICONS.android;
         const className = `download-btn ${platform}-btn icon-only-btn`; // Added class for styling if needed
@@ -1127,7 +1128,7 @@ export class StartupManager {
             </button>`;
         }
 
-        return `<button class="${className}" data-platform="${platform}" style="padding: 5px 10px; display: flex; align-items: center; justify-content: center;">
+        return `<button class="${className}" data-platform="${platform}" aria-label="${data.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name} for ${platform}`}" title="${data.linkType === 'website' ? 'Official download page' : 'Download'}" style="padding: 5px 10px; display: flex; align-items: center; justify-content: center;">
             <img src="${iconSrc}" alt="${platform}" style="width: 1.2em; height: 1.2em;">
         </button>`;
     }

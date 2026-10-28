@@ -6,7 +6,7 @@ import test from 'node:test';
 import { ITEMS } from '../js/data.js';
 
 const require = createRequire(import.meta.url);
-const { PROGRAMS } = require('../scripts/update-links.js');
+const { PROGRAMS, extractHermesInstallerUrl } = require('../scripts/update-links.js');
 const catalogSource = readFileSync(new URL('../js/data.js', import.meta.url), 'utf8');
 
 // Version-independent upstream endpoints intentionally do not require daily rewrites.
@@ -17,10 +17,9 @@ const STABLE_PC_URLS = new Map([
     ['revo-uninstaller', 'https://download.revouninstaller.com/download/revosetup.exe'],
     ['cheat-engine', 'https://cheatengine.org/downloads.php'],
     ['patch-my-pc', 'https://patchmypc.com/freeupdater/PatchMyPC.exe'],
-    ['pcloud', 'https://www.pcloud.com/it/how-to-install-pcloud-drive-windows.html?download=windows-10-64bit'],
+    ['pcloud', 'https://partner.pcloud.com/dl/win64'],
     ['claude-desktop', 'https://downloads.claude.ai/releases/win32/ClaudeSetup.exe'],
     ['chatgpt-desktop', 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi'],
-    ['hermes-agent', 'https://hermes-agent.nousresearch.com/'],
     ['discord', 'https://discord.com/api/download?platform=win'],
     ['telegram-desktop', 'https://telegram.org/dl/desktop/win64'],
     ['whatsapp-desktop', 'https://get.microsoft.com/installer/download/9NKSQGP7F2NH'],
@@ -67,4 +66,42 @@ test('Panacea offers stable installer and portable links without release-number 
     assert.equal(panacea.installerUrl, 'https://github.com/falker47/Panacea/releases/latest/download/PanaceaSetup.exe');
     assert.notEqual(panacea.url, panacea.installerUrl);
     assert.ok(!PROGRAMS.some(rule => rule.name === 'Panacea'));
+});
+
+test('PC download actions are direct files or verified stable binary resolvers, never masked landing pages', () => {
+    const resolvers = new Set(['brave-browser', 'mozilla-firefox', 'pcloud',
+        'discord', 'telegram-desktop', 'chatgpt-desktop',
+        'whatsapp-desktop', 'visual-studio-code']);
+    const websiteOnly = new Set(['cheat-engine']);
+    for (const item of Object.values(ITEMS['pc-programs'])) {
+        if (websiteOnly.has(item.id)) {
+            assert.equal(item.linkType, 'website', item.name + ' must be visibly marked as a website');
+            continue;
+        }
+        assert.notEqual(item.linkType, 'website', item.name + ' must provide a direct binary');
+        if (resolvers.has(item.id)) continue;
+        assert.match(new URL(item.url).pathname, /\.(?:exe|msi|msix|msixbundle|appinstaller|zip|7z)$/i,
+            item.name + ' is not a direct file URL');
+        if (item.installerUrl) assert.match(new URL(item.installerUrl).pathname, /\.exe$/i);
+    }
+});
+
+test('emulator PC downloads target files except the explicitly labelled PKHeX publisher page', () => {
+    for (const item of Object.values(ITEMS.emulation)) {
+        if (!item.pc?.url) continue;
+        if (item.id === 'pkhex') {
+            assert.equal(item.pc.linkType, 'website');
+        } else {
+            assert.match(new URL(item.pc.url).pathname, /\.(?:exe|msi|7z|zip)$/i, item.name);
+        }
+    }
+});
+
+test('Hermes updater extracts only the official Windows installer URL and never links to landing pages', () => {
+    const expected = 'https://hermes-assets.nousresearch.com/Hermes-Setup.exe?build=ee7e0f517232';
+    const rule = PROGRAMS.find(rule => rule.name === 'Hermes Agent');
+    assert.equal(rule?.mode, 'hermes');
+    assert.equal(catalogSource.match(rule.regex)?.[2], expected);
+    assert.equal(extractHermesInstallerUrl('<a href="' + expected + '">Download</a>'), expected);
+    assert.equal(extractHermesInstallerUrl('<a href="https://hermes-agent.nousresearch.com/">Download</a>'), null);
 });

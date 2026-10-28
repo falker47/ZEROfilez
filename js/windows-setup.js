@@ -1,6 +1,22 @@
 const WINGET_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]{1,126}[A-Za-z0-9+]$/;
 const MSSTORE_ID_PATTERN = /^[A-Z0-9]{12}$/;
 
+// Hermes uses the official native Windows source installer, not an invented WinGet ID.
+export function isAutomaticSetupItem(item) {
+    return Boolean(item?.wingetId) ||
+        (item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-windows');
+}
+
+function hasHermesSetup(items) {
+    if (!Array.isArray(items)) throw new TypeError('Expected an array of catalog items.');
+    for (const item of items) {
+        if (item?.autoInstaller && !(item.id === 'hermes-agent' && item.autoInstaller === 'hermes-windows')) {
+            throw new Error('Unsupported automatic installer: ' + String(item.autoInstaller));
+        }
+    }
+    return items.some(item => item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-windows');
+}
+
 export function isValidWingetId(value) {
     return typeof value === 'string'
         && value.length >= 3
@@ -69,9 +85,10 @@ export function getSetupPackages(items) {
 
 export function generateCommandSetup(items) {
     const packages = getSetupPackages(items);
+    const hermes = hasHermesSetup(items);
 
-    if (packages.length === 0) {
-        throw new Error('Select at least one winget-compatible application.');
+    if (packages.length === 0 && !hermes) {
+        throw new Error('Select at least one supported automatic application.');
     }
 
     const packageComments = packages
@@ -93,7 +110,7 @@ rem Generated locally in your browser.
 rem Selected packages:
 ${packageComments}
 
-where winget >nul 2>&1
+${packages.length ? `where winget >nul 2>&1
 if errorlevel 1 (
     echo ERROR: winget is not available.
     echo Install or update App Installer from Microsoft, then run this setup again.
@@ -101,11 +118,12 @@ if errorlevel 1 (
     echo Press any key to close this window.
     pause >nul
     exit /b 1
-)
+)` : ''}
 
 set "FAILED_PACKAGES="
 
 ${installCalls}
+${hermes ? 'call :installHermes' : ''}
 
 echo.
 if defined FAILED_PACKAGES (
@@ -151,14 +169,28 @@ if not "%ERRORLEVEL%"=="0" (
 )
 
 exit /b 0
+${hermes ? `
+:installHermes
+echo.
+echo ==^> Hermes Agent (official Windows PowerShell installer + Desktop build)
+powershell.exe -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; try { $script = Invoke-RestMethod -Uri 'https://hermes-agent.nousresearch.com/install.ps1'; & ([scriptblock]::Create(([string]$script).TrimStart([char]0xFEFF))) -NonInteractive -IncludeDesktop; if (-not $?) { exit 1 } } catch { Write-Error $_; exit 1 }"
+if not "%ERRORLEVEL%"=="0" (
+    echo WARNING: Hermes Agent installation failed. Continuing.
+    set "FAILED_PACKAGES=%FAILED_PACKAGES% hermes-agent"
+) else (
+    echo Hermes Agent installed successfully.
+)
+exit /b 0
+` : ''}
 `;
 }
 
 export function generatePowerShellSetup(items) {
     const packages = getSetupPackages(items);
+    const hermes = hasHermesSetup(items);
 
-    if (packages.length === 0) {
-        throw new Error('Select at least one winget-compatible application.');
+    if (packages.length === 0 && !hermes) {
+        throw new Error('Select at least one supported automatic application.');
     }
 
     const packageComments = packages
@@ -179,11 +211,11 @@ $ErrorActionPreference = 'Continue'
 # Use the native executable resolver used by the CMD installer. PowerShell's
 # Get-Command lookup can stall when WinGet is absent on a restricted PATH.
 # where.exe searches executable locations without module/alias discovery.
-& where.exe winget.exe > $null 2>&1
+${packages.length ? `& where.exe winget.exe > $null 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Error 'winget is not available. Install or update App Installer from Microsoft, then run this script again.'
     exit 1
-}
+}` : ''}
 
 $packages = @(
 ${packageIds}
@@ -220,6 +252,23 @@ foreach ($package in $packages) {
         $failedPackages += $packageId
     }
 }
+
+${hermes ? `
+$oldErrorActionPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Stop'
+try {
+    Write-Host 'Installing Hermes Agent via the official Windows source installer (including Desktop)...'
+    $script = Invoke-RestMethod -Uri 'https://hermes-agent.nousresearch.com/install.ps1'
+    & ([scriptblock]::Create(([string]$script).TrimStart([char]0xFEFF))) -NonInteractive -IncludeDesktop
+    if (-not $?) { throw 'Hermes installer reported an error.' }
+    Write-Host 'Hermes Agent installed successfully.'
+} catch {
+    Write-Warning ('Hermes Agent installation failed: ' + $_.Exception.Message)
+    $failedPackages += 'hermes-agent'
+} finally {
+    $ErrorActionPreference = $oldErrorActionPreference
+}
+` : ''}
 
 Write-Host ''
 

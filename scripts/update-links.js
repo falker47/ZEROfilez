@@ -199,6 +199,11 @@ const PROGRAMS = [
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     },
+    {
+        name: "Hermes Agent",
+        mode: "hermes",
+        regex: /("hermes-agent"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
 ];
 
 
@@ -229,6 +234,8 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'hermes') {
+            updatesCount += await checkHermesInstallerUrl(prog.name, prog.regex, newContent, updated => { newContent = updated; });
         } else if (prog.mode === 'gitea') {
             updatesCount += await updateGiteaRelease(
                 prog.name,
@@ -311,6 +318,30 @@ async function main() {
         console.log('Updated js/data.js');
     } else {
         console.log('\nNo updates found.');
+    }
+}
+
+// Resolve the Windows desktop installer from the official homepage, not a release landing page.
+function extractHermesInstallerUrl(html) {
+    return String(html).match(/https:\/\/hermes-assets\.nousresearch\.com\/Hermes-Setup\.exe(?:\?build=[A-Za-z0-9_-]+)?/)?.[0] ?? null;
+}
+
+async function checkHermesInstallerUrl(name, regexPattern, currentContent, updateCallback) {
+    process.stdout.write('Checking ' + name.padEnd(20) + ' [official desktop] ... ');
+    try {
+        const response = await fetch('https://hermes-agent.nousresearch.com/', { signal: AbortSignal.timeout(12000) });
+        if (!response.ok) throw new Error('Publisher page returned HTTP ' + response.status);
+        const directUrl = extractHermesInstallerUrl(await response.text());
+        if (!directUrl) throw new Error('Official Windows executable URL not found');
+        const match = currentContent.match(regexPattern);
+        if (!match) throw new Error('Hermes Agent catalog entry not found');
+        if (match[2] === directUrl) { console.log('Current'); return 0; }
+        updateCallback(currentContent.replace(regexPattern, (_full, before, _old, after) => before + directUrl + after));
+        console.log('Updated to ' + directUrl);
+        return 1;
+    } catch (error) {
+        console.log('Skipped: ' + error.message);
+        return 0;
     }
 }
 
@@ -763,7 +794,7 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
 }
 
 // Expose release rules for offline catalog coverage tests without running network requests.
-module.exports = { PROGRAMS };
+module.exports = { PROGRAMS, extractHermesInstallerUrl };
 
 if (require.main === module) {
     main();

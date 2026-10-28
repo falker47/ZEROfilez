@@ -84,10 +84,11 @@ test('Telegram and WhatsApp Desktop are in Communication and available in Window
     assert.ok(ORDER['pc-programs'].includes(telegram.id) && ORDER['pc-programs'].includes(whatsapp.id));
 });
 
-test('Hermes Agent appears once in Development & AI with an official manual link', () => {
+test('Hermes Agent appears once in Development & AI with a direct installer and automatic setup', () => {
     const hermes = ITEMS['pc-programs']['hermes-agent'];
     assert.equal(hermes.name, 'Hermes Agent');
-    assert.equal(hermes.url, 'https://hermes-agent.nousresearch.com/');
+    assert.match(hermes.url, /^https:\/\/hermes-assets\.nousresearch\.com\/Hermes-Setup\.exe\?build=/);
+    assert.equal(hermes.autoInstaller, 'hermes-windows');
     assert.equal(hermes.icon, 'assets/icons/official-hermes-agent.png');
     assert.equal(Object.hasOwn(hermes, 'wingetId'), false);
     assert.ok(PC_PROGRAM_CATEGORIES.find(group => group.label === 'Development & AI').ids.includes(hermes.id));
