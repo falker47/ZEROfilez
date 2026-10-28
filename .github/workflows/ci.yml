@@ -46,3 +46,21 @@ jobs:
           $testFiles = Get-ChildItem tests/*.test.mjs | ForEach-Object FullName
           # PowerShell native integration fixtures spawn many subprocesses; avoid cross-file contention.
           node --test --test-concurrency=1 $testFiles
+          if ($LASTEXITCODE -ne 0) { throw "Windows regression tests failed with exit code $LASTEXITCODE." }
+
+      - name: Install Hermes through the generated setup in this isolated Windows runner
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $setup = Join-Path $env:TEMP 'ZEROfilez-Hermes-setup.ps1'
+          node scripts/generate-hermes-setup.mjs | Set-Content -LiteralPath $setup -Encoding utf8
+          if ($LASTEXITCODE -ne 0) { throw 'Could not generate the Hermes-only setup script.' }
+          powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $setup
+          if ($LASTEXITCODE -ne 0) { throw "Generated Hermes setup failed with exit code $LASTEXITCODE." }
+
+          $expectedPublisher = 'CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US'
+          $installed = Get-AppxPackage | Where-Object {
+            $_.Publisher -eq $expectedPublisher -and $_.Name -match 'Hermes'
+          } | Select-Object -First 1
+          if (-not $installed) { throw 'Hermes was not registered for the isolated runner user after setup.' }
+          Write-Host "Verified Hermes package $($installed.Name) version $($installed.Version), publisher $($installed.Publisher)."

@@ -1,6 +1,22 @@
 const WINGET_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]{1,126}[A-Za-z0-9+]$/;
 const MSSTORE_ID_PATTERN = /^[A-Z0-9]{12}$/;
 
+// Hermes uses its signed Windows App Installer feed, not an invented WinGet ID.
+export function isAutomaticSetupItem(item) {
+    return Boolean(item?.wingetId) ||
+        (item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-appinstaller');
+}
+
+function hasHermesSetup(items) {
+    if (!Array.isArray(items)) throw new TypeError('Expected an array of catalog items.');
+    for (const item of items) {
+        if (item?.autoInstaller && !(item.id === 'hermes-agent' && item.autoInstaller === 'hermes-appinstaller')) {
+            throw new Error('Unsupported automatic installer: ' + String(item.autoInstaller));
+        }
+    }
+    return items.some(item => item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-appinstaller');
+}
+
 export function isValidWingetId(value) {
     return typeof value === 'string'
         && value.length >= 3
@@ -69,9 +85,10 @@ export function getSetupPackages(items) {
 
 export function generateCommandSetup(items) {
     const packages = getSetupPackages(items);
+    const hermes = hasHermesSetup(items);
 
-    if (packages.length === 0) {
-        throw new Error('Select at least one winget-compatible application.');
+    if (packages.length === 0 && !hermes) {
+        throw new Error('Select at least one supported automatic application.');
     }
 
     const packageComments = packages
@@ -93,7 +110,7 @@ rem Generated locally in your browser.
 rem Selected packages:
 ${packageComments}
 
-where winget >nul 2>&1
+${packages.length ? `where winget >nul 2>&1
 if errorlevel 1 (
     echo ERROR: winget is not available.
     echo Install or update App Installer from Microsoft, then run this setup again.
@@ -101,11 +118,12 @@ if errorlevel 1 (
     echo Press any key to close this window.
     pause >nul
     exit /b 1
-)
+)` : ''}
 
 set "FAILED_PACKAGES="
 
 ${installCalls}
+${hermes ? 'call :installHermes' : ''}
 
 echo.
 if defined FAILED_PACKAGES (
@@ -151,14 +169,28 @@ if not "%ERRORLEVEL%"=="0" (
 )
 
 exit /b 0
+${hermes ? `
+:installHermes
+echo.
+echo ==^> Hermes Agent (official signed Windows App Installer feed)
+powershell.exe -NoLogo -NoProfile -NonInteractive -Command "$ErrorActionPreference='Stop'; $expectedPublisher='CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US'; $target=Join-Path $env:TEMP ('ZEROfilez-Hermes-' + [guid]::NewGuid().ToString('N') + '.appinstaller'); try { Invoke-WebRequest -Uri 'https://hermes-assets.nousresearch.com/releases/win32/stable/stable.appinstaller' -OutFile $target -MaximumRedirection 3 -TimeoutSec 60; [xml]$manifest=Get-Content -LiteralPath $target -Raw; $package=$manifest.AppInstaller.MainBundle; if (-not $package -or $package.Publisher -ne $expectedPublisher) { throw 'Hermes App Installer publisher did not match Nous Research.' }; $bundle=[uri]$package.Uri; if ($bundle.Scheme -ne 'https' -or $bundle.Host -ne 'hermes-assets.nousresearch.com' -or $bundle.AbsolutePath -notlike '/releases/*.msixbundle' -and $bundle.AbsolutePath -notlike '/releases/*/*.msixbundle') { throw 'Hermes bundle URI was outside the official release host.' }; $installed=Get-AppxPackage | Where-Object { $_.Publisher -eq $expectedPublisher -and $_.Name -match 'Hermes' } | Sort-Object { [version]$_.Version } -Descending | Select-Object -First 1; if ($installed -and [version]$installed.Version -ge [version]$package.Version) { Write-Host 'Hermes Agent is already installed at the current stable version.'; exit 0 }; Add-AppxPackage -AppInstallerFile $target -ErrorAction Stop; $installed=Get-AppxPackage | Where-Object { $_.Publisher -eq $expectedPublisher -and $_.Name -match 'Hermes' -and [version]$_.Version -ge [version]$package.Version } | Select-Object -First 1; if (-not $installed) { throw 'Hermes package was not registered after App Installer completed.' } } catch { Write-Error $_; exit 1 } finally { Remove-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue }"
+if not "%ERRORLEVEL%"=="0" (
+    echo WARNING: Hermes Agent installation failed. Continuing.
+    set "FAILED_PACKAGES=%FAILED_PACKAGES% hermes-agent"
+) else (
+    echo Hermes Agent installed successfully.
+)
+exit /b 0
+` : ''}
 `;
 }
 
 export function generatePowerShellSetup(items) {
     const packages = getSetupPackages(items);
+    const hermes = hasHermesSetup(items);
 
-    if (packages.length === 0) {
-        throw new Error('Select at least one winget-compatible application.');
+    if (packages.length === 0 && !hermes) {
+        throw new Error('Select at least one supported automatic application.');
     }
 
     const packageComments = packages
@@ -179,11 +211,11 @@ $ErrorActionPreference = 'Continue'
 # Use the native executable resolver used by the CMD installer. PowerShell's
 # Get-Command lookup can stall when WinGet is absent on a restricted PATH.
 # where.exe searches executable locations without module/alias discovery.
-& where.exe winget.exe > $null 2>&1
+${packages.length ? `& where.exe winget.exe > $null 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Error 'winget is not available. Install or update App Installer from Microsoft, then run this script again.'
     exit 1
-}
+}` : ''}
 
 $packages = @(
 ${packageIds}
@@ -220,6 +252,46 @@ foreach ($package in $packages) {
         $failedPackages += $packageId
     }
 }
+
+${hermes ? `
+$expectedPublisher = 'CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US'
+$target = Join-Path $env:TEMP ('ZEROfilez-Hermes-' + [guid]::NewGuid().ToString('N') + '.appinstaller')
+try {
+    Write-Host 'Installing Hermes Agent from the official signed Windows App Installer feed...'
+    Invoke-WebRequest -Uri 'https://hermes-assets.nousresearch.com/releases/win32/stable/stable.appinstaller' -OutFile $target -MaximumRedirection 3 -TimeoutSec 60
+    [xml]$manifest = Get-Content -LiteralPath $target -Raw
+    $package = $manifest.AppInstaller.MainBundle
+    if (-not $package -or $package.Publisher -ne $expectedPublisher) {
+        throw 'Hermes App Installer publisher did not match Nous Research.'
+    }
+    $bundle = [uri]$package.Uri
+    if ($bundle.Scheme -ne 'https' -or $bundle.Host -ne 'hermes-assets.nousresearch.com' -or
+        $bundle.AbsolutePath -notlike '/releases/*.msixbundle' -and $bundle.AbsolutePath -notlike '/releases/*/*.msixbundle') {
+        throw 'Hermes bundle URI was outside the official release host.'
+    }
+    $installed = Get-AppxPackage | Where-Object {
+        $_.Publisher -eq $expectedPublisher -and $_.Name -match 'Hermes'
+    } | Sort-Object { [version]$_.Version } -Descending | Select-Object -First 1
+    if ($installed -and [version]$installed.Version -ge [version]$package.Version) {
+        Write-Host 'Hermes Agent is already installed at the current stable version.'
+    } else {
+        Add-AppxPackage -AppInstallerFile $target -ErrorAction Stop
+        $installed = Get-AppxPackage | Where-Object {
+            $_.Publisher -eq $expectedPublisher -and $_.Name -match 'Hermes' -and
+            [version]$_.Version -ge [version]$package.Version
+        } | Select-Object -First 1
+        if (-not $installed) {
+            throw 'Hermes package was not registered after App Installer completed.'
+        }
+        Write-Host "Hermes Agent $($installed.Version) installed successfully."
+    }
+} catch {
+    Write-Warning ('Hermes Agent installation failed: ' + $_.Exception.Message)
+    $failedPackages += 'hermes-agent'
+} finally {
+    Remove-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
+}
+` : ''}
 
 Write-Host ''
 

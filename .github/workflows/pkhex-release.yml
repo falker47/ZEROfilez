@@ -1,0 +1,206 @@
+name: Build and publish PKHeX for Windows
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/pkhex-release.yml'
+      - 'js/data.js'
+      - 'scripts/update-links.js'
+      - 'tests/download-links.test.mjs'
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      source_sha: ${{ steps.source_sha.outputs.sha }}
+      package_sha256: ${{ steps.package.outputs.sha256 }}
+    steps:
+      - name: Checkout ZEROfilez
+        uses: actions/checkout@v4
+
+      - name: Resolve the latest stable upstream release
+        id: version
+        shell: pwsh
+        run: |
+          $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/kwsch/PKHeX/releases/latest' -TimeoutSec 30
+          if ($release.draft -or $release.prerelease -or $release.tag_name -notmatch '^\d{2}\.\d{2}\.\d+$') {
+            throw 'PKHeX upstream did not return a stable numeric release tag.'
+          }
+          "version=$($release.tag_name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Checkout the exact PKHeX source tag
+        uses: actions/checkout@v4
+        with:
+          repository: kwsch/PKHeX
+          ref: ${{ steps.version.outputs.version }}
+          path: upstream/PKHeX
+          persist-credentials: false
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Record upstream source commit
+        id: source_sha
+        shell: pwsh
+        run: |
+          $sha = (git -C upstream/PKHeX rev-parse HEAD).Trim()
+          if ($sha -notmatch '^[0-9a-f]{40}$') { throw 'Could not resolve the PKHeX source commit.' }
+          "sha=$sha" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Build and package the Windows application
+        id: package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = '${{ steps.version.outputs.version }}'
+          $publish = Join-Path $env:RUNNER_TEMP 'pkhex-publish'
+          $stage = Join-Path $env:RUNNER_TEMP 'pkhex-package'
+          $package = Join-Path $env:RUNNER_TEMP 'PKHeX.zip'
+          $sourceArchive = Join-Path $env:RUNNER_TEMP "PKHeX-Source-$version.zip"
+          New-Item -ItemType Directory -Force -Path $stage | Out-Null
+
+          dotnet publish 'upstream/PKHeX/PKHeX.WinForms/PKHeX.WinForms.csproj' `
+            --configuration Release --runtime win-x64 --self-contained false `
+            --output $publish
+          if ($LASTEXITCODE -ne 0) { throw "PKHeX build failed with exit code $LASTEXITCODE." }
+
+          $exe = Join-Path $publish 'PKHeX.exe'
+          if (-not (Test-Path -LiteralPath $exe)) { throw 'PKHeX.exe was missing from the build output.' }
+          $exeBytes = [System.IO.File]::ReadAllBytes($exe)
+          if ($exeBytes.Length -lt 1024 -or [System.Text.Encoding]::ASCII.GetString($exeBytes, 0, 2) -ne 'MZ') {
+            throw 'PKHeX.exe did not have a valid PE signature.'
+          }
+          Copy-Item -Path (Join-Path $publish '*') -Destination $stage -Recurse -Force
+          Copy-Item -LiteralPath 'upstream/PKHeX/LICENSE' -Destination (Join-Path $stage 'LICENSE-GPL-3.0.txt')
+          @"
+          PKHeX Windows x64 build $version
+
+          Upstream: https://github.com/kwsch/PKHeX
+          Source tag: $version
+          Source commit: ${{ steps.source_sha.outputs.sha }}
+          License: GNU General Public License v3.0 (see LICENSE-GPL-3.0.txt)
+          Corresponding source archive: PKHeX-Source-$version.zip in the matching ZEROfilez release.
+          Build: dotnet publish PKHeX.WinForms/PKHeX.WinForms.csproj --configuration Release --runtime win-x64 --self-contained false
+          Local source modifications: none
+
+          This framework-dependent build requires the .NET 10 Windows Desktop Runtime, as documented by upstream.
+          "@ | Set-Content -LiteralPath (Join-Path $stage 'SOURCE-AND-LICENSE.txt') -Encoding utf8
+          Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $package -CompressionLevel Optimal
+
+          $sourceUrl = "https://github.com/kwsch/PKHeX/archive/refs/tags/$version.zip"
+          Invoke-WebRequest -Uri $sourceUrl -OutFile $sourceArchive -MaximumRedirection 5 -TimeoutSec 120
+          foreach ($artifact in @($package, $sourceArchive)) {
+            $bytes = [System.IO.File]::ReadAllBytes($artifact)
+            if ($bytes.Length -lt 1024 -or [System.Text.Encoding]::ASCII.GetString($bytes, 0, 2) -ne 'PK') {
+              throw "Expected a ZIP artifact at $artifact."
+            }
+          }
+          $sha = (Get-FileHash -LiteralPath $package -Algorithm SHA256).Hash
+          "sha256=$sha" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Upload the build for CI inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: PKHeX-Windows-${{ steps.version.outputs.version }}
+          path: |
+            ${{ runner.temp }}\PKHeX.zip
+            ${{ runner.temp }}\PKHeX-Source-${{ steps.version.outputs.version }}.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download verified build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: PKHeX-Windows-${{ needs.build.outputs.version }}
+          path: ${{ runner.temp }}/pkhex-release
+
+      - name: Create or complete the versioned GPL release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+          SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+          PACKAGE_SHA256: ${{ needs.build.outputs.package_sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="pkhex-${RELEASE_VERSION}"
+          package="$RUNNER_TEMP/pkhex-release/PKHeX.zip"
+          source_archive="$RUNNER_TEMP/pkhex-release/PKHeX-Source-${RELEASE_VERSION}.zip"
+          notes="$RUNNER_TEMP/pkhex-release-notes.md"
+          test -s "$package"
+          test -s "$source_archive"
+          cat > "$notes" <<EOF
+          Windows x64 build of [PKHeX ${RELEASE_VERSION}](https://github.com/kwsch/PKHeX/tree/${RELEASE_VERSION}).
+
+          Built from upstream commit [${SOURCE_SHA}](https://github.com/kwsch/PKHeX/commit/${SOURCE_SHA}) without source modifications, using .NET 10 and the upstream Windows Forms project.
+
+          **License:** GNU GPL v3. This release includes the matching upstream source archive as `PKHeX-Source-${RELEASE_VERSION}.zip`; the binary archive also contains the upstream GPL-3.0 license and build/source notice. Upstream license: https://github.com/kwsch/PKHeX/blob/${RELEASE_VERSION}/LICENSE
+
+          The framework-dependent executable requires the .NET 10 Windows Desktop Runtime, as specified by upstream.
+          EOF
+
+          release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}" 2>/dev/null || true)"
+          if [[ -z "$release_json" ]]; then
+            gh release create "$tag" --draft --title "PKHeX ${RELEASE_VERSION} — Windows x64" \
+              --notes-file "$notes" --target "$GITHUB_SHA"
+            release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}")"
+          fi
+          release_id="$(jq -r '.id' <<<"$release_json")"
+          if [[ -z "$release_id" || "$release_id" == null ]]; then
+            echo 'GitHub did not return the PKHeX release ID.' >&2
+            exit 1
+          fi
+
+          assets_to_upload=()
+          if ! jq -e '.assets[].name | select(. == "PKHeX.zip")' <<<"$release_json" >/dev/null; then
+            assets_to_upload+=("$package")
+          fi
+          if ! jq -e --arg source "PKHeX-Source-${RELEASE_VERSION}.zip" '.assets[].name | select(. == $source)' <<<"$release_json" >/dev/null; then
+            assets_to_upload+=("$source_archive")
+          fi
+          if (( ${#assets_to_upload[@]} > 0 )); then
+            gh release upload "$tag" "${assets_to_upload[@]}"
+          fi
+
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/releases/${release_id}" \
+            -f draft=false -f make_latest=true >/dev/null
+
+          published="$(gh api "repos/${GITHUB_REPOSITORY}/releases/${release_id}")"
+          jq -e --arg source "PKHeX-Source-${RELEASE_VERSION}.zip" \
+            '.draft == false and ([.assets[].name] | index("PKHeX.zip") != null and index($source) != null)' \
+            <<<"$published" >/dev/null
+          echo "Published PKHeX ${RELEASE_VERSION} from ${SOURCE_SHA}; binary ZIP SHA-256 ${PACKAGE_SHA256}."
+
+      - name: Download the public stable link and compare the complete ZIP
+        env:
+          EXPECTED_SHA256: ${{ needs.build.outputs.package_sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://github.com/falker47/ZEROfilez/releases/latest/download/PKHeX.zip'
+          output="$RUNNER_TEMP/published-PKHeX.zip"
+          curl --fail --location --retry 2 --max-time 180 --dump-header "$RUNNER_TEMP/pkhex-headers.txt" --output "$output" "$url"
+          grep -qi '^content-disposition:.*PKHeX.zip' "$RUNNER_TEMP/pkhex-headers.txt"
+          test "$(od -An -tx1 -N2 "$output" | tr -d ' \n')" = '504b'
+          actual="$(sha256sum "$output" | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')"
+          test "$actual" = "$EXPECTED_SHA256"
+          echo "Public stable download returned a ZIP; SHA-256 ${actual}."

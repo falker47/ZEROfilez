@@ -8,6 +8,7 @@ import {
     generatePowerShellSetup,
     getSetupPackages,
     isValidStoreId,
+    isAutomaticSetupItem,
     isValidWingetId
 } from '../js/windows-setup.js';
 
@@ -314,7 +315,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.match(sectionsCss, /#pc-programs-list \.pc-program-category-heading/);
     assert.match(sectionsCss, /#pc-programs-list \.pc-program-grid/);
     assert.match(startupJs, /groupPcPrograms/);
-    assert.match(startupJs, /badge\.textContent = item\.wingetId \? 'Auto' : 'Manual'/);
+    assert.match(startupJs, /badge\.textContent = isAutomaticSetupItem\(item\) \? 'Auto' : 'Manual'/);
     assert.match(startupJs, /generateCommandSetup\(automatic\)/);
     assert.match(startupJs, /setupManualDownloads/);
     assert.match(startupJs, /ZEROfilez-Windows-Setup\.cmd/);
@@ -334,4 +335,47 @@ test('Personal Vault and normal startup entry points remain wired', async () => 
     assert.match(mainJs, /new CloudDecryptor\(\)/);
     assert.match(startupJs, /handleSimpleDownload\(button, item, url = item\.url\)/);
     assert.match(startupJs, /window\.open\(url, '_blank', 'noopener,noreferrer'\)/);
+});
+
+test('Hermes Agent is automatic without a fictitious WinGet package ID', () => {
+    const hermes = ITEMS['pc-programs']['hermes-agent'];
+    assert.equal(hermes.wingetId, undefined);
+    assert.equal(isAutomaticSetupItem(hermes), true);
+    assert.equal(isAutomaticSetupItem(ITEMS['pc-programs'].panacea), false);
+    assert.deepEqual(getSetupPackages([hermes]), []);
+
+    const cmd = generateCommandSetup([hermes]);
+    assert.doesNotMatch(cmd, /where winget >nul/);
+    assert.match(cmd, /call :installHermes/);
+    assert.match(cmd, /powershell\.exe -NoLogo -NoProfile -NonInteractive/);
+    assert.match(cmd, /Add-AppxPackage -AppInstallerFile \$target -ErrorAction Stop/);
+    assert.match(cmd, /https:\/\/hermes-assets\.nousresearch\.com\/releases\/win32\/stable\/stable\.appinstaller/);
+    assert.match(cmd, /CN=Nous Research Inc\./);
+    assert.match(cmd, /Get-AppxPackage/);
+    assert.match(cmd, /FAILED_PACKAGES=.*hermes-agent/);
+
+    const ps = generatePowerShellSetup([hermes]);
+    assert.doesNotMatch(ps, /& where\.exe winget\.exe/);
+    assert.match(ps, /Add-AppxPackage -AppInstallerFile \$target -ErrorAction Stop/);
+    assert.match(ps, /https:\/\/hermes-assets\.nousresearch\.com\/releases\/win32\/stable\/stable\.appinstaller/);
+    assert.match(ps, /Get-AppxPackage/);
+
+    const mixed = generateCommandSetup([hermes, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixed, /where winget >nul/);
+    assert.match(mixed, /call :install "Google\.Chrome"/);
+    assert.match(mixed, /call :installHermes/);
+
+    const mixedPowerShell = generatePowerShellSetup([hermes, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixedPowerShell, /winget install --id \$packageId/);
+    assert.match(mixedPowerShell, /Add-AppxPackage -AppInstallerFile \$target -ErrorAction Stop/);
+});
+
+test('unknown auto-installer metadata is rejected before generating executable code', () => {
+    for (const item of [
+        { id: 'fake', autoInstaller: 'hermes-appinstaller', url: 'https://attacker.example/x.appinstaller' },
+        { id: 'hermes-agent', autoInstaller: 'unknown', url: 'https://attacker.example/x.ps1' }
+    ]) {
+        assert.throws(() => generateCommandSetup([item]), /Unsupported automatic installer/);
+        assert.throws(() => generatePowerShellSetup([item]), /Unsupported automatic installer/);
+    }
 });

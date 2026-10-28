@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { createHash } = require('crypto');
+const { inflateRawSync } = require('zlib');
 
 // ==========================================
 // 🛠️ CONFIGURATION - ADD NEW PROGRAMS HERE
@@ -199,6 +201,17 @@ const PROGRAMS = [
         mode: "antigravity",
         regex: /("antigravity"[\s\S]*?"url":\s*")([^"]+)(")/
     },
+    {
+        name: "Cheat Engine",
+        mode: "cheatengine",
+        regex: /("cheat-engine"[\s\S]*?"url":\s*")([^"]+)(")/,
+        checksumRegex: /("cheat-engine"[\s\S]*?"sha256":\s*")([a-f0-9]{64})(")/i
+    },
+    {
+        name: "Hermes Agent",
+        mode: "hermes",
+        regex: /("hermes-agent"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
 ];
 
 
@@ -229,6 +242,10 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
+        } else if (prog.mode === 'hermes') {
+            updatesCount += await checkHermesAppInstallerUrl(prog.name, prog.regex, newContent, updated => { newContent = updated; });
+        } else if (prog.mode === 'cheatengine') {
+            updatesCount += await checkCheatEngineUrl(prog.name, prog.regex, prog.checksumRegex, newContent, updated => { newContent = updated; });
         } else if (prog.mode === 'gitea') {
             updatesCount += await updateGiteaRelease(
                 prog.name,
@@ -311,6 +328,270 @@ async function main() {
         console.log('Updated js/data.js');
     } else {
         console.log('\nNo updates found.');
+    }
+}
+
+const HERMES_APPINSTALLER_URL = 'https://hermes-assets.nousresearch.com/releases/win32/stable/stable.appinstaller';
+const HERMES_PUBLISHER = 'CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US';
+const CHEAT_ENGINE_FEED_URL = 'https://community.chocolatey.org/api/v2/Packages()?$filter=Id%20eq%20%27cheatengine%27%20and%20IsLatestVersion';
+const MAX_NUPKG_BYTES = 2 * 1024 * 1024;
+const MAX_INSTALLER_BYTES = 200 * 1024 * 1024;
+
+function xmlText(xml, name) {
+    const match = String(xml).match(new RegExp(`<(?:(?:[A-Za-z0-9_]+):)?${name}>([\\s\\S]*?)<\\/(?:(?:[A-Za-z0-9_]+):)?${name}>`, 'i'));
+    return match?.[1]?.replace(/<[^>]*>/g, '').trim()
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"').replace(/&apos;/g, "'") ?? null;
+}
+
+function extractChocolateyPackageMetadata(feedXml) {
+    const entry = String(feedXml).match(/<entry\b[^>]*>([\s\S]*?)<\/entry>/i)?.[1];
+    if (!entry) throw new Error('Chocolatey feed had no package entry');
+    const version = xmlText(entry, 'Version');
+    const author = xmlText(entry.match(/<author\b[^>]*>[\s\S]*?<\/author>/i)?.[0] ?? '', 'name');
+    if (!/^\d+(?:\.\d+){1,3}(?:[-+][0-9A-Za-z.-]+)?$/.test(version ?? '')) {
+        throw new Error('Chocolatey feed contained an invalid Cheat Engine version');
+    }
+    if (!author) throw new Error('Chocolatey feed did not identify the package author');
+    return { version, author };
+}
+
+function extractNupkgEntry(nupkg, entryName, maxEntryBytes = 256 * 1024) {
+    const zip = Buffer.isBuffer(nupkg) ? nupkg : Buffer.from(nupkg);
+    const eocdSignature = Buffer.from([0x50, 0x4b, 0x05, 0x06]);
+    let eocd = -1;
+    const minOffset = Math.max(0, zip.length - 22 - 0xffff);
+    for (let offset = zip.length - 22; offset >= minOffset; offset--) {
+        if (zip.readUInt32LE(offset) === eocdSignature.readUInt32LE(0) &&
+            offset + 22 + zip.readUInt16LE(offset + 20) === zip.length) {
+            eocd = offset;
+            break;
+        }
+    }
+    if (eocd < 0) throw new Error('Chocolatey package is not a valid ZIP/NuGet archive');
+
+    const entryCount = zip.readUInt16LE(eocd + 10);
+    let centralOffset = zip.readUInt32LE(eocd + 16);
+    for (let index = 0; index < entryCount; index++) {
+        if (centralOffset + 46 > zip.length || zip.readUInt32LE(centralOffset) !== 0x02014b50) {
+            throw new Error('Chocolatey package has a malformed ZIP directory');
+        }
+        const flags = zip.readUInt16LE(centralOffset + 8);
+        const method = zip.readUInt16LE(centralOffset + 10);
+        const compressedSize = zip.readUInt32LE(centralOffset + 20);
+        const uncompressedSize = zip.readUInt32LE(centralOffset + 24);
+        const nameLength = zip.readUInt16LE(centralOffset + 28);
+        const extraLength = zip.readUInt16LE(centralOffset + 30);
+        const commentLength = zip.readUInt16LE(centralOffset + 32);
+        const localOffset = zip.readUInt32LE(centralOffset + 42);
+        const nameStart = centralOffset + 46;
+        const name = zip.toString('utf8', nameStart, nameStart + nameLength);
+
+        if (name.toLowerCase() === entryName.toLowerCase()) {
+            if ((flags & 1) !== 0 || uncompressedSize > maxEntryBytes ||
+                localOffset + 30 > zip.length || zip.readUInt32LE(localOffset) !== 0x04034b50) {
+                throw new Error('Chocolatey install script entry was encrypted or exceeded its size limit');
+            }
+            const localNameLength = zip.readUInt16LE(localOffset + 26);
+            const localExtraLength = zip.readUInt16LE(localOffset + 28);
+            const dataStart = localOffset + 30 + localNameLength + localExtraLength;
+            const dataEnd = dataStart + compressedSize;
+            if (dataEnd > zip.length) throw new Error('Chocolatey install script entry is truncated');
+            const compressed = zip.subarray(dataStart, dataEnd);
+            let content;
+            if (method === 0) content = Buffer.from(compressed);
+            else if (method === 8) content = inflateRawSync(compressed, { maxOutputLength: maxEntryBytes });
+            else throw new Error('Chocolatey install script uses an unsupported ZIP compression method');
+            if (content.length !== uncompressedSize) throw new Error('Chocolatey install script size did not match its ZIP record');
+            return content;
+        }
+        centralOffset += 46 + nameLength + extraLength + commentLength;
+    }
+    throw new Error('Chocolatey package did not include ' + entryName);
+}
+
+function extractChocolateyInstallerInfo(installScript) {
+    const read64BitOrDefault = parameter => {
+        const pattern = new RegExp(`-${parameter}(64(?:bit)?)?\\s+['\"]([^'\"]+)['\"]`, 'gi');
+        const matches = [...String(installScript).matchAll(pattern)];
+        const match = matches.find(candidate => candidate[1]) ?? matches[0];
+        return match?.[2] ?? null;
+    };
+    const url = read64BitOrDefault('Url');
+    const sha256 = read64BitOrDefault('Checksum');
+    const checksumType = read64BitOrDefault('ChecksumType');
+    if (!url || !/^https:\/\//i.test(url)) throw new Error('Chocolatey install script did not supply an HTTPS binary URL');
+    const parsedUrl = new URL(url);
+    if (!parsedUrl.hostname.toLowerCase().endsWith('.cloudfront.net') ||
+        !/\.exe$/i.test(parsedUrl.pathname) || parsedUrl.username || parsedUrl.password) {
+        throw new Error('Chocolatey package URL was not a direct CloudFront EXE');
+    }
+    if (!/^[a-f0-9]{64}$/i.test(sha256 ?? '') || checksumType?.toLowerCase() !== 'sha256') {
+        throw new Error('Chocolatey install script did not provide a SHA-256 checksum');
+    }
+    return { url, sha256: sha256.toUpperCase() };
+}
+
+function extractHermesAppInstallerInfo(manifestXml) {
+    const xml = String(manifestXml);
+    const appinstaller = xml.match(/<AppInstaller\b([^>]*)>/i)?.[1];
+    const bundle = xml.match(/<MainBundle\b([^>]*)>/i)?.[1];
+    if (!appinstaller || !bundle) throw new Error('Official Hermes App Installer XML was missing its bundle');
+    const attribute = (text, name) => text.match(new RegExp(`\\b${name}\\s*=\\s*['\"]([^'\"]+)['\"]`, 'i'))?.[1] ?? null;
+    const bundleUri = attribute(bundle, 'Uri');
+    const publisher = attribute(bundle, 'Publisher');
+    const version = attribute(bundle, 'Version');
+    const parsedUri = new URL(bundleUri ?? 'https://invalid.invalid');
+    if (publisher !== HERMES_PUBLISHER) throw new Error('Hermes App Installer publisher did not match Nous Research');
+    if (parsedUri.protocol !== 'https:' || parsedUri.hostname !== 'hermes-assets.nousresearch.com' ||
+        !parsedUri.pathname.startsWith('/releases/') || !parsedUri.pathname.endsWith('.msixbundle')) {
+        throw new Error('Hermes bundle URI was outside the official release host');
+    }
+    if (!/^\d+(?:\.\d+){2,3}$/.test(version ?? '')) throw new Error('Hermes App Installer version was invalid');
+    return { bundleUri, publisher, version };
+}
+
+async function readResponseBytes(response, maxBytes) {
+    const declaredLength = Number(response.headers.get('content-length') ?? 0);
+    if (declaredLength > maxBytes) throw new Error('Response exceeded the configured size limit');
+    if (!response.body) return Buffer.alloc(0);
+    const reader = response.body.getReader();
+    const chunks = [];
+    let length = 0;
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            length += value.byteLength;
+            if (length > maxBytes) {
+                await reader.cancel();
+                throw new Error('Response exceeded the configured size limit');
+            }
+            chunks.push(Buffer.from(value));
+        }
+    } finally {
+        reader.releaseLock();
+    }
+    return Buffer.concat(chunks, length);
+}
+
+function isPortableExecutable(file) {
+    if (!Buffer.isBuffer(file) || file.length < 64 || file.toString('ascii', 0, 2) !== 'MZ') return false;
+    const peOffset = file.readUInt32LE(0x3c);
+    return peOffset >= 64 && peOffset + 4 <= file.length && file.toString('ascii', peOffset, peOffset + 4) === 'PE\0\0';
+}
+
+async function fetchChocolateyCheatEngineInfo() {
+    const headers = { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/atom+xml' };
+    const feed = await fetch(CHEAT_ENGINE_FEED_URL, { headers, signal: AbortSignal.timeout(20000) });
+    if (!feed.ok) throw new Error('Chocolatey package feed returned HTTP ' + feed.status);
+    const metadata = extractChocolateyPackageMetadata(await feed.text());
+    if (metadata.author.trim().toLowerCase() !== 'dark byte') {
+        throw new Error('Latest Chocolatey package author was not Dark Byte');
+    }
+
+    const packageResponse = await fetch(`https://community.chocolatey.org/api/v2/package/cheatengine/${encodeURIComponent(metadata.version)}`, {
+        headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/octet-stream' },
+        signal: AbortSignal.timeout(20000)
+    });
+    if (!packageResponse.ok) throw new Error('Chocolatey package download returned HTTP ' + packageResponse.status);
+    const nupkg = await readResponseBytes(packageResponse, MAX_NUPKG_BYTES);
+    if (nupkg.subarray(0, 2).toString('ascii') !== 'PK') throw new Error('Chocolatey package response was not a NuGet ZIP');
+    const installScript = extractNupkgEntry(nupkg, 'tools/chocolateyInstall.ps1').toString('utf8');
+    return { ...metadata, ...extractChocolateyInstallerInfo(installScript) };
+}
+
+async function verifyCheatEngineHeaders(url) {
+    const response = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(20000) });
+    if (!response.ok) throw new Error('Cheat Engine binary returned HTTP ' + response.status);
+    const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
+    const length = Number(response.headers.get('content-length') ?? 0);
+    if (!['application/octet-stream', 'application/x-msdownload'].includes(contentType)) {
+        throw new Error('Cheat Engine endpoint returned a non-binary Content-Type');
+    }
+    if (length < 1024 * 1024 || length > MAX_INSTALLER_BYTES) throw new Error('Cheat Engine endpoint had an unexpected Content-Length');
+    if (response.url && new URL(response.url).hostname.toLowerCase() !== new URL(url).hostname.toLowerCase()) {
+        throw new Error('Cheat Engine URL redirected to a different host');
+    }
+    return { contentType, length, contentDisposition: response.headers.get('content-disposition') };
+}
+
+async function downloadAndVerifyCheatEngine(info) {
+    const response = await fetch(info.url, {
+        headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/octet-stream' },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(120000)
+    });
+    if (!response.ok) throw new Error('Cheat Engine download returned HTTP ' + response.status);
+    const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
+    if (!['application/octet-stream', 'application/x-msdownload'].includes(contentType)) {
+        throw new Error('Cheat Engine download returned a non-binary Content-Type');
+    }
+    if (response.url && new URL(response.url).hostname.toLowerCase() !== new URL(info.url).hostname.toLowerCase()) {
+        throw new Error('Cheat Engine download redirected to a different host');
+    }
+    const file = await readResponseBytes(response, MAX_INSTALLER_BYTES);
+    if (!isPortableExecutable(file)) throw new Error('Cheat Engine download did not have a valid PE signature');
+    const sha256 = createHash('sha256').update(file).digest('hex').toUpperCase();
+    if (sha256 !== info.sha256) throw new Error('Cheat Engine SHA-256 did not match the Chocolatey package');
+    return { length: file.length, sha256 };
+}
+
+async function checkCheatEngineUrl(name, urlRegex, checksumRegex, currentContent, updateCallback) {
+    process.stdout.write('Checking ' + name.padEnd(20) + ' [Chocolatey hash] ... ');
+    try {
+        const info = await fetchChocolateyCheatEngineInfo();
+        const urlMatch = currentContent.match(urlRegex);
+        const checksumMatch = currentContent.match(checksumRegex);
+        if (!urlMatch || !checksumMatch) throw new Error('Cheat Engine catalog URL or SHA-256 field was not found');
+
+        if (urlMatch[2] === info.url && checksumMatch[2].toUpperCase() === info.sha256) {
+            const headers = await verifyCheatEngineHeaders(info.url);
+            console.log(`Current (Chocolatey ${info.version}; HTTP binary ${headers.length} bytes)`);
+            return 0;
+        }
+
+        const verified = await downloadAndVerifyCheatEngine(info);
+        let updatedContent = currentContent.replace(urlRegex, (_full, before, _old, after) => before + info.url + after);
+        updatedContent = updatedContent.replace(checksumRegex, (_full, before, _old, after) => before + info.sha256 + after);
+        updateCallback(updatedContent);
+        console.log(`Updated to Chocolatey ${info.version} after full PE/SHA-256 validation (${verified.length} bytes)`);
+        return 1;
+    } catch (error) {
+        console.log('Skipped: ' + error.message);
+        return 0;
+    }
+}
+
+async function checkHermesAppInstallerUrl(name, regexPattern, currentContent, updateCallback) {
+    process.stdout.write('Checking ' + name.padEnd(20) + ' [signed App Installer] ... ');
+    try {
+        const response = await fetch(HERMES_APPINSTALLER_URL, {
+            headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/appinstaller, application/xml' },
+            redirect: 'follow',
+            signal: AbortSignal.timeout(20000)
+        });
+        if (!response.ok) throw new Error('Official App Installer feed returned HTTP ' + response.status);
+        if (new URL(response.url).hostname !== 'hermes-assets.nousresearch.com') {
+            throw new Error('Hermes App Installer feed redirected away from the official host');
+        }
+        const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
+        if (contentType !== 'application/appinstaller') throw new Error('Official endpoint did not return application/appinstaller');
+        const body = await readResponseBytes(response, 512 * 1024);
+        const appInfo = extractHermesAppInstallerInfo(body.toString('utf8'));
+        const match = currentContent.match(regexPattern);
+        if (!match) throw new Error('Hermes Agent catalog entry was not found');
+        if (match[2] === HERMES_APPINSTALLER_URL) {
+            console.log(`Current (stable signed bundle ${appInfo.version})`);
+            return 0;
+        }
+        updateCallback(currentContent.replace(regexPattern,
+            (_full, before, _old, after) => before + HERMES_APPINSTALLER_URL + after));
+        console.log(`Updated to the stable App Installer feed (bundle ${appInfo.version})`);
+        return 1;
+    } catch (error) {
+        console.log('Skipped: ' + error.message);
+        return 0;
     }
 }
 
@@ -762,8 +1043,15 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
     return 0;
 }
 
-// Expose release rules for offline catalog coverage tests without running network requests.
-module.exports = { PROGRAMS };
+// Expose source parsers for offline catalog and updater regression tests.
+module.exports = {
+    PROGRAMS,
+    extractChocolateyInstallerInfo,
+    extractChocolateyPackageMetadata,
+    extractHermesAppInstallerInfo,
+    extractNupkgEntry,
+    isPortableExecutable
+};
 
 if (require.main === module) {
     main();
