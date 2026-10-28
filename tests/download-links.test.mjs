@@ -6,8 +6,16 @@ import test from 'node:test';
 import { ITEMS } from '../js/data.js';
 
 const require = createRequire(import.meta.url);
-const { PROGRAMS, extractHermesInstallerUrl } = require('../scripts/update-links.js');
+const {
+    PROGRAMS,
+    extractChocolateyInstallerInfo,
+    extractChocolateyPackageMetadata,
+    extractHermesAppInstallerInfo,
+    extractNupkgEntry,
+    isPortableExecutable
+} = require('../scripts/update-links.js');
 const catalogSource = readFileSync(new URL('../js/data.js', import.meta.url), 'utf8');
+const startupSource = readFileSync(new URL('../js/startup.js', import.meta.url), 'utf8');
 
 // Version-independent upstream endpoints intentionally do not require daily rewrites.
 const STABLE_PC_URLS = new Map([
@@ -15,7 +23,6 @@ const STABLE_PC_URLS = new Map([
     ['google-chrome', 'https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi'],
     ['mozilla-firefox', 'https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US'],
     ['revo-uninstaller', 'https://download.revouninstaller.com/download/revosetup.exe'],
-    ['cheat-engine', 'https://cheatengine.org/downloads.php'],
     ['patch-my-pc', 'https://patchmypc.com/freeupdater/PatchMyPC.exe'],
     ['pcloud', 'https://partner.pcloud.com/dl/win64'],
     ['claude-desktop', 'https://downloads.claude.ai/releases/win32/ClaudeSetup.exe'],
@@ -72,7 +79,7 @@ test('PC download actions are direct files or verified stable binary resolvers, 
     const resolvers = new Set(['brave-browser', 'mozilla-firefox', 'pcloud',
         'discord', 'telegram-desktop', 'chatgpt-desktop',
         'whatsapp-desktop', 'visual-studio-code']);
-    const websiteOnly = new Set(['cheat-engine']);
+    const websiteOnly = new Set();
     for (const item of Object.values(ITEMS['pc-programs'])) {
         if (websiteOnly.has(item.id)) {
             assert.equal(item.linkType, 'website', item.name + ' must be visibly marked as a website');
@@ -86,26 +93,106 @@ test('PC download actions are direct files or verified stable binary resolvers, 
     }
 });
 
-test('emulator PC downloads target files except the explicitly labelled PKHeX publisher page', () => {
+test('emulator PC downloads target files, including the published PKHeX application ZIP', () => {
     for (const item of Object.values(ITEMS.emulation)) {
         if (!item.pc?.url) continue;
-        if (item.id === 'pkhex') {
-            assert.equal(item.pc.linkType, 'website');
-        } else {
-            assert.match(new URL(item.pc.url).pathname, /\.(?:exe|msi|7z|zip)$/i, item.name);
-        }
+        assert.match(new URL(item.pc.url).pathname, /\.(?:exe|msi|7z|zip)$/i, item.name);
     }
 });
 
-test('Hermes updater extracts only the official Windows installer URL and never links to landing pages', () => {
+test('Android store destinations are identified as stores instead of download files', () => {
+    for (const item of Object.values(ITEMS.emulation)) {
+        const android = item.android;
+        if (!android?.url) continue;
+        if (new URL(android.url).hostname === 'play.google.com') {
+            assert.equal(android.linkType, 'store', item.name + ' Google Play destination must be labelled as a store');
+        } else {
+            assert.match(new URL(android.url).pathname, /\.apk$/i, item.name + ' Android endpoint must be an APK');
+        }
+    }
+    assert.match(startupSource, /storeLink = data\?\.linkType === 'store'/);
+    assert.match(startupSource, /Google Play/);
+});
+
+test('Hermes updater verifies the permanent official App Installer feed and signed bundle metadata', () => {
     const current = ITEMS['pc-programs']['hermes-agent'].url;
     const rule = PROGRAMS.find(rule => rule.name === 'Hermes Agent');
     assert.equal(rule?.mode, 'hermes');
     assert.equal(catalogSource.match(rule.regex)?.[2], current);
     assert.equal(new URL(current).hostname, 'hermes-assets.nousresearch.com');
-    assert.equal(new URL(current).pathname, '/Hermes-Setup.exe');
-    assert.equal(extractHermesInstallerUrl('<a href="' + current + '">Download</a>'), current);
-    const updatedBuild = 'https://hermes-assets.nousresearch.com/Hermes-Setup.exe?build=new-release';
-    assert.equal(extractHermesInstallerUrl('<a href="' + updatedBuild + '">Download</a>'), updatedBuild);
-    assert.equal(extractHermesInstallerUrl('<a href="https://hermes-agent.nousresearch.com/">Download</a>'), null);
+    assert.equal(new URL(current).pathname, '/releases/win32/stable/stable.appinstaller');
+    assert.equal(ITEMS['pc-programs']['hermes-agent'].autoInstaller, 'hermes-appinstaller');
+    const manifest = `<AppInstaller Version="2026.6864.2132.0"><MainBundle Uri="https://hermes-assets.nousresearch.com/releases/tag/rc.3-v0.22.0/HermesBundled-2026.6864.2132.0-win.msixbundle" Version="2026.6864.2132.0" Publisher="CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US" /></AppInstaller>`;
+    assert.deepEqual(extractHermesAppInstallerInfo(manifest), {
+        bundleUri: 'https://hermes-assets.nousresearch.com/releases/tag/rc.3-v0.22.0/HermesBundled-2026.6864.2132.0-win.msixbundle',
+        publisher: 'CN=Nous Research Inc., O=Nous Research Inc., L=Austin, S=Texas, C=US',
+        version: '2026.6864.2132.0'
+    });
+    assert.throws(() => extractHermesAppInstallerInfo(manifest.replace('CN=Nous Research Inc.', 'CN=Untrusted')),
+        /publisher did not match/);
+    assert.throws(() => extractHermesAppInstallerInfo(manifest.replace('hermes-assets.nousresearch.com', 'attacker.example')),
+        /official release host/);
+});
+
+test('Cheat Engine points to Dark Byte’s direct package binary and pins the published SHA-256', () => {
+    const item = ITEMS['pc-programs']['cheat-engine'];
+    const rule = PROGRAMS.find(rule => rule.name === 'Cheat Engine');
+    assert.equal(rule?.mode, 'cheatengine');
+    assert.equal(catalogSource.match(rule.regex)?.[2], item.url);
+    assert.equal(rule.checksumRegex && catalogSource.match(rule.checksumRegex)?.[2], item.sha256);
+    assert.equal(item.url, 'https://d1dj9aohuk02ls.cloudfront.net/f/CheatEngine/2129/CheatEngine77.exe');
+    assert.equal(item.sha256, 'CF0F4B6002555677984233C95856683959BE83A5DEF3DC12175A8296EB22676B');
+    assert.equal(item.linkType, undefined);
+});
+
+test('Chocolatey updater accepts only the package author, direct PE URL, and a SHA-256 checksum', () => {
+    const feed = `<feed><entry><author><name>Dark Byte</name></author><m:properties><d:Version>7.7.0</d:Version></m:properties></entry></feed>`;
+    assert.deepEqual(extractChocolateyPackageMetadata(feed), { version: '7.7.0', author: 'Dark Byte' });
+    assert.throws(() => extractChocolateyPackageMetadata('<feed></feed>'), /no package entry/);
+
+    const hash = 'CF0F4B6002555677984233C95856683959BE83A5DEF3DC12175A8296EB22676B';
+    const install = `Install-ChocolateyPackage \\\n+  -PackageName 'cheatengine' \\\n+  -Url 'https://d1dj9aohuk02ls.cloudfront.net/f/CheatEngine/2129/CheatEngine77.exe' \\\n+  -Checksum '${hash}' \\\n+  -ChecksumType 'SHA256'`;
+    assert.deepEqual(extractChocolateyInstallerInfo(install), {
+        url: 'https://d1dj9aohuk02ls.cloudfront.net/f/CheatEngine/2129/CheatEngine77.exe',
+        sha256: hash
+    });
+    assert.throws(() => extractChocolateyInstallerInfo(install.replace('cloudfront.net', 'example.org')),
+        /direct CloudFront EXE/);
+    assert.throws(() => extractChocolateyInstallerInfo(install.replace(hash, 'bad')),
+        /SHA-256 checksum/);
+});
+
+test('Chocolatey NuGet parser extracts the install script and rejects non-PE bytes', () => {
+    const name = Buffer.from('tools/chocolateyInstall.ps1', 'utf8');
+    const text = Buffer.from("Install-ChocolateyPackage -Url 'https://example.invalid/CheatEngine.exe'", 'utf8');
+    const local = Buffer.alloc(30);
+    local.writeUInt32LE(0x04034b50, 0);
+    local.writeUInt16LE(20, 4);
+    local.writeUInt16LE(0, 8);
+    local.writeUInt32LE(text.length, 18);
+    local.writeUInt32LE(text.length, 22);
+    local.writeUInt16LE(name.length, 26);
+    const localRecord = Buffer.concat([local, name, text]);
+
+    const central = Buffer.alloc(46);
+    central.writeUInt32LE(0x02014b50, 0);
+    central.writeUInt16LE(20, 4);
+    central.writeUInt16LE(20, 6);
+    central.writeUInt16LE(0, 10);
+    central.writeUInt32LE(text.length, 20);
+    central.writeUInt32LE(text.length, 24);
+    central.writeUInt16LE(name.length, 28);
+    central.writeUInt32LE(0, 42);
+    const centralRecord = Buffer.concat([central, name]);
+
+    const eocd = Buffer.alloc(22);
+    eocd.writeUInt32LE(0x06054b50, 0);
+    eocd.writeUInt16LE(1, 8);
+    eocd.writeUInt16LE(1, 10);
+    eocd.writeUInt32LE(centralRecord.length, 12);
+    eocd.writeUInt32LE(localRecord.length, 16);
+    const nupkg = Buffer.concat([localRecord, centralRecord, eocd]);
+    assert.equal(extractNupkgEntry(nupkg, 'tools/chocolateyInstall.ps1').toString('utf8'), text.toString('utf8'));
+    assert.throws(() => extractNupkgEntry(Buffer.from('not a ZIP'), 'tools/chocolateyInstall.ps1'), /valid ZIP/);
+    assert.equal(isPortableExecutable(Buffer.from('not an executable')), false);
 });

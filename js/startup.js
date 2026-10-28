@@ -1116,8 +1116,16 @@ export class StartupManager {
 
     createButtonHtml(item, platform) {
         const data = item[platform];
-        // Use icons instead of text text
-        const iconSrc = data?.linkType === 'website' ? ICONS.web : platform === 'pc' ? ICONS.windows :
+        const websiteOnly = data?.linkType === 'website';
+        const storeLink = data?.linkType === 'store';
+        const linkLabel = websiteOnly
+            ? `Visit ${item.name} official download page`
+            : storeLink
+                ? `${data.appId ? 'Open' : 'Search'} ${item.name} in Google Play`
+                : `Download ${item.name} for ${platform}`;
+        const title = websiteOnly ? 'Official website' : storeLink ? 'Google Play' : 'Download';
+        // Use icons instead of text.
+        const iconSrc = websiteOnly ? ICONS.web : platform === 'pc' ? ICONS.windows :
             platform === 'web' ? ICONS.web :
                 ICONS.android;
         const className = `download-btn ${platform}-btn icon-only-btn`; // Added class for styling if needed
@@ -1128,7 +1136,7 @@ export class StartupManager {
             </button>`;
         }
 
-        return `<button class="${className}" data-platform="${platform}" aria-label="${data.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name} for ${platform}`}" title="${data.linkType === 'website' ? 'Official download page' : 'Download'}" style="padding: 5px 10px; display: flex; align-items: center; justify-content: center;">
+        return `<button class="${className}" data-platform="${platform}" aria-label="${linkLabel}" title="${title}" style="padding: 5px 10px; display: flex; align-items: center; justify-content: center;">
             <img src="${iconSrc}" alt="${platform}" style="width: 1.2em; height: 1.2em;">
         </button>`;
     }

@@ -35,7 +35,7 @@ The **PC Programs** tab includes a guided **Set up a new PC** flow. Pick the pro
 
 Programs with a verified `wingetId` are bundled into one local Windows command file (`.cmd`) together with explicitly supported publisher installers, when selected (currently Hermes Agent). Packages use the `winget` community source by default, while entries with `wingetSource: 'msstore'` use the Microsoft Store catalog (for example, ChatGPT Desktop). The file is generated entirely in the browser, checks for already installed packages using their declared source, installs exact IDs and pauses before closing so failures remain visible. Store installation can require Windows Store services, an account or a confirmation; the normal direct download links remain available in the PC catalog. ZEROfilez does **not** execute commands on the PC from the browser.
 
-Programs without an approved automatic installer can still be selected. They appear at the end as a manual download checklist instead of silently disappearing from the setup flow. Hermes Agent uses the publisher's Windows PowerShell source installer with `-NonInteractive -IncludeDesktop` to build the Desktop app; it is an opt-in automatic step, not a WinGet package or a prebuilt MSIX installation. It requires Internet access, may install development dependencies and can take longer than ordinary WinGet installs. Its normal Download button links directly to the official `Hermes-Setup.exe` bootstrap installer.
+Programs without an approved automatic installer can still be selected. They appear at the end as a manual download checklist instead of silently disappearing from the setup flow. Hermes Agent uses Nous Research's signed Windows `.appinstaller` feed. The generated script calls Windows `Add-AppxPackage -AppInstallerFile`, checks the publisher and registered package version, and uses the feed's stable update source. Hermes is an opt-in automatic step, not a WinGet package. Its normal Download button downloads the same official stable `.appinstaller` file. The separate `Hermes-Setup.exe` bootstrap installer remains available from the publisher and builds a source installation.
 
 **Panacea Featured:** Panacea is displayed once, above the PC Programs categories, while remaining searchable through both *Featured* and *Essentials*. Install (recommended) uses the stable `PanaceaSetup.exe` endpoint, enabling future user-approved updates; Portable uses the stable `Panacea.exe` endpoint with manual updates. In PC Setup, include Panacea in **Choose** and select exactly one variant; **Review** and **Install** keep that choice. Panacea is always a manual download and never enters the generated WinGet command file. A manual-only setup needs no `.cmd`. The generated command file remains available under **Technical details** for users who want to inspect it.
 
@@ -89,7 +89,9 @@ The same script runs automatically from:
 .github/workflows/update_links.yml
 ```
 
-The updater uses official release APIs or upstream download pages where possible. Version-specific links are updated in `js/data.js`; verified stable vendor binary endpoints remain unchanged. Hermes Agent's current direct Windows `Hermes-Setup.exe` URL is extracted daily from its official site so its build parameter can change. pCloud uses the official 64-bit download resolver (`partner.pcloud.com/dl/win64`) also listed in its WinGet manifest. The catalog coverage tests require PC download actions to resolve to direct binaries or approved binary resolvers. Cheat Engine has no confirmed stable direct installer (its publisher currently reports a download-provider issue), so its control is explicitly labelled **Official website**, not **Download**. The PKHeX PC link in Emulation is likewise labelled as an upstream website rather than pretending to be a direct download.
+The updater uses official release APIs or upstream download pages where possible. Version-specific links are updated in `js/data.js`; verified stable vendor endpoints remain unchanged. Cheat Engine's daily updater reads the latest Chocolatey community package maintained by Dark Byte, extracts its direct CloudFront installer URL and SHA-256, then downloads and validates the full PE before changing the catalog. The current installer hash is also recorded with its link. Hermes Agent's stable `.appinstaller` feed is checked daily for its MIME type, publisher and signed MSIX bundle source. pCloud uses the official 64-bit download resolver (`partner.pcloud.com/dl/win64`) also listed in its WinGet manifest.
+
+PKHeX's Project Pokémon download action is generated with a per-session CSRF key, so it is not a permanent static link. The `Build and publish PKHeX for Windows` workflow builds the latest stable tag from the author's `kwsch/PKHeX` repository and publishes a Windows x64 ZIP at the stable release URL. Each matching release includes the exact upstream source archive and GPLv3 license notice; the binary is an unmodified, framework-dependent .NET 10 build. The catalog links to that binary ZIP, not the source archive. Direct-download tests and the optional live audit check file responses and signatures rather than relying on filename extensions.
 
 ---
 
@@ -109,12 +111,15 @@ The updater uses official release APIs or upstream download pages where possible
 │   ├── pc-categories.js        # Shared categories and alphabetical PC listing
 │   └── decryptor.js             # Client-side vault/decryption logic
 ├── scripts/
-│   └── update-links.js          # Release/link updater
+│   ├── update-links.js          # Release/link updater
+│   └── audit-download-links.mjs # Live catalog HTTP/header/signature audit
 ├── tests/
 │   ├── windows-setup.test.mjs   # Zero-dependency generator/regression tests
+│   ├── download-links.test.mjs  # Download source and updater regressions
 │   └── pc-categories.test.mjs   # Category/catalog regression tests
 ├── .github/workflows/
 │   ├── ci.yml                   # Syntax + Node built-in tests
+│   ├── pkhex-release.yml        # Windows build and GPL-compliant release
 │   └── update_links.yml         # Scheduled updater
 ├── panacea_icon_white.png       # Local icon for Panacea
 └── README.md
@@ -128,7 +133,7 @@ Private keys, encrypted personal indexes and personal packaging scripts are inte
 
 - Keep `user.key` private and backed up.
 - Keep independent backups of original files; the browser decryptor is not a backup system.
-- Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control.
+- Public software links point to third-party upstreams, so availability and distribution behavior remain under those upstreams' control. PKHeX's locally built release includes a matching upstream source archive and GPLv3 license notice.
 - Generated Windows setup scripts contain only validated package IDs and explicitly approved `winget`/`msstore` sources from the curated catalog; review the script before running it. Windows Store installation behavior must be validated on a real Windows machine.
 - No explicit software license is currently granted in this repository.
 
