@@ -127,6 +127,11 @@ jobs:
       contents: write
       actions: read
     steps:
+      - name: Checkout ZEROfilez at the release target commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
       - name: Download verified build artifacts
         uses: actions/download-artifact@v4
         with:
