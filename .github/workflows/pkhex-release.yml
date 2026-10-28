@@ -153,18 +153,18 @@ jobs:
 
           Built from upstream commit [${SOURCE_SHA}](https://github.com/kwsch/PKHeX/commit/${SOURCE_SHA}) without source modifications, using .NET 10 and the upstream Windows Forms project.
 
-          **License:** GNU GPL v3. This release includes the matching upstream source archive as `PKHeX-Source-${RELEASE_VERSION}.zip`; the binary archive also contains the upstream GPL-3.0 license and build/source notice. Upstream license: https://github.com/kwsch/PKHeX/blob/${RELEASE_VERSION}/LICENSE
+          **License:** GNU GPL v3. This release includes the matching upstream source archive as PKHeX-Source-${RELEASE_VERSION}.zip; the binary archive also contains the upstream GPL-3.0 license and build/source notice. Upstream license: https://github.com/kwsch/PKHeX/blob/${RELEASE_VERSION}/LICENSE
 
           The framework-dependent executable requires the .NET 10 Windows Desktop Runtime, as specified by upstream.
           EOF
 
           release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}" 2>/dev/null || true)"
-          if [[ -z "$release_json" ]]; then
+          if ! jq -e 'type == "object" and (.id | type == "number")' <<<"$release_json" >/dev/null 2>&1; then
             gh release create "$tag" --draft --title "PKHeX ${RELEASE_VERSION} — Windows x64" \
               --notes-file "$notes" --target "$GITHUB_SHA"
             release_json="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${tag}")"
           fi
-          release_id="$(jq -r '.id' <<<"$release_json")"
+          release_id="$(jq -er '.id | numbers' <<<"$release_json" 2>/dev/null || true)"
           if [[ -z "$release_id" || "$release_id" == null ]]; then
             echo 'GitHub did not return the PKHeX release ID.' >&2
             exit 1
