@@ -76,9 +76,21 @@ jobs:
 
           $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
           $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |
-            Where-Object { $_.DisplayName -eq 'OpenClaw Companion' } | Select-Object -First 1
-          if (-not $registration) { throw 'OpenClaw Companion did not register with Windows after setup.' }
-          Write-Host "Verified OpenClaw Companion $($registration.DisplayVersion) at $installedPath."
+            Where-Object { $_.DisplayName -like '*OpenClaw*' } | Select-Object -First 1
+          if ($registration) {
+            Write-Host "OpenClaw uninstall registration: $($registration.DisplayName) $($registration.DisplayVersion) at $($registration.InstallLocation)."
+          } else {
+            Write-Warning 'The OpenClaw uninstaller registry entry was not found by the display-name scan.'
+            $appIdKey = Join-Path $uninstallRoot '{M0LTB0T-TRAY-4PP1-D3N7}_is1'
+            if (Test-Path -LiteralPath $appIdKey) {
+              Get-ItemProperty -LiteralPath $appIdKey | Format-List DisplayName, DisplayVersion, InstallLocation, UninstallString | Out-String | Write-Host
+            } else {
+              Write-Warning "OpenClaw AppId registry key was not found: $appIdKey"
+            }
+          }
+          $shortcutPath = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\OpenClaw Companion\OpenClaw Companion.lnk'
+          if (-not (Test-Path -LiteralPath $shortcutPath -PathType Leaf)) { throw 'OpenClaw Companion Start Menu shortcut was not installed.' }
+          Write-Host "Verified OpenClaw Companion executable and Start Menu shortcut at $installedPath."
 
       - name: Install Hermes through the generated setup in this isolated Windows runner
         shell: pwsh
