@@ -96,6 +96,18 @@ test('Hermes Agent appears once in Development & AI with a direct installer and 
     assert.deepEqual(groupPcPrograms(items, 'Hermes').flatMap(group => group.items.map(item => item.id)), ['hermes-agent']);
 });
 
+test('OpenClaw Windows Hub appears once in Development & AI with direct and automatic setup', () => {
+    const openclaw = ITEMS['pc-programs'].openclaw;
+    assert.equal(openclaw.name, 'OpenClaw');
+    assert.equal(openclaw.url,
+        'https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-x64.exe');
+    assert.equal(openclaw.autoInstaller, 'openclaw-inno');
+    assert.equal(openclaw.icon, 'assets/icons/official-openclaw.png');
+    assert.ok(PC_PROGRAM_CATEGORIES.find(group => group.label === 'Development & AI').ids.includes(openclaw.id));
+    assert.ok(ORDER['pc-programs'].includes(openclaw.id));
+    assert.deepEqual(groupPcPrograms(items, 'OpenClaw').flatMap(group => group.items.map(item => item.id)), ['openclaw']);
+});
+
 test('PC Programs is the only initially active and visible main tab', () => {
     const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
     const activeTabs = [...html.matchAll(/<button class="([^"]+)" data-tab="([^"]+)">/g)]

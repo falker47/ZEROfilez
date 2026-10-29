@@ -64,6 +64,7 @@ export const ICONS = {
     claude: 'assets/icons/brand-claude-color.svg',
     chatgpt: 'chatgpt_icon_white.svg',
     hermes: 'assets/icons/official-hermes-agent.png',
+    openclaw: 'assets/icons/official-openclaw.png',
     bitwarden: 'assets/icons/brand-bitwarden-color.svg',
     discord: 'assets/icons/brand-discord-color.svg',
     whatsapp: 'assets/icons/brand-whatsapp-color.svg',

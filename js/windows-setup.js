@@ -1,20 +1,115 @@
 const WINGET_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]{1,126}[A-Za-z0-9+]$/;
 const MSSTORE_ID_PATTERN = /^[A-Z0-9]{12}$/;
 
-// Hermes uses its signed Windows App Installer feed, not an invented WinGet ID.
+// Non-WinGet installers use their publisher-supported distribution and validation contracts.
 export function isAutomaticSetupItem(item) {
     return Boolean(item?.wingetId) ||
-        (item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-appinstaller');
+        (item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-appinstaller') ||
+        (item?.id === 'openclaw' && item?.autoInstaller === 'openclaw-inno');
 }
 
-function hasHermesSetup(items) {
+function validateAutomaticInstallers(items) {
     if (!Array.isArray(items)) throw new TypeError('Expected an array of catalog items.');
+    const supported = new Map([
+        ['hermes-agent', 'hermes-appinstaller'],
+        ['openclaw', 'openclaw-inno']
+    ]);
     for (const item of items) {
-        if (item?.autoInstaller && !(item.id === 'hermes-agent' && item.autoInstaller === 'hermes-appinstaller')) {
+        if (item?.autoInstaller && supported.get(item.id) !== item.autoInstaller) {
             throw new Error('Unsupported automatic installer: ' + String(item.autoInstaller));
         }
     }
+}
+
+function hasHermesSetup(items) {
     return items.some(item => item?.id === 'hermes-agent' && item?.autoInstaller === 'hermes-appinstaller');
+}
+
+function hasOpenClawSetup(items) {
+    return items.some(item => item?.id === 'openclaw' && item?.autoInstaller === 'openclaw-inno');
+}
+
+const OPENCLAW_INSTALL_SCRIPT = `Write-Host 'Installing OpenClaw Windows Hub from the official stable release...'
+$ErrorActionPreference = 'Stop'
+$release = Invoke-RestMethod -Uri 'https://api.github.com/repos/openclaw/openclaw-windows-node/releases/latest' -Headers @{ Accept = 'application/vnd.github+json'; 'User-Agent' = 'ZEROfilez Windows Setup' } -TimeoutSec 30
+if ($release.draft -or $release.prerelease) { throw 'The latest OpenClaw release was not stable.' }
+$asset = $null
+foreach ($candidate in $release.assets) {
+    if ($candidate.name -eq 'OpenClawCompanion-Setup-x64.exe') { $asset = $candidate; break }
+}
+if (-not $asset) { throw 'GitHub did not publish an OpenClaw x64 installer in the latest stable release.' }
+if ($asset.digest -notmatch '^sha256:[A-Fa-f0-9]{64}$') { throw 'GitHub did not provide an OpenClaw SHA-256 release digest.' }
+if ($asset.browser_download_url -notmatch '^https://github\\.com/openclaw/openclaw-windows-node/releases/download/[^/]+/OpenClawCompanion-Setup-x64\\.exe$') {
+    throw 'GitHub returned an OpenClaw installer outside the official release path.'
+}
+if ([long]$asset.size -lt 1000000) { throw 'GitHub returned an unexpectedly small OpenClaw installer.' }
+$target = Join-Path $env:TEMP ('ZEROfilez-OpenClaw-' + [guid]::NewGuid().ToString('N') + '.exe')
+$installRoot = Join-Path $env:LOCALAPPDATA 'OpenClawTray'
+$installLog = Join-Path $env:TEMP ('ZEROfilez-OpenClaw-Install-' + [guid]::NewGuid().ToString('N') + '.log')
+$expectedSigner = 'CN=OpenClaw Foundation, O=OpenClaw Foundation, L=Mill Valley, S=California, C=US'
+try {
+    Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $target -MaximumRedirection 5 -TimeoutSec 300
+    $file = Get-Item -LiteralPath $target
+    if ($file.Length -ne [long]$asset.size) { throw 'The downloaded OpenClaw installer size did not match release metadata.' }
+    $hash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash
+    if ($hash -ine $asset.digest.Substring(7)) { throw 'The downloaded OpenClaw installer SHA-256 did not match GitHub release metadata.' }
+    $signature = Get-AuthenticodeSignature -LiteralPath $target
+    if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -ne $expectedSigner) {
+        throw 'The OpenClaw installer Authenticode signature was invalid or belonged to a different publisher.'
+    }
+    $arguments = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-', ('/DIR=' + [char]34 + $installRoot + [char]34), ('/LOG=' + [char]34 + $installLog + [char]34))
+    $process = Start-Process -FilePath $target -ArgumentList $arguments -Wait -PassThru
+    Write-Host ('OpenClaw installer exited with code ' + $process.ExitCode + '.')
+    if ($process.ExitCode -ne 0) { throw ('The OpenClaw installer exited with code ' + $process.ExitCode + '.') }
+    $installed = Join-Path $installRoot 'OpenClaw.Tray.WinUI.exe'
+    $isInstalledPe = $false
+    if (Test-Path -LiteralPath $installed -PathType Leaf) {
+        $stream = [System.IO.File]::OpenRead($installed)
+        try {
+            if ($stream.Length -ge 256) {
+                $reader = [System.IO.BinaryReader]::new($stream)
+                $isInstalledPe = $reader.ReadUInt16() -eq 0x5A4D
+                if ($isInstalledPe) {
+                    $stream.Position = 0x3c
+                    $peOffset = $reader.ReadInt32()
+                    $isInstalledPe = $peOffset -ge 64 -and $peOffset -le ($stream.Length - 4)
+                    if ($isInstalledPe) {
+                        $stream.Position = $peOffset
+                        $isInstalledPe = $reader.ReadUInt32() -eq 0x00004550
+                    }
+                }
+            }
+        } finally {
+            $stream.Dispose()
+        }
+    }
+    if (-not $isInstalledPe) {
+        $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
+        $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |
+            Where-Object { $_.DisplayName -like '*OpenClaw*' } | Select-Object -First 5
+        Write-Host ('Expected OpenClaw executable path: ' + $installed)
+        foreach ($entry in $registration) {
+            Write-Host ('OpenClaw uninstall registration: ' + $entry.DisplayName + ' | ' + $entry.DisplayVersion + ' | ' + $entry.InstallLocation + ' | ' + $entry.DisplayIcon)
+        }
+        Write-Host ('OpenClaw installer log: ' + $installLog)
+        if (Test-Path -LiteralPath $installLog) {
+            Write-Host 'Full OpenClaw installer log follows:'
+            Get-Content -LiteralPath $installLog -Raw | Write-Host
+        }
+        if (Test-Path -LiteralPath $installRoot) {
+            Get-ChildItem -LiteralPath $installRoot -Filter 'OpenClaw.Tray.WinUI.exe' -File -Recurse -ErrorAction SilentlyContinue |
+                Select-Object -First 10 -ExpandProperty FullName | ForEach-Object { Write-Host ('Found OpenClaw executable: ' + $_) }
+        }
+        throw 'OpenClaw Windows Hub did not install a valid Windows PE executable.'
+    }
+    Remove-Item -LiteralPath $installLog -Force -ErrorAction SilentlyContinue
+    Write-Host ('OpenClaw Windows Hub ' + $release.tag_name + ' installed. Open it to complete Gateway setup.')
+} finally {
+    Remove-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
+}`;
+
+function getOpenClawInstallScriptForCommand() {
+    return OPENCLAW_INSTALL_SCRIPT.split(/\r?\n/).map(line => line.trim()).filter(Boolean).join('; ');
 }
 
 export function isValidWingetId(value) {
@@ -84,10 +179,12 @@ export function getSetupPackages(items) {
 }
 
 export function generateCommandSetup(items) {
+    validateAutomaticInstallers(items);
     const packages = getSetupPackages(items);
     const hermes = hasHermesSetup(items);
+    const openclaw = hasOpenClawSetup(items);
 
-    if (packages.length === 0 && !hermes) {
+    if (packages.length === 0 && !hermes && !openclaw) {
         throw new Error('Select at least one supported automatic application.');
     }
 
@@ -124,6 +221,7 @@ set "FAILED_PACKAGES="
 
 ${installCalls}
 ${hermes ? 'call :installHermes' : ''}
+${openclaw ? 'call :installOpenClaw' : ''}
 
 echo.
 if defined FAILED_PACKAGES (
@@ -182,14 +280,29 @@ if not "%ERRORLEVEL%"=="0" (
 )
 exit /b 0
 ` : ''}
+${openclaw ? `
+:installOpenClaw
+echo.
+echo ==^> OpenClaw Windows Hub (official stable release, verified SHA-256 and signature)
+powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"${getOpenClawInstallScriptForCommand()}\"
+if not \"%ERRORLEVEL%\"==\"0\" (
+    echo WARNING: OpenClaw installation failed. Continuing.
+    set \"FAILED_PACKAGES=%FAILED_PACKAGES% openclaw\"
+) else (
+    echo OpenClaw Windows Hub installed successfully.
+)
+exit /b 0
+` : ''}
 `;
 }
 
 export function generatePowerShellSetup(items) {
+    validateAutomaticInstallers(items);
     const packages = getSetupPackages(items);
     const hermes = hasHermesSetup(items);
+    const openclaw = hasOpenClawSetup(items);
 
-    if (packages.length === 0 && !hermes) {
+    if (packages.length === 0 && !hermes && !openclaw) {
         throw new Error('Select at least one supported automatic application.');
     }
 
@@ -290,6 +403,14 @@ try {
     $failedPackages += 'hermes-agent'
 } finally {
     Remove-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
+}
+` : ''}
+${openclaw ? `
+try {
+${OPENCLAW_INSTALL_SCRIPT.split(/\r?\n/).map(line => '    ' + line).join('\n')}
+} catch {
+    Write-Warning ('OpenClaw installation failed: ' + $_.Exception.Message)
+    $failedPackages += 'openclaw'
 }
 ` : ''}
 

@@ -48,6 +48,50 @@ jobs:
           node --test --test-concurrency=1 $testFiles
           if ($LASTEXITCODE -ne 0) { throw "Windows regression tests failed with exit code $LASTEXITCODE." }
 
+      - name: Install OpenClaw through the generated setup in this isolated Windows runner
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $setup = Join-Path $env:TEMP 'ZEROfilez-OpenClaw-setup.ps1'
+          node scripts/generate-openclaw-setup.mjs | Set-Content -LiteralPath $setup -Encoding utf8
+          if ($LASTEXITCODE -ne 0) { throw 'Could not generate the OpenClaw-only setup script.' }
+          powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $setup
+          if ($LASTEXITCODE -ne 0) { throw "Generated OpenClaw setup failed with exit code $LASTEXITCODE." }
+
+          $installedPath = Join-Path $env:LOCALAPPDATA 'OpenClawTray\OpenClaw.Tray.WinUI.exe'
+          if (-not (Test-Path -LiteralPath $installedPath)) { throw 'OpenClaw Windows Hub was not installed in the isolated runner.' }
+          $stream = [System.IO.File]::OpenRead($installedPath)
+          try {
+            if ($stream.Length -lt 256) { throw 'Installed OpenClaw executable was unexpectedly small.' }
+            $reader = [System.IO.BinaryReader]::new($stream)
+            if ($reader.ReadUInt16() -ne 0x5A4D) { throw 'Installed OpenClaw executable is missing its DOS PE signature.' }
+            $stream.Position = 0x3c
+            $peOffset = $reader.ReadInt32()
+            if ($peOffset -lt 64 -or $peOffset -gt ($stream.Length - 4)) { throw 'Installed OpenClaw executable has an invalid PE header offset.' }
+            $stream.Position = $peOffset
+            if ($reader.ReadUInt32() -ne 0x00004550) { throw 'Installed OpenClaw executable is missing its PE signature.' }
+          } finally {
+            $stream.Dispose()
+          }
+
+          $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
+          $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |
+            Where-Object { $_.DisplayName -like '*OpenClaw*' } | Select-Object -First 1
+          if ($registration) {
+            Write-Host "OpenClaw uninstall registration: $($registration.DisplayName) $($registration.DisplayVersion) at $($registration.InstallLocation)."
+          } else {
+            Write-Warning 'The OpenClaw uninstaller registry entry was not found by the display-name scan.'
+            $appIdKey = Join-Path $uninstallRoot '{M0LTB0T-TRAY-4PP1-D3N7}_is1'
+            if (Test-Path -LiteralPath $appIdKey) {
+              Get-ItemProperty -LiteralPath $appIdKey | Format-List DisplayName, DisplayVersion, InstallLocation, UninstallString | Out-String | Write-Host
+            } else {
+              Write-Warning "OpenClaw AppId registry key was not found: $appIdKey"
+            }
+          }
+          $shortcutPath = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\OpenClaw Companion\OpenClaw Companion.lnk'
+          if (-not (Test-Path -LiteralPath $shortcutPath -PathType Leaf)) { throw 'OpenClaw Companion Start Menu shortcut was not installed.' }
+          Write-Host "Verified OpenClaw Companion executable and Start Menu shortcut at $installedPath."
+
       - name: Install Hermes through the generated setup in this isolated Windows runner
         shell: pwsh
         run: |

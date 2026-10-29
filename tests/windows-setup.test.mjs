@@ -370,6 +370,62 @@ test('Hermes Agent is automatic without a fictitious WinGet package ID', () => {
     assert.match(mixedPowerShell, /Add-AppxPackage -AppInstallerFile \$target -ErrorAction Stop/);
 });
 
+test('OpenClaw verifies and silently installs the official signed Windows Hub release', () => {
+    const openclaw = ITEMS['pc-programs'].openclaw;
+    assert.equal(openclaw.wingetId, undefined);
+    assert.equal(isAutomaticSetupItem(openclaw), true);
+    assert.deepEqual(getSetupPackages([openclaw]), []);
+
+    const cmd = generateCommandSetup([openclaw]);
+    assert.doesNotMatch(cmd, /where winget >nul/);
+    assert.match(cmd, /call :installOpenClaw/);
+    assert.match(cmd, /api\.github\.com\/repos\/openclaw\/openclaw-windows-node\/releases\/latest/);
+    assert.match(cmd, /Get-FileHash -LiteralPath \$target -Algorithm SHA256/);
+    assert.match(cmd, /Get-AuthenticodeSignature -LiteralPath \$target/);
+    assert.match(cmd, /CN=OpenClaw Foundation, O=OpenClaw Foundation, L=Mill Valley, S=California, C=US/);
+    assert.match(cmd, /\/VERYSILENT/);
+    assert.match(cmd, /\/DIR=/);
+    assert.match(cmd, /\/LOG=/);
+    assert.match(cmd, /\[char\]34/);
+    assert.match(cmd, /Get-Content -LiteralPath \$installLog -Raw/);
+    assert.doesNotMatch(cmd, /Length -lt 1000000/);
+    assert.match(cmd, /ReadUInt16\(\) -eq 0x5A4D/);
+    assert.match(cmd, /ReadUInt32\(\) -eq 0x00004550/);
+    assert.match(cmd, /did not install a valid Windows PE executable/);
+    assert.match(cmd, /DisplayName -like '\*OpenClaw\*'/);
+    assert.match(cmd, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
+    assert.match(cmd, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
+    const openclawCommand = cmd.split(/\r?\n/).find(line => line.includes('powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command'));
+    assert.ok(openclawCommand);
+    assert.equal((openclawCommand.match(/"/g) ?? []).length, 2);
+    assert.match(cmd, /FAILED_PACKAGES=.*openclaw/);
+
+    const ps = generatePowerShellSetup([openclaw]);
+    assert.doesNotMatch(ps, /& where\.exe winget\.exe/);
+    assert.match(ps, /Get-FileHash -LiteralPath \$target -Algorithm SHA256/);
+    assert.match(ps, /Start-Process -FilePath \$target/);
+    assert.match(ps, /\/VERYSILENT/);
+    assert.match(ps, /\/DIR=/);
+    assert.match(ps, /\/LOG=/);
+    assert.match(ps, /\[char\]34/);
+    assert.match(ps, /Get-Content -LiteralPath \$installLog -Raw/);
+    assert.doesNotMatch(ps, /Length -lt 1000000/);
+    assert.match(ps, /ReadUInt16\(\) -eq 0x5A4D/);
+    assert.match(ps, /ReadUInt32\(\) -eq 0x00004550/);
+    assert.match(ps, /did not install a valid Windows PE executable/);
+    assert.match(ps, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
+    assert.match(ps, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
+
+    const mixed = generateCommandSetup([openclaw, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixed, /where winget >nul/);
+    assert.match(mixed, /call :install "Google\.Chrome"/);
+    assert.match(mixed, /call :installOpenClaw/);
+
+    const mixedPowerShell = generatePowerShellSetup([openclaw, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixedPowerShell, /winget install --id \$packageId/);
+    assert.match(mixedPowerShell, /Get-AuthenticodeSignature -LiteralPath \$target/);
+});
+
 test('unknown auto-installer metadata is rejected before generating executable code', () => {
     for (const item of [
         { id: 'fake', autoInstaller: 'hermes-appinstaller', url: 'https://attacker.example/x.appinstaller' },
