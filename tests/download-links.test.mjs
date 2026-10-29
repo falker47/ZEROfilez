@@ -31,6 +31,7 @@ const STABLE_PC_URLS = new Map([
     ['telegram-desktop', 'https://telegram.org/dl/desktop/win64'],
     ['whatsapp-desktop', 'https://get.microsoft.com/installer/download/9NKSQGP7F2NH'],
     ['visual-studio-code', 'https://update.code.visualstudio.com/latest/win32-x64-user/stable'],
+    ['openclaw', 'https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-x64.exe'],
     ['panacea', 'https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe']
 ]);
 
@@ -132,6 +133,16 @@ test('Hermes updater verifies the permanent official App Installer feed and sign
         /publisher did not match/);
     assert.throws(() => extractHermesAppInstallerInfo(manifest.replace('hermes-assets.nousresearch.com', 'attacker.example')),
         /official release host/);
+});
+
+test('OpenClaw uses the official stable Windows Hub installer endpoint', () => {
+    const openclaw = ITEMS['pc-programs'].openclaw;
+    assert.equal(openclaw.url, STABLE_PC_URLS.get('openclaw'));
+    assert.equal(openclaw.autoInstaller, 'openclaw-inno');
+    assert.equal(new URL(openclaw.url).hostname, 'github.com');
+    assert.equal(new URL(openclaw.url).pathname,
+        '/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-x64.exe');
+    assert.equal(openclaw.wingetId, undefined);
 });
 
 test('Cheat Engine points to Dark Byte’s direct package binary and pins the published SHA-256', () => {

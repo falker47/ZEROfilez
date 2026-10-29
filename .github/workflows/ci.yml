@@ -64,3 +64,23 @@ jobs:
           } | Select-Object -First 1
           if (-not $installed) { throw 'Hermes was not registered for the isolated runner user after setup.' }
           Write-Host "Verified Hermes package $($installed.Name) version $($installed.Version), publisher $($installed.Publisher)."
+
+      - name: Install OpenClaw through the generated setup in this isolated Windows runner
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $setup = Join-Path $env:TEMP 'ZEROfilez-OpenClaw-setup.ps1'
+          node scripts/generate-openclaw-setup.mjs | Set-Content -LiteralPath $setup -Encoding utf8
+          if ($LASTEXITCODE -ne 0) { throw 'Could not generate the OpenClaw-only setup script.' }
+          powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $setup
+          if ($LASTEXITCODE -ne 0) { throw "Generated OpenClaw setup failed with exit code $LASTEXITCODE." }
+
+          $installedPath = Join-Path $env:LOCALAPPDATA 'OpenClawTray\OpenClaw.Tray.WinUI.exe'
+          if (-not (Test-Path -LiteralPath $installedPath)) { throw 'OpenClaw Windows Hub was not installed in the isolated runner.' }
+          if ((Get-Item -LiteralPath $installedPath).Length -lt 1000000) { throw 'Installed OpenClaw executable was unexpectedly small.' }
+
+          $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
+          $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |
+            Where-Object { $_.DisplayName -eq 'OpenClaw Companion' } | Select-Object -First 1
+          if (-not $registration) { throw 'OpenClaw Companion did not register with Windows after setup.' }
+          Write-Host "Verified OpenClaw Companion $($registration.DisplayVersion) at $installedPath."

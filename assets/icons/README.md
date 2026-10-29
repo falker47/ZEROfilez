@@ -84,6 +84,17 @@ redistributable identity was verified retain simple generic category symbols.
 ## Further original-brand icons (October 2026)
 
 - **Hermes Agent:** official Nous Research desktop `icon.png` from [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent/blob/main/apps/desktop/assets/icon.png). Kept locally for catalog identification; see `LICENSE-HERMES-MIT.txt`. Product marks belong to their owners; inclusion does not imply endorsement.
+- **OpenClaw Windows Hub:** official `StoreLogo.png` from [openclaw/openclaw-windows-node](https://github.com/openclaw/openclaw-windows-node/blob/main/src/OpenClaw.Tray.WinUI/Assets/StoreLogo.png). Its MIT notice from the upstream [LICENSE](https://github.com/openclaw/openclaw-windows-node/blob/main/LICENSE) is reproduced here:
+
+  > MIT License
+  >
+  > Copyright (c) 2025 OpenClaw Foundation
+  >
+  > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  >
+  > The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  >
+  > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 - **Revo Uninstaller** and **WinRAR:** software icon artwork reused from
   [WINSLIM CENTER STORE](https://github.com/Christianlg97/WINSLIM_CENTER_STORE/tree/main/src/assets/catalog);

@@ -45,6 +45,7 @@ export const ORDER = {
         "claude-desktop",
         "chatgpt-desktop",
         "hermes-agent",
+        "openclaw",
         "bitwarden-desktop",
         "discord",
         "telegram-desktop",

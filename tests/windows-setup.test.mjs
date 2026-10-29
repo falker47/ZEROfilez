@@ -370,6 +370,40 @@ test('Hermes Agent is automatic without a fictitious WinGet package ID', () => {
     assert.match(mixedPowerShell, /Add-AppxPackage -AppInstallerFile \$target -ErrorAction Stop/);
 });
 
+test('OpenClaw verifies and silently installs the official signed Windows Hub release', () => {
+    const openclaw = ITEMS['pc-programs'].openclaw;
+    assert.equal(openclaw.wingetId, undefined);
+    assert.equal(isAutomaticSetupItem(openclaw), true);
+    assert.deepEqual(getSetupPackages([openclaw]), []);
+
+    const cmd = generateCommandSetup([openclaw]);
+    assert.doesNotMatch(cmd, /where winget >nul/);
+    assert.match(cmd, /call :installOpenClaw/);
+    assert.match(cmd, /api\.github\.com\/repos\/openclaw\/openclaw-windows-node\/releases\/latest/);
+    assert.match(cmd, /Get-FileHash -LiteralPath \$target -Algorithm SHA256/);
+    assert.match(cmd, /Get-AuthenticodeSignature -LiteralPath \$target/);
+    assert.match(cmd, /CN=OpenClaw Foundation, O=OpenClaw Foundation, L=Mill Valley, S=California, C=US/);
+    assert.match(cmd, /\/VERYSILENT/);
+    assert.match(cmd, /OpenClawTray\\OpenClaw\.Tray\.WinUI\.exe/);
+    assert.match(cmd, /FAILED_PACKAGES=.*openclaw/);
+
+    const ps = generatePowerShellSetup([openclaw]);
+    assert.doesNotMatch(ps, /& where\.exe winget\.exe/);
+    assert.match(ps, /Get-FileHash -LiteralPath \$target -Algorithm SHA256/);
+    assert.match(ps, /Start-Process -FilePath \$target/);
+    assert.match(ps, /\/VERYSILENT/);
+    assert.match(ps, /OpenClawTray\\OpenClaw\.Tray\.WinUI\.exe/);
+
+    const mixed = generateCommandSetup([openclaw, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixed, /where winget >nul/);
+    assert.match(mixed, /call :install "Google\.Chrome"/);
+    assert.match(mixed, /call :installOpenClaw/);
+
+    const mixedPowerShell = generatePowerShellSetup([openclaw, ITEMS['pc-programs']['google-chrome']]);
+    assert.match(mixedPowerShell, /winget install --id \$packageId/);
+    assert.match(mixedPowerShell, /Get-AuthenticodeSignature -LiteralPath \$target/);
+});
+
 test('unknown auto-installer metadata is rejected before generating executable code', () => {
     for (const item of [
         { id: 'fake', autoInstaller: 'hermes-appinstaller', url: 'https://attacker.example/x.appinstaller' },
