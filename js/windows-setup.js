@@ -62,13 +62,45 @@ try {
     Write-Host ('OpenClaw installer exited with code ' + $process.ExitCode + '.')
     if ($process.ExitCode -ne 0) { throw ('The OpenClaw installer exited with code ' + $process.ExitCode + '.') }
     $installed = Join-Path $installRoot 'OpenClaw.Tray.WinUI.exe'
-    if (-not (Test-Path -LiteralPath $installed) -or (Get-Item -LiteralPath $installed).Length -lt 1000000) {
+    $isInstalledPe = $false
+    if (Test-Path -LiteralPath $installed -PathType Leaf) {
+        $stream = [System.IO.File]::OpenRead($installed)
+        try {
+            if ($stream.Length -ge 256) {
+                $reader = [System.IO.BinaryReader]::new($stream)
+                $isInstalledPe = $reader.ReadUInt16() -eq 0x5A4D
+                if ($isInstalledPe) {
+                    $stream.Position = 0x3c
+                    $peOffset = $reader.ReadInt32()
+                    $isInstalledPe = $peOffset -ge 64 -and $peOffset -le ($stream.Length - 4)
+                    if ($isInstalledPe) {
+                        $stream.Position = $peOffset
+                        $isInstalledPe = $reader.ReadUInt32() -eq 0x00004550
+                    }
+                }
+            }
+        } finally {
+            $stream.Dispose()
+        }
+    }
+    if (-not $isInstalledPe) {
+        $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
+        $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |
+            Where-Object { $_.DisplayName -like '*OpenClaw*' } | Select-Object -First 5
         Write-Host ('Expected OpenClaw executable path: ' + $installed)
+        foreach ($entry in $registration) {
+            Write-Host ('OpenClaw uninstall registration: ' + $entry.DisplayName + ' | ' + $entry.DisplayVersion + ' | ' + $entry.InstallLocation + ' | ' + $entry.DisplayIcon)
+        }
         Write-Host ('OpenClaw installer log: ' + $installLog)
         if (Test-Path -LiteralPath $installLog) {
-            Get-Content -LiteralPath $installLog -Tail 60 | ForEach-Object { Write-Host $_ }
+            Write-Host 'Full OpenClaw installer log follows:'
+            Get-Content -LiteralPath $installLog -Raw | Write-Host
         }
-        throw 'OpenClaw Windows Hub was not present after the installer completed.'
+        if (Test-Path -LiteralPath $installRoot) {
+            Get-ChildItem -LiteralPath $installRoot -Filter 'OpenClaw.Tray.WinUI.exe' -File -Recurse -ErrorAction SilentlyContinue |
+                Select-Object -First 10 -ExpandProperty FullName | ForEach-Object { Write-Host ('Found OpenClaw executable: ' + $_) }
+        }
+        throw 'OpenClaw Windows Hub did not install a valid Windows PE executable.'
     }
     Remove-Item -LiteralPath $installLog -Force -ErrorAction SilentlyContinue
     Write-Host ('OpenClaw Windows Hub ' + $release.tag_name + ' installed. Open it to complete Gateway setup.')

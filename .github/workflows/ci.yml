@@ -60,7 +60,19 @@ jobs:
 
           $installedPath = Join-Path $env:LOCALAPPDATA 'OpenClawTray\OpenClaw.Tray.WinUI.exe'
           if (-not (Test-Path -LiteralPath $installedPath)) { throw 'OpenClaw Windows Hub was not installed in the isolated runner.' }
-          if ((Get-Item -LiteralPath $installedPath).Length -lt 1000000) { throw 'Installed OpenClaw executable was unexpectedly small.' }
+          $stream = [System.IO.File]::OpenRead($installedPath)
+          try {
+            if ($stream.Length -lt 256) { throw 'Installed OpenClaw executable was unexpectedly small.' }
+            $reader = [System.IO.BinaryReader]::new($stream)
+            if ($reader.ReadUInt16() -ne 0x5A4D) { throw 'Installed OpenClaw executable is missing its DOS PE signature.' }
+            $stream.Position = 0x3c
+            $peOffset = $reader.ReadInt32()
+            if ($peOffset -lt 64 -or $peOffset -gt ($stream.Length - 4)) { throw 'Installed OpenClaw executable has an invalid PE header offset.' }
+            $stream.Position = $peOffset
+            if ($reader.ReadUInt32() -ne 0x00004550) { throw 'Installed OpenClaw executable is missing its PE signature.' }
+          } finally {
+            $stream.Dispose()
+          }
 
           $uninstallRoot = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall'
           $registration = Get-ChildItem -LiteralPath $uninstallRoot | ForEach-Object { Get-ItemProperty -LiteralPath $_.PSPath } |

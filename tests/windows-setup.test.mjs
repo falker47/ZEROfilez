@@ -387,7 +387,12 @@ test('OpenClaw verifies and silently installs the official signed Windows Hub re
     assert.match(cmd, /\/DIR=/);
     assert.match(cmd, /\/LOG=/);
     assert.match(cmd, /\[char\]34/);
-    assert.match(cmd, /Get-Content -LiteralPath \$installLog -Tail 60/);
+    assert.match(cmd, /Get-Content -LiteralPath \$installLog -Raw/);
+    assert.doesNotMatch(cmd, /Length -lt 1000000/);
+    assert.match(cmd, /ReadUInt16\(\) -eq 0x5A4D/);
+    assert.match(cmd, /ReadUInt32\(\) -eq 0x00004550/);
+    assert.match(cmd, /did not install a valid Windows PE executable/);
+    assert.match(cmd, /DisplayName -like '\*OpenClaw\*'/);
     assert.match(cmd, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
     assert.match(cmd, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
     const openclawCommand = cmd.split(/\r?\n/).find(line => line.includes('powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command'));
@@ -403,7 +408,11 @@ test('OpenClaw verifies and silently installs the official signed Windows Hub re
     assert.match(ps, /\/DIR=/);
     assert.match(ps, /\/LOG=/);
     assert.match(ps, /\[char\]34/);
-    assert.match(ps, /Get-Content -LiteralPath \$installLog -Tail 60/);
+    assert.match(ps, /Get-Content -LiteralPath \$installLog -Raw/);
+    assert.doesNotMatch(ps, /Length -lt 1000000/);
+    assert.match(ps, /ReadUInt16\(\) -eq 0x5A4D/);
+    assert.match(ps, /ReadUInt32\(\) -eq 0x00004550/);
+    assert.match(ps, /did not install a valid Windows PE executable/);
     assert.match(ps, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
     assert.match(ps, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
 
