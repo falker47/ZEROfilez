@@ -384,7 +384,15 @@ test('OpenClaw verifies and silently installs the official signed Windows Hub re
     assert.match(cmd, /Get-AuthenticodeSignature -LiteralPath \$target/);
     assert.match(cmd, /CN=OpenClaw Foundation, O=OpenClaw Foundation, L=Mill Valley, S=California, C=US/);
     assert.match(cmd, /\/VERYSILENT/);
-    assert.match(cmd, /OpenClawTray\\OpenClaw\.Tray\.WinUI\.exe/);
+    assert.match(cmd, /\/DIR=/);
+    assert.match(cmd, /\/LOG=/);
+    assert.match(cmd, /\[char\]34/);
+    assert.match(cmd, /Get-Content -LiteralPath \$installLog -Tail 60/);
+    assert.match(cmd, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
+    assert.match(cmd, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
+    const openclawCommand = cmd.split(/\r?\n/).find(line => line.includes('powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command'));
+    assert.ok(openclawCommand);
+    assert.equal((openclawCommand.match(/"/g) ?? []).length, 2);
     assert.match(cmd, /FAILED_PACKAGES=.*openclaw/);
 
     const ps = generatePowerShellSetup([openclaw]);
@@ -392,7 +400,12 @@ test('OpenClaw verifies and silently installs the official signed Windows Hub re
     assert.match(ps, /Get-FileHash -LiteralPath \$target -Algorithm SHA256/);
     assert.match(ps, /Start-Process -FilePath \$target/);
     assert.match(ps, /\/VERYSILENT/);
-    assert.match(ps, /OpenClawTray\\OpenClaw\.Tray\.WinUI\.exe/);
+    assert.match(ps, /\/DIR=/);
+    assert.match(ps, /\/LOG=/);
+    assert.match(ps, /\[char\]34/);
+    assert.match(ps, /Get-Content -LiteralPath \$installLog -Tail 60/);
+    assert.match(ps, /Join-Path \$env:LOCALAPPDATA 'OpenClawTray'/);
+    assert.match(ps, /Join-Path \$installRoot 'OpenClaw\.Tray\.WinUI\.exe'/);
 
     const mixed = generateCommandSetup([openclaw, ITEMS['pc-programs']['google-chrome']]);
     assert.match(mixed, /where winget >nul/);

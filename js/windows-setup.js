@@ -44,6 +44,8 @@ if ($asset.browser_download_url -notmatch '^https://github\\.com/openclaw/opencl
 }
 if ([long]$asset.size -lt 1000000) { throw 'GitHub returned an unexpectedly small OpenClaw installer.' }
 $target = Join-Path $env:TEMP ('ZEROfilez-OpenClaw-' + [guid]::NewGuid().ToString('N') + '.exe')
+$installRoot = Join-Path $env:LOCALAPPDATA 'OpenClawTray'
+$installLog = Join-Path $env:TEMP ('ZEROfilez-OpenClaw-Install-' + [guid]::NewGuid().ToString('N') + '.log')
 $expectedSigner = 'CN=OpenClaw Foundation, O=OpenClaw Foundation, L=Mill Valley, S=California, C=US'
 try {
     Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $target -MaximumRedirection 5 -TimeoutSec 300
@@ -55,12 +57,20 @@ try {
     if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -ne $expectedSigner) {
         throw 'The OpenClaw installer Authenticode signature was invalid or belonged to a different publisher.'
     }
-    $process = Start-Process -FilePath $target -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-' -Wait -PassThru
+    $arguments = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-', ('/DIR=' + [char]34 + $installRoot + [char]34), ('/LOG=' + [char]34 + $installLog + [char]34))
+    $process = Start-Process -FilePath $target -ArgumentList $arguments -Wait -PassThru
+    Write-Host ('OpenClaw installer exited with code ' + $process.ExitCode + '.')
     if ($process.ExitCode -ne 0) { throw ('The OpenClaw installer exited with code ' + $process.ExitCode + '.') }
-    $installed = Join-Path $env:LOCALAPPDATA 'OpenClawTray\\OpenClaw.Tray.WinUI.exe'
+    $installed = Join-Path $installRoot 'OpenClaw.Tray.WinUI.exe'
     if (-not (Test-Path -LiteralPath $installed) -or (Get-Item -LiteralPath $installed).Length -lt 1000000) {
+        Write-Host ('Expected OpenClaw executable path: ' + $installed)
+        Write-Host ('OpenClaw installer log: ' + $installLog)
+        if (Test-Path -LiteralPath $installLog) {
+            Get-Content -LiteralPath $installLog -Tail 60 | ForEach-Object { Write-Host $_ }
+        }
         throw 'OpenClaw Windows Hub was not present after the installer completed.'
     }
+    Remove-Item -LiteralPath $installLog -Force -ErrorAction SilentlyContinue
     Write-Host ('OpenClaw Windows Hub ' + $release.tag_name + ' installed. Open it to complete Gateway setup.')
 } finally {
     Remove-Item -LiteralPath $target -Force -ErrorAction SilentlyContinue
