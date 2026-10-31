@@ -26,3 +26,5 @@ jobs:
           node-version: "20"
       - name: Check all catalog URLs, redirects, and binary signatures
         run: node scripts/audit-download-links.mjs
+      - name: Verify all automatic source resolvers without writing the catalog
+        run: node scripts/update-links.js --check

@@ -338,8 +338,13 @@ async function main() {
 
     if (updatesCount > 0) {
         console.log(`\nTotal updates found: ${updatesCount}`);
-        fs.writeFileSync(DATA_FILE_PATH, newContent, 'utf8');
-        console.log('Updated js/data.js');
+        if (process.argv.includes('--check')) {
+            console.error('Catalog is stale: ' + updatesCount + ' upstream link updates are available.');
+            process.exitCode = 1;
+        } else {
+            fs.writeFileSync(DATA_FILE_PATH, newContent, 'utf8');
+            console.log('Updated js/data.js');
+        }
     } else {
         console.log('\nNo updates found.');
     }
