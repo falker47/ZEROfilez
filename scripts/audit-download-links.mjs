@@ -10,6 +10,7 @@ export function collectCatalogDownloads(items = ITEMS) {
     for (const item of Object.values(items.emulation ?? {})) {
         if (item.pc?.url) downloads.push({ name: `${item.name} (PC)`, ...item.pc });
         if (item.android?.url) downloads.push({ name: `${item.name} (Android)`, ...item.android });
+        if (item.web?.url) downloads.push({ name: `${item.name} (Web)`, ...item.web, linkType: 'website' });
     }
     for (const item of Object.values(items['pc-programs'] ?? {})) {
         if (item.url) downloads.push({ name: item.name, ...item });
@@ -18,6 +19,9 @@ export function collectCatalogDownloads(items = ITEMS) {
             url: item.installerUrl,
             ...(item.installerLinkType ? { linkType: item.installerLinkType } : {})
         });
+    }
+    for (const item of Object.values(items['apk-files'] ?? {})) {
+        if (item.url) downloads.push({ name: `${item.name} (APK)`, ...item });
     }
     return downloads;
 }
@@ -110,7 +114,13 @@ async function auditDownload(item) {
 
     const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
     const contentDisposition = response.headers.get('content-disposition') ?? '(none)';
-    const sample = await readSample(response, RANGE_BYTES);
+    let sample;
+    try {
+        sample = await readSample(response, RANGE_BYTES);
+    } catch (error) {
+        return { name: item.name, url: item.url, ok: false,
+            status: response.status, message: `Reading download signature failed: ${error.message}` };
+    }
     const finalUrl = response.url || item.url;
     const expected = getExpectedType(finalUrl, contentDisposition, contentType);
     const signature = inspectDownloadSignature(sample, expected);

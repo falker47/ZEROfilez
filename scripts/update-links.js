@@ -3,6 +3,12 @@ const path = require('path');
 const { createHash } = require('crypto');
 const { inflateRawSync } = require('zlib');
 
+const failedChecks = new Set();
+function recordFailure(name, message) {
+    failedChecks.add(name);
+    console.log(message);
+}
+
 // ==========================================
 // 🛠️ CONFIGURATION - ADD NEW PROGRAMS HERE
 // ==========================================
@@ -33,13 +39,13 @@ const PROGRAMS = [
     {
         name: "Azahar (PC)",
         repo: "azahar-emu/azahar",
-        filter: asset => asset.name.includes('windows-msvc.zip'),
+        filter: asset => /^azahar-windows-msvc-\d+(?:\.\d+)+\.zip$/i.test(asset.name),
         regex: /("3ds"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
         name: "Azahar (Android)",
         repo: "azahar-emu/azahar",
-        filter: asset => asset.name.includes('android-googleplay.apk'),
+        filter: asset => /^azahar-android-googleplay-\d+(?:\.\d+)+\.apk$/i.test(asset.name),
         regex: /("3ds"[\s\S]*?"android"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
@@ -114,6 +120,11 @@ const PROGRAMS = [
         regex: /("retroarch"[\s\S]*?"pc"[\s\S]*?"url":\s*")([^"]+)(")/
     },
     {
+        name: "RetroArch (Android)",
+        mode: "retroarch-android",
+        regex: /("retroarch"[\s\S]*?"android"[\s\S]*?"url":\s*")([^"]+)(")/
+    },
+    {
         name: "7-Zip",
         repo: "ip7z/7zip",
         filter: asset => /^7z\d+-x64\.exe$/i.test(asset.name),
@@ -141,7 +152,7 @@ const PROGRAMS = [
     },
     {
         name: "Lucky Patcher",
-        mode: "increment",
+        mode: "lucky-directory",
         // Current: https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.0.apk
         regex: /("lucky-patcher"[\s\S]*?"url":\s*")([^"]+)(")/
     },
@@ -263,13 +274,17 @@ async function main() {
                 newContent,
                 (updatedContent) => { newContent = updatedContent; }
             );
-        } else if (prog.mode === 'retroarch') {
+        } else if (prog.mode === 'retroarch' || prog.mode === 'retroarch-android') {
             updatesCount += await checkRetroarchUrl(
                 prog.name,
                 prog.regex,
                 newContent,
-                (updatedContent) => { newContent = updatedContent; }
+                (updatedContent) => { newContent = updatedContent; },
+                prog.mode === 'retroarch-android' ? 'android' : 'pc'
             );
+        } else if (prog.mode === 'lucky-directory') {
+            updatesCount += await checkLuckyPatcherUrl(prog.name, prog.regex, newContent,
+                (updatedContent) => { newContent = updatedContent; });
         } else if (prog.mode === 'libreoffice') {
             updatesCount += await checkLibreOfficeUrl(
                 prog.name,
@@ -278,9 +293,8 @@ async function main() {
                 (updatedContent) => { newContent = updatedContent; }
             );
         } else if (prog.mode === 'dolphin') {
-            updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
-                'https://dolphin-emu.org/download/',
-                /https:\/\/dl\.dolphin-emu\.org\/releases\/2[0-9]{3}\/dolphin-[^\/]+-x64\.7z/i);
+            updatesCount += await checkDolphinUrl(prog.name, prog.regex, newContent,
+                (updatedContent) => { newContent = updatedContent; });
         } else if (prog.mode === 'winrar') {
             updatesCount += await checkWebScrapeUrl(prog.name, prog.regex, newContent, (updatedContent) => { newContent = updatedContent; },
                 'https://www.rarlab.com/download.htm',
@@ -328,6 +342,10 @@ async function main() {
         console.log('Updated js/data.js');
     } else {
         console.log('\nNo updates found.');
+    }
+    if (failedChecks.size > 0) {
+        console.error('Link checks failed: ' + [...failedChecks].join(', '));
+        process.exitCode = 1;
     }
 }
 
@@ -558,7 +576,7 @@ async function checkCheatEngineUrl(name, urlRegex, checksumRegex, currentContent
         console.log(`Updated to Chocolatey ${info.version} after full PE/SHA-256 validation (${verified.length} bytes)`);
         return 1;
     } catch (error) {
-        console.log('Skipped: ' + error.message);
+        recordFailure(name, 'Skipped: ' + error.message);
         return 0;
     }
 }
@@ -590,7 +608,7 @@ async function checkHermesAppInstallerUrl(name, regexPattern, currentContent, up
         console.log(`Updated to the stable App Installer feed (bundle ${appInfo.version})`);
         return 1;
     } catch (error) {
-        console.log('Skipped: ' + error.message);
+        recordFailure(name, 'Skipped: ' + error.message);
         return 0;
     }
 }
@@ -598,6 +616,127 @@ async function checkHermesAppInstallerUrl(name, regexPattern, currentContent, up
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+/**
+ * Official Dolphin releases have a 4-digit tag optionally followed by a hotfix
+ * letter. Ignore development tags like 2609-133 and compare releases by version,
+ * not by HTML appearance order.
+ */
+function extractDolphinStableUrl(html, platform = 'pc') {
+    const candidates = [];
+    const pattern = /https:\/\/dl\.dolphin-emu\.org\/releases\/(\d{4}[a-z]?)\/dolphin-(\d{4}[a-z]?)(-x64\.7z|\.apk)/gi;
+    for (const match of String(html).matchAll(pattern)) {
+        if (match[1] !== match[2]) continue;
+        if (platform === 'pc' && match[3] !== '-x64.7z') continue;
+        if (platform === 'android' && match[3] !== '.apk') continue;
+        candidates.push({ version: match[1], url: match[0] });
+    }
+    candidates.sort((a, b) => a.version.slice(0, 4).localeCompare(b.version.slice(0, 4),
+        undefined, { numeric: true }) || a.version.slice(4).localeCompare(b.version.slice(4)));
+    return candidates.at(-1)?.url ?? null;
+}
+
+/** Read actual published files from the distributor directory rather than guessing releases. */
+function extractLatestLuckyPatcherUrl(html) {
+    const versions = [...String(html).matchAll(/LuckyPatchers\.com_Official_Installer_(\d+(?:\.\d+){2,})\.apk/gi)];
+    versions.sort((a, b) => {
+        const av = a[1].split('.').map(Number);
+        const bv = b[1].split('.').map(Number);
+        for (let i = 0; i < Math.max(av.length, bv.length); i++) {
+            const diff = (av[i] ?? 0) - (bv[i] ?? 0);
+            if (diff) return diff;
+        }
+        return 0;
+    });
+    const latest = versions.at(-1);
+    return latest ? 'https://chelpus.com/download/' + latest[0] : null;
+}
+
+/** Verify file bytes (not just status/extension) before any scraped URL is written. */
+async function verifyCandidateDownload(url) {
+    const extension = new URL(url).pathname.match(/\.(exe|msi|zip|apk|7z|appinstaller)$/i)?.[1]?.toLowerCase();
+    if (!extension) throw new Error('URL did not name an accepted downloadable file: ' + url);
+    const response = await fetch(url, {
+        headers: { Range: 'bytes=0-4095', 'User-Agent': 'ZEROfilez link updater' },
+        redirect: 'follow', signal: AbortSignal.timeout(20000)
+    });
+    if (!response.ok) throw new Error('Candidate download returned HTTP ' + response.status);
+    const contentType = response.headers.get('content-type')?.toLowerCase() ?? '';
+    if (/text\/html|application\/json/.test(contentType)) throw new Error('Candidate download returned a page');
+    if (!response.body) throw new Error('Candidate download had no content');
+    const reader = response.body.getReader();
+    const parts = [];
+    let count = 0;
+    try {
+        while (count < 4096) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            const part = Buffer.from(value).subarray(0, 4096 - count);
+            parts.push(part);
+            count += part.length;
+        }
+    } finally {
+        await reader.cancel().catch(() => {});
+        reader.releaseLock();
+    }
+    const sample = Buffer.concat(parts);
+    const zip = sample.length >= 4 && sample.subarray(0, 2).toString('ascii') === 'PK' &&
+        [3, 5, 7].includes(sample[2]) && [4, 6, 8].includes(sample[3]);
+    const valid = extension === 'exe' ? isPortableExecutable(sample)
+        : extension === 'msi' ? sample.subarray(0, 8).equals(Buffer.from('D0CF11E0A1B11AE1', 'hex'))
+            : extension === '7z' ? sample.subarray(0, 6).equals(Buffer.from('377ABCAF271C', 'hex'))
+                : ['zip', 'apk'].includes(extension) ? zip
+                    : /^\s*(?:<\?xml[^>]*>\s*)?<AppInstaller\b/i.test(sample.toString('utf8'));
+    if (!valid) throw new Error('Candidate download did not match expected ' + extension + ' file signature');
+    return true;
+}
+
+async function checkDolphinUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Official Dolphin] ... `);
+        const response = await fetch('https://dolphin-emu.org/download/', {
+            headers: { 'User-Agent': 'ZEROfilez link updater' },
+            signal: AbortSignal.timeout(20000)
+        });
+        if (!response.ok) throw new Error('Dolphin release index returned HTTP ' + response.status);
+        const newUrl = extractDolphinStableUrl(await response.text(), 'pc');
+        if (!newUrl) throw new Error('No stable Windows x64 Dolphin download on official release index');
+        const match = currentContent.match(regexPattern);
+        if (!match) throw new Error('Dolphin catalog entry not found');
+        if (match[2] === newUrl) { console.log('✅'); return 0; }
+        await verifyCandidateDownload(newUrl);
+        updateCallback(currentContent.replace(regexPattern, (_all, before, _old, after) => before + newUrl + after));
+        console.log('✨ UPDATE FOUND! ' + newUrl);
+        return 1;
+    } catch (error) {
+        recordFailure(name, '❌ Dolphin: ' + error.message);
+        return 0;
+    }
+}
+
+async function checkLuckyPatcherUrl(name, regexPattern, currentContent, updateCallback) {
+    try {
+        process.stdout.write(`Checking ${name.padEnd(20)} [Published directory] ... `);
+        const response = await fetch('https://chelpus.com/download/', {
+            headers: { 'User-Agent': 'ZEROfilez link updater' },
+            signal: AbortSignal.timeout(20000)
+        });
+        if (!response.ok) throw new Error('Directory returned HTTP ' + response.status);
+        const newUrl = extractLatestLuckyPatcherUrl(await response.text());
+        if (!newUrl) throw new Error('No published Lucky Patcher APK found in directory');
+        const match = currentContent.match(regexPattern);
+        if (!match) throw new Error('Lucky Patcher catalog entry not found');
+        if (match[2] === newUrl) { console.log('✅'); return 0; }
+        await verifyCandidateDownload(newUrl);
+        updateCallback(currentContent.replace(regexPattern, (_all, before, _old, after) => before + newUrl + after));
+        console.log('✨ UPDATE FOUND! ' + newUrl);
+        return 1;
+    } catch (error) {
+        recordFailure(name, '❌ Lucky Patcher: ' + error.message);
+        return 0;
+    }
+}
+
 
 // ==========================================
 // 🛠️ HELPER FUNCTIONS
@@ -620,13 +759,13 @@ async function updateGithubRelease(name, repo, assetFilter, regexPattern, curren
         }
 
         if (!release) {
-            console.log(`❌ No matching release.`);
+            recordFailure(name, `❌ No matching release.`);
             return 0;
         }
 
         const asset = release.assets.find(assetFilter);
         if (!asset) {
-            console.log(`❌ No matching asset.`);
+            recordFailure(name, `❌ No matching asset.`);
             return 0;
         }
 
@@ -647,11 +786,11 @@ async function updateGithubRelease(name, repo, assetFilter, regexPattern, curren
                 console.log(`✅`);
             }
         } else {
-            console.log(`⚠️ Regex mismatch.`);
+            recordFailure(name, `⚠️ Regex mismatch.`);
         }
 
     } catch (err) {
-        console.log(`❌ Error: ${err.message}`);
+        recordFailure(name, `❌ Error: ${err.message}`);
     }
     return 0;
 }
@@ -667,7 +806,7 @@ async function updateGiteaRelease(name, giteaBase, repo, assetFilter, regexPatte
 
         const asset = (data.assets || []).find(assetFilter);
         if (!asset) {
-            console.log(`❌ No matching asset.`);
+            recordFailure(name, `❌ No matching asset.`);
             return 0;
         }
 
@@ -688,11 +827,11 @@ async function updateGiteaRelease(name, giteaBase, repo, assetFilter, regexPatte
                 console.log(`✅`);
             }
         } else {
-            console.log(`⚠️ Regex mismatch.`);
+            recordFailure(name, `⚠️ Regex mismatch.`);
         }
 
     } catch (err) {
-        console.log(`❌ Error: ${err.message}`);
+        recordFailure(name, `❌ Error: ${err.message}`);
     }
     return 0;
 }
@@ -703,11 +842,12 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
 
         const match = currentContent.match(regexPattern);
         if (!match) {
-            console.log(`⚠️ Regex mismatch.`);
+            recordFailure(name, `⚠️ Regex mismatch.`);
             return 0;
         }
 
         let currentUrl = match[2];
+        await verifyCandidateDownload(currentUrl);
         let bestUrl = currentUrl;
         let foundUpdate = false;
 
@@ -722,7 +862,7 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
         }
 
         if (!versionMatch) {
-            console.log(`❓ Could not parse version.`);
+            recordFailure(name, `❓ Could not parse version.`);
             return 0;
         }
         let versionStr = versionMatch[versionMatch.length - 1];
@@ -765,8 +905,7 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
 
                 try {
                     await sleep(1000);
-                    const resp = await fetch(nextUrl, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
-                    if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
+                    await verifyCandidateDownload(nextUrl);
 
                     bestUrl = nextUrl;
                     versionStr = nextVer;
@@ -793,7 +932,7 @@ async function checkUrlIncrement(name, regexPattern, currentContent, updateCallb
         }
 
     } catch (err) {
-        console.log(`❌ Error: ${err.message}`);
+        recordFailure(name, `❌ Error: ${err.message}`);
     }
     return 0;
 }
@@ -809,7 +948,7 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
         let winX64Match = extractAntigravityInstallerUrl(text);
         const jsFileMatch = winX64Match || jsFileUrls.length > 0;
         if (!jsFileMatch) {
-            console.log(`❌ Could not find main JS bundle.`);
+            recordFailure(name, `❌ Could not find main JS bundle.`);
             return 0;
         }
 
@@ -823,7 +962,7 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
         }
 
         if (!winX64Match) {
-            console.log(`❌ Could not extract URL from JS bundle.`);
+            recordFailure(name, `❌ Could not extract URL from JS bundle.`);
             return 0;
         }
 
@@ -842,10 +981,10 @@ async function checkAntigravityUrl(name, regexPattern, currentContent, updateCal
                 console.log(`✅`);
             }
         } else {
-            console.log(`⚠️ Regex mismatch.`);
+            recordFailure(name, `⚠️ Regex mismatch.`);
         }
     } catch (err) {
-        console.log(`❌ Error: ${err.message}`);
+        recordFailure(name, `❌ Error: ${err.message}`);
     }
     return 0;
 }
@@ -895,7 +1034,7 @@ async function checkPpssppUrl(name, regexPattern, currentContent, updateCallback
         const text = await r.text();
         const exeMatch = text.match(/https:\/\/www\.ppsspp\.org\/files\/[^\/]+\/PPSSPPSetup\.exe/i);
         if (!exeMatch) {
-            console.log(`❌ Could not find PPSSPP installer URL on download page.`);
+            recordFailure(name, `❌ Could not find PPSSPP installer URL on download page.`);
             return 0;
         }
 
@@ -913,7 +1052,7 @@ async function checkPpssppUrl(name, regexPattern, currentContent, updateCallback
                 console.log(`✅`);
             }
         }
-    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    } catch (err) { recordFailure(name, `❌ Error: ${err.message}`); }
     return 0;
 }
 
@@ -933,7 +1072,7 @@ async function checkLibreOfficeUrl(name, regexPattern, currentContent, updateCal
             .map(match => match[1]);
 
         if (versions.length === 0) {
-            console.log('❌ Could not find stable versions.');
+            recordFailure(name, '❌ Could not find stable versions.');
             return 0;
         }
 
@@ -946,7 +1085,7 @@ async function checkLibreOfficeUrl(name, regexPattern, currentContent, updateCal
 
         const match = currentContent.match(regexPattern);
         if (!match) {
-            console.log('⚠️ Regex mismatch.');
+            recordFailure(name, '⚠️ Regex mismatch.');
             return 0;
         }
 
@@ -960,28 +1099,31 @@ async function checkLibreOfficeUrl(name, regexPattern, currentContent, updateCal
 
         console.log('✅');
     } catch (err) {
-        console.log(`❌ Error: ${err.message}`);
+        recordFailure(name, `❌ Error: ${err.message}`);
     }
     return 0;
 }
 
-async function checkRetroarchUrl(name, regexPattern, currentContent, updateCallback) {
+async function checkRetroarchUrl(name, regexPattern, currentContent, updateCallback, platform = 'pc') {
     try {
         process.stdout.write(`Checking ${name.padEnd(20)} [Probe]  ... `);
         const r = await fetch('https://buildbot.libretro.com/stable/', { signal: AbortSignal.timeout(5000) });
         const text = await r.text();
         const versions = [...text.matchAll(/href="\/stable\/([0-9]+\.[0-9]+\.[0-9]+)\/"/g)].map(m => m[1]);
         if (versions.length === 0) {
-            console.log(`❌ Could not scrape RetroArch versions.`);
+            recordFailure(name, `❌ Could not scrape RetroArch versions.`);
             return 0;
         }
 
         const latestVersion = versions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).pop();
-        const newUrl = `https://buildbot.libretro.com/stable/${latestVersion}/windows/x86_64/RetroArch-Win64-setup.exe`;
+        const newUrl = platform === 'android'
+            ? `https://buildbot.libretro.com/stable/${latestVersion}/android/RetroArch.apk`
+            : `https://buildbot.libretro.com/stable/${latestVersion}/windows/x86_64/RetroArch-Win64-setup.exe`;
 
         const match = currentContent.match(regexPattern);
         if (match) {
             if (match[2] !== newUrl) {
+                await verifyCandidateDownload(newUrl);
                 console.log(`✨ UPDATE FOUND!`);
                 console.log(`    Old: ${match[2]}`);
                 console.log(`    New: ${newUrl}`);
@@ -992,7 +1134,7 @@ async function checkRetroarchUrl(name, regexPattern, currentContent, updateCallb
                 console.log(`✅`);
             }
         }
-    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    } catch (err) { recordFailure(name, `❌ Error: ${err.message}`); }
     return 0;
 }
 
@@ -1005,7 +1147,7 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
         const extractedMatch = text.match(extractRegex);
 
         if (!extractedMatch) {
-            console.log(`❌ Could not find installer URL on ${scrapeUrl}`);
+            recordFailure(name, `❌ Could not find installer URL on ${scrapeUrl}`);
             return 0;
         }
 
@@ -1029,6 +1171,7 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
         const match = currentContent.match(regexPattern);
         if (match) {
             if (match[2] !== newUrl) {
+                await verifyCandidateDownload(newUrl);
                 console.log(`✨ UPDATE FOUND!`);
                 console.log(`    Old: ${match[2]}`);
                 console.log(`    New: ${newUrl}`);
@@ -1039,13 +1182,16 @@ async function checkWebScrapeUrl(name, regexPattern, currentContent, updateCallb
                 console.log(`✅`);
             }
         }
-    } catch (err) { console.log(`❌ Error: ${err.message}`); }
+    } catch (err) { recordFailure(name, `❌ Error: ${err.message}`); }
     return 0;
 }
 
 // Expose source parsers for offline catalog and updater regression tests.
 module.exports = {
     PROGRAMS,
+    extractDolphinStableUrl,
+    extractLatestLuckyPatcherUrl,
+    verifyCandidateDownload,
     extractChocolateyInstallerInfo,
     extractChocolateyPackageMetadata,
     extractHermesAppInstallerInfo,

@@ -50,8 +50,7 @@ test('Lucky Patcher updater selects published versions from its directory, not n
 
 test('RetroArch Android is maintained independently of the Windows URL while sharing stable releases', () => {
     const current = ITEMS.emulation.retroarch;
-    const pc = PROGRAMS.filter(rule => rule.regex && '"'+current.pc.url+'"' &&
-        rule.name === 'RetroArch (PC)');
+    const pc = PROGRAMS.filter(rule => rule.name === 'RetroArch (PC)');
     const android = PROGRAMS.find(rule => rule.name === 'RetroArch (Android)');
     assert.equal(pc.length, 1);
     assert.equal(android?.mode, 'retroarch-android');
@@ -92,13 +91,16 @@ test('continuous Vita3K asset endpoints need no stale timestamp query', () => {
         'https://github.com/Vita3K/Vita3K/releases/download/continuous/android-latest.apk');
 });
 
-test('latest source-specific links are present in the catalog', () => {
-    assert.equal(ITEMS.emulation['3ds'].pc.url,
-        'https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-windows-msvc-2126.2.zip');
-    assert.equal(ITEMS.emulation['3ds'].android.url,
-        'https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-android-googleplay-2126.2.apk');
-    assert.equal(ITEMS.emulation.gc_wii.pc.url,
-        'https://dl.dolphin-emu.org/releases/2609a/dolphin-2609a-x64.7z');
-    assert.equal(ITEMS['apk-files']['lucky-patcher'].url,
-        'https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.10.8.apk');
+test('resolved download paths use maintained current-generation upstream naming', () => {
+    assert.match(ITEMS.emulation['3ds'].pc.url,
+        /^https:\/\/github\.com\/azahar-emu\/azahar\/releases\/download\/\d+(?:\.\d+)+\/azahar-windows-msvc-\d+(?:\.\d+)+\.zip$/);
+    assert.match(ITEMS.emulation['3ds'].android.url,
+        /^https:\/\/github\.com\/azahar-emu\/azahar\/releases\/download\/\d+(?:\.\d+)+\/azahar-android-googleplay-\d+(?:\.\d+)+\.apk$/);
+    assert.doesNotMatch(ITEMS.emulation['3ds'].pc.url, /2124\.3/);
+    assert.match(ITEMS.emulation.gc_wii.pc.url,
+        /^https:\/\/dl\.dolphin-emu\.org\/releases\/\d{4}[a-z]?\/dolphin-\d{4}[a-z]?-x64\.7z$/);
+    assert.doesNotMatch(ITEMS.emulation.gc_wii.pc.url, /\/2609\/dolphin-2609-x64/);
+    assert.match(ITEMS['apk-files']['lucky-patcher'].url,
+        /^https:\/\/chelpus\.com\/download\/LuckyPatchers\.com_Official_Installer_\d+(?:\.\d+){2,}\.apk$/);
+    assert.doesNotMatch(ITEMS['apk-files']['lucky-patcher'].url, /_12\.0\.2\.apk$/);
 });
