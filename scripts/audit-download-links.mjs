@@ -1,5 +1,6 @@
 import { ITEMS } from '../js/data.js';
 import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const USER_AGENT = 'ZEROfilez direct-download audit';
 const RANGE_BYTES = 64 * 1024;
@@ -10,6 +11,7 @@ export function collectCatalogDownloads(items = ITEMS) {
     for (const item of Object.values(items.emulation ?? {})) {
         if (item.pc?.url) downloads.push({ name: `${item.name} (PC)`, ...item.pc });
         if (item.android?.url) downloads.push({ name: `${item.name} (Android)`, ...item.android });
+        if (item.web?.url) downloads.push({ name: `${item.name} (Web)`, ...item.web, linkType: 'website' });
     }
     for (const item of Object.values(items['pc-programs'] ?? {})) {
         if (item.url) downloads.push({ name: item.name, ...item });
@@ -19,7 +21,22 @@ export function collectCatalogDownloads(items = ITEMS) {
             ...(item.installerLinkType ? { linkType: item.installerLinkType } : {})
         });
     }
+    for (const item of Object.values(items['apk-files'] ?? {})) {
+        if (item.url) downloads.push({ name: `${item.name} (APK)`, ...item });
+    }
     return downloads;
+}
+
+/** Extract only added catalog URLs from a Git diff, including inline object rows. */
+export function collectChangedCatalogDownloads(diff, items = ITEMS) {
+    const urls = new Set();
+    for (const line of String(diff).split(/\r?\n/)) {
+        if (!line.startsWith('+') || line.startsWith('+++')) continue;
+        for (const match of line.matchAll(/"(?:url|installerUrl)":\s*"(https:\/\/[^"]+)"/g)) {
+            urls.add(match[1]);
+        }
+    }
+    return collectCatalogDownloads(items).filter(item => urls.has(item.url));
 }
 
 function isHtml(sample) {
@@ -110,7 +127,13 @@ async function auditDownload(item) {
 
     const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
     const contentDisposition = response.headers.get('content-disposition') ?? '(none)';
-    const sample = await readSample(response, RANGE_BYTES);
+    let sample;
+    try {
+        sample = await readSample(response, RANGE_BYTES);
+    } catch (error) {
+        return { name: item.name, url: item.url, ok: false,
+            status: response.status, message: `Reading download signature failed: ${error.message}` };
+    }
     const finalUrl = response.url || item.url;
     const expected = getExpectedType(finalUrl, contentDisposition, contentType);
     const signature = inspectDownloadSignature(sample, expected);
@@ -148,12 +171,22 @@ async function runPool(values, limit, task) {
     return results;
 }
 
+export async function auditDownloads(downloads) {
+    return runPool(downloads, 5, auditDownload);
+}
+
 export async function auditCatalog(items = ITEMS) {
-    return runPool(collectCatalogDownloads(items), 5, auditDownload);
+    return auditDownloads(collectCatalogDownloads(items));
 }
 
 async function main() {
-    const results = await auditCatalog();
+    const changedOnly = process.argv.includes('--changed');
+    const diff = changedOnly
+        ? execFileSync('git', ['diff', '--unified=0', 'HEAD^1', 'HEAD', '--', 'js/data.js'], { encoding: 'utf8' })
+        : '';
+    const targets = changedOnly ? collectChangedCatalogDownloads(diff) : collectCatalogDownloads();
+    if (changedOnly) console.log('Auditing ' + targets.length + ' newly changed download URLs.');
+    const results = await auditDownloads(targets);
     for (const result of results) {
         const status = result.status ?? 'ERR';
         const finalUrl = result.finalUrl ?? result.url;

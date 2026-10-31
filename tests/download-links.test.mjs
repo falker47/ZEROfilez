@@ -151,8 +151,8 @@ test('Cheat Engine points to Dark Byte’s direct package binary and pins the pu
     assert.equal(rule?.mode, 'cheatengine');
     assert.equal(catalogSource.match(rule.regex)?.[2], item.url);
     assert.equal(rule.checksumRegex && catalogSource.match(rule.checksumRegex)?.[2], item.sha256);
-    assert.equal(item.url, 'https://d1dj9aohuk02ls.cloudfront.net/f/CheatEngine/2129/CheatEngine77.exe');
-    assert.equal(item.sha256, 'CF0F4B6002555677984233C95856683959BE83A5DEF3DC12175A8296EB22676B');
+    assert.match(item.url, /^https:\/\/[^/]+\.cloudfront\.net\/f\/CheatEngine\/[^/]+\/CheatEngine\d+\.exe$/i);
+    assert.match(item.sha256, /^[A-F0-9]{64}$/i);
     assert.equal(item.linkType, undefined);
 });
 

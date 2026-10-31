@@ -1,0 +1,30 @@
+name: Audit Live Download URLs
+
+on:
+  schedule:
+    # Independent weekly inventory audit (Monday 05:30 UTC).
+    - cron: "30 5 * * 1"
+  pull_request:
+    paths:
+      - 'js/data.js'
+      - 'scripts/update-links.js'
+      - 'scripts/audit-download-links.mjs'
+      - '.github/workflows/audit_downloads.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-downloads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check all catalog URLs, redirects, and binary signatures
+        run: node scripts/audit-download-links.mjs
+      - name: Verify all automatic source resolvers without writing the catalog
+        run: node scripts/update-links.js --check
