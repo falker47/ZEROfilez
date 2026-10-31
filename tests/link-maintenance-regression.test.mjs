@@ -6,7 +6,8 @@ import { ITEMS } from '../js/data.js';
 import { collectCatalogDownloads } from '../scripts/audit-download-links.mjs';
 
 const require = createRequire(import.meta.url);
-const { PROGRAMS, extractDolphinStableUrl, extractLatestLuckyPatcherUrl, verifyCandidateDownload } =
+const { PROGRAMS, extractDolphinStableUrl, extractLatestLuckyPatcherUrl,
+    fetchChocolateyResource, verifyCandidateDownload } =
     require('../scripts/update-links.js');
 
 test('Azahar release rules accept upstream versioned filenames for Windows and Android', () => {
@@ -117,4 +118,34 @@ test('scraper candidates require binary signatures, not simply HTTP 200', async 
         serve(Buffer.from('fake zip'), 'application/zip')), /file signature/);
     await assert.rejects(verifyCandidateDownload('https://example.org/bad.zip',
         async () => new Response('not found', { status: 404 })), /HTTP 404/);
+});
+
+test('Dolphin uses official GitHub release tags when its website blocks CI clients', () => {
+    const tags = [
+        { ref: 'refs/tags/2606a' },
+        { ref: 'refs/tags/2609' },
+        { ref: 'refs/tags/2609-133' }, // development tag must be ignored
+        { ref: 'refs/tags/2609a' }
+    ];
+    assert.equal(extractDolphinStableUrl(tags, 'pc'),
+        'https://dl.dolphin-emu.org/releases/2609a/dolphin-2609a-x64.7z');
+    assert.equal(extractDolphinStableUrl(tags, 'android'),
+        'https://dl.dolphin-emu.org/releases/2609a/dolphin-2609a.apk');
+    assert.equal(extractDolphinStableUrl([], 'pc'), null);
+});
+
+test('Chocolatey transient errors are retried but never accepted as valid metadata', async () => {
+    let attempts = 0;
+    const fetcher = async () => {
+        attempts += 1;
+        return attempts === 1
+            ? new Response('temporarily unavailable', { status: 503 })
+            : new Response('valid response', { status: 200 });
+    };
+    const response = await fetchChocolateyResource('https://community.chocolatey.org/api/v2/test',
+        {}, fetcher, async () => {});
+    assert.equal(response.status, 200);
+    assert.equal(attempts, 2);
+    await assert.rejects(fetchChocolateyResource('https://community.chocolatey.org/api/v2/test',
+        {}, async () => { throw new Error('invalid publisher'); }, async () => {}), /invalid publisher/);
 });

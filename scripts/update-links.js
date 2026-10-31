@@ -504,18 +504,38 @@ function isPortableExecutable(file) {
     return peOffset >= 64 && peOffset + 4 <= file.length && file.toString('ascii', peOffset, peOffset + 4) === 'PE\0\0';
 }
 
+/** Retry Chocolatey's transient upstream timeouts and throttling without weakening integrity checks. */
+async function fetchChocolateyResource(url, options = {}, fetcher = fetch, pause = sleep) {
+    let lastError;
+    for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+            const response = await fetcher(url, { ...options, signal: AbortSignal.timeout(25000) });
+            if (attempt === 0 && [408, 429, 500, 502, 503, 504].includes(response.status)) {
+                await response.body?.cancel().catch(() => {});
+                await pause(2000);
+                continue;
+            }
+            return response;
+        } catch (error) {
+            lastError = error;
+            if (attempt === 1 || !/timeout|aborted|fetch failed/i.test(error.message)) throw error;
+            await pause(2000);
+        }
+    }
+    throw lastError ?? new Error('Chocolatey source did not respond after retry');
+}
+
 async function fetchChocolateyCheatEngineInfo() {
     const headers = { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/atom+xml' };
-    const feed = await fetch(CHEAT_ENGINE_FEED_URL, { headers, signal: AbortSignal.timeout(20000) });
+    const feed = await fetchChocolateyResource(CHEAT_ENGINE_FEED_URL, { headers });
     if (!feed.ok) throw new Error('Chocolatey package feed returned HTTP ' + feed.status);
     const metadata = extractChocolateyPackageMetadata(await feed.text());
     if (metadata.author.trim().toLowerCase() !== 'dark byte') {
         throw new Error('Latest Chocolatey package author was not Dark Byte');
     }
 
-    const packageResponse = await fetch(`https://community.chocolatey.org/api/v2/package/cheatengine/${encodeURIComponent(metadata.version)}`, {
-        headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/octet-stream' },
-        signal: AbortSignal.timeout(20000)
+    const packageResponse = await fetchChocolateyResource(`https://community.chocolatey.org/api/v2/package/cheatengine/${encodeURIComponent(metadata.version)}`, {
+        headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/octet-stream' }
     });
     if (!packageResponse.ok) throw new Error('Chocolatey package download returned HTTP ' + packageResponse.status);
     const nupkg = await readResponseBytes(packageResponse, MAX_NUPKG_BYTES);
@@ -525,7 +545,7 @@ async function fetchChocolateyCheatEngineInfo() {
 }
 
 async function verifyCheatEngineHeaders(url) {
-    const response = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(20000) });
+    const response = await fetchChocolateyResource(url, { method: 'HEAD', redirect: 'follow' });
     if (!response.ok) throw new Error('Cheat Engine binary returned HTTP ' + response.status);
     const contentType = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() ?? '';
     const length = Number(response.headers.get('content-length') ?? 0);
@@ -627,14 +647,30 @@ function sleep(ms) {
  * letter. Ignore development tags like 2609-133 and compare releases by version,
  * not by HTML appearance order.
  */
-function extractDolphinStableUrl(html, platform = 'pc') {
+function extractDolphinStableUrl(source, platform = 'pc') {
+    if (!['pc', 'android'].includes(platform)) return null;
     const candidates = [];
-    const pattern = /https:\/\/dl\.dolphin-emu\.org\/releases\/(\d{4}[a-z]?)\/dolphin-(\d{4}[a-z]?)(-x64\.7z|\.apk)/gi;
-    for (const match of String(html).matchAll(pattern)) {
-        if (match[1] !== match[2]) continue;
-        if (platform === 'pc' && match[3] !== '-x64.7z') continue;
-        if (platform === 'android' && match[3] !== '.apk') continue;
-        candidates.push({ version: match[1], url: match[0] });
+    if (Array.isArray(source)) {
+        // The upstream source repository publishes signed/annotated release tags,
+        // but no GitHub Releases API assets. Its refs API works in Actions when the
+        // official download HTML returns HTTP 403 to CI clients.
+        for (const ref of source) {
+            const version = String(ref?.ref ?? '').match(/^refs\/tags\/(\d{4}[a-z]?)$/)?.[1];
+            if (!version) continue;
+            const suffix = platform === 'pc' ? '-x64.7z' : '.apk';
+            candidates.push({
+                version,
+                url: `https://dl.dolphin-emu.org/releases/${version}/dolphin-${version}${suffix}`
+            });
+        }
+    } else {
+        const pattern = /https:\/\/dl\.dolphin-emu\.org\/releases\/(\d{4}[a-z]?)\/dolphin-(\d{4}[a-z]?)(-x64\.7z|\.apk)/gi;
+        for (const match of String(source).matchAll(pattern)) {
+            if (match[1] !== match[2]) continue;
+            if (platform === 'pc' && match[3] !== '-x64.7z') continue;
+            if (platform === 'android' && match[3] !== '.apk') continue;
+            candidates.push({ version: match[1], url: match[0] });
+        }
     }
     candidates.sort((a, b) => a.version.slice(0, 4).localeCompare(b.version.slice(0, 4),
         undefined, { numeric: true }) || a.version.slice(4).localeCompare(b.version.slice(4)));
@@ -699,13 +735,13 @@ async function verifyCandidateDownload(url, fetcher = fetch) {
 async function checkDolphinUrl(name, regexPattern, currentContent, updateCallback) {
     try {
         process.stdout.write(`Checking ${name.padEnd(20)} [Official Dolphin] ... `);
-        const response = await fetch('https://dolphin-emu.org/download/', {
-            headers: { 'User-Agent': 'ZEROfilez link updater' },
+        const response = await fetch('https://api.github.com/repos/dolphin-emu/dolphin/git/refs/tags', {
+            headers: { 'User-Agent': 'ZEROfilez link updater', Accept: 'application/vnd.github+json' },
             signal: AbortSignal.timeout(20000)
         });
-        if (!response.ok) throw new Error('Dolphin release index returned HTTP ' + response.status);
-        const newUrl = extractDolphinStableUrl(await response.text(), 'pc');
-        if (!newUrl) throw new Error('No stable Windows x64 Dolphin download on official release index');
+        if (!response.ok) throw new Error('Official Dolphin GitHub tag API returned HTTP ' + response.status);
+        const newUrl = extractDolphinStableUrl(await response.json(), 'pc');
+        if (!newUrl) throw new Error('No stable Dolphin release tags found upstream');
         const match = currentContent.match(regexPattern);
         if (!match) throw new Error('Dolphin catalog entry not found');
         if (match[2] === newUrl) { console.log('✅'); return 0; }
@@ -1196,6 +1232,7 @@ module.exports = {
     PROGRAMS,
     extractDolphinStableUrl,
     extractLatestLuckyPatcherUrl,
+    fetchChocolateyResource,
     verifyCandidateDownload,
     extractChocolateyInstallerInfo,
     extractChocolateyPackageMetadata,
