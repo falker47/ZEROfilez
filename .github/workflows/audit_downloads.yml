@@ -4,6 +4,12 @@ on:
   schedule:
     # Independent weekly inventory audit (Monday 05:30 UTC).
     - cron: "30 5 * * 1"
+  pull_request:
+    paths:
+      - 'js/data.js'
+      - 'scripts/update-links.js'
+      - 'scripts/audit-download-links.mjs'
+      - '.github/workflows/audit_downloads.yml'
   workflow_dispatch:
 
 permissions:
