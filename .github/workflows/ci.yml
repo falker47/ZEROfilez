@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,6 +30,9 @@ jobs:
 
       - name: Run tests
         run: node --test tests/*.test.mjs
+
+      - name: Audit changed catalog downloads using HTTP and file signatures
+        run: node scripts/audit-download-links.mjs --changed
 
   windows-test:
     runs-on: windows-latest

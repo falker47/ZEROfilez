@@ -1,5 +1,6 @@
 import { ITEMS } from '../js/data.js';
 import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const USER_AGENT = 'ZEROfilez direct-download audit';
 const RANGE_BYTES = 64 * 1024;
@@ -24,6 +25,18 @@ export function collectCatalogDownloads(items = ITEMS) {
         if (item.url) downloads.push({ name: `${item.name} (APK)`, ...item });
     }
     return downloads;
+}
+
+/** Extract only added catalog URLs from a Git diff, including inline object rows. */
+export function collectChangedCatalogDownloads(diff, items = ITEMS) {
+    const urls = new Set();
+    for (const line of String(diff).split(/\r?\n/)) {
+        if (!line.startsWith('+') || line.startsWith('+++')) continue;
+        for (const match of line.matchAll(/"(?:url|installerUrl)":\s*"(https:\/\/[^"]+)"/g)) {
+            urls.add(match[1]);
+        }
+    }
+    return collectCatalogDownloads(items).filter(item => urls.has(item.url));
 }
 
 function isHtml(sample) {
@@ -158,12 +171,22 @@ async function runPool(values, limit, task) {
     return results;
 }
 
+export async function auditDownloads(downloads) {
+    return runPool(downloads, 5, auditDownload);
+}
+
 export async function auditCatalog(items = ITEMS) {
-    return runPool(collectCatalogDownloads(items), 5, auditDownload);
+    return auditDownloads(collectCatalogDownloads(items));
 }
 
 async function main() {
-    const results = await auditCatalog();
+    const changedOnly = process.argv.includes('--changed');
+    const diff = changedOnly
+        ? execFileSync('git', ['diff', '--unified=0', 'HEAD^1', 'HEAD', '--', 'js/data.js'], { encoding: 'utf8' })
+        : '';
+    const targets = changedOnly ? collectChangedCatalogDownloads(diff) : collectCatalogDownloads();
+    if (changedOnly) console.log('Auditing ' + targets.length + ' newly changed download URLs.');
+    const results = await auditDownloads(targets);
     for (const result of results) {
         const status = result.status ?? 'ERR';
         const finalUrl = result.finalUrl ?? result.url;

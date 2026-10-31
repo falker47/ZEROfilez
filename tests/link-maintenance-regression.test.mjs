@@ -6,7 +6,7 @@ import { ITEMS } from '../js/data.js';
 import { collectCatalogDownloads } from '../scripts/audit-download-links.mjs';
 
 const require = createRequire(import.meta.url);
-const { PROGRAMS, extractDolphinStableUrl, extractLatestLuckyPatcherUrl } =
+const { PROGRAMS, extractDolphinStableUrl, extractLatestLuckyPatcherUrl, verifyCandidateDownload } =
     require('../scripts/update-links.js');
 
 test('Azahar release rules accept upstream versioned filenames for Windows and Android', () => {
@@ -103,4 +103,18 @@ test('resolved download paths use maintained current-generation upstream naming'
     assert.match(ITEMS['apk-files']['lucky-patcher'].url,
         /^https:\/\/chelpus\.com\/download\/LuckyPatchers\.com_Official_Installer_\d+(?:\.\d+){2,}\.apk$/);
     assert.doesNotMatch(ITEMS['apk-files']['lucky-patcher'].url, /_12\.0\.2\.apk$/);
+});
+
+test('scraper candidates require binary signatures, not simply HTTP 200', async () => {
+    const validArchive = Buffer.from([0x50, 0x4b, 0x03, 0x04, 0, 0, 0, 0]);
+    const serve = (bytes, contentType) => async () =>
+        new Response(bytes, { status: 206, headers: { 'Content-Type': contentType } });
+    await assert.doesNotReject(verifyCandidateDownload('https://example.org/good.apk',
+        serve(validArchive, 'application/vnd.android.package-archive')));
+    await assert.rejects(verifyCandidateDownload('https://example.org/bad.apk',
+        serve('<html>Download</html>', 'text/html')), /page/);
+    await assert.rejects(verifyCandidateDownload('https://example.org/bad.zip',
+        serve(Buffer.from('fake zip'), 'application/zip')), /file signature/);
+    await assert.rejects(verifyCandidateDownload('https://example.org/bad.zip',
+        async () => new Response('not found', { status: 404 })), /HTTP 404/);
 });

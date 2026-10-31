@@ -653,10 +653,10 @@ function extractLatestLuckyPatcherUrl(html) {
 }
 
 /** Verify file bytes (not just status/extension) before any scraped URL is written. */
-async function verifyCandidateDownload(url) {
+async function verifyCandidateDownload(url, fetcher = fetch) {
     const extension = new URL(url).pathname.match(/\.(exe|msi|zip|apk|7z|appinstaller)$/i)?.[1]?.toLowerCase();
     if (!extension) throw new Error('URL did not name an accepted downloadable file: ' + url);
-    const response = await fetch(url, {
+    const response = await fetcher(url, {
         headers: { Range: 'bytes=0-4095', 'User-Agent': 'ZEROfilez link updater' },
         redirect: 'follow', signal: AbortSignal.timeout(20000)
     });
