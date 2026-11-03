@@ -40,7 +40,7 @@ export const ITEMS = {
             "icon": ICONS.gbc,
             "subtext": "💻: SameBoy\n📱: Pizza Boy GBC",
             "pc": {
-                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.4/sameboy_winsdl_v1.0.4.zip"
+                "url": "https://github.com/LIJI32/SameBoy/releases/download/v1.0.5/sameboy_winsdl_v1.0.5.zip"
             },
             "android": {
                 "appId": "it.dbtecno.pizzaboy",
@@ -173,7 +173,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-a18dc9ac291cc0e13d787dc1ff4f9adc92823690/rpcs3-v0.0.43-20553-a18dc9ac_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-63996a47115563e433b909f2afc62d264e4b1314/rpcs3-v0.0.43-20560-63996a47_win64_msvc.7z"
             },
             "android": null
         },
@@ -265,13 +265,13 @@ export const ITEMS = {
         "everything": { "id": "everything", "name": "Everything", "description": "Find files and folders by name, with matching results appearing as you type.", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
         "espanso": { "id": "espanso", "name": "Espanso", "description": "Typed keywords expand into full phrases, email addresses, or other text you use often.", "url": "https://github.com/espanso/espanso/releases/download/v2.4.1/Espanso-Win-Installer-x86_64.exe", "wingetId": "Espanso.Espanso", "icon": ICONS.espanso },
         "pcloud": { "id": "pcloud", "name": "pCloud", "description": "Store files online, access them across your devices, and share them with a link.", "url": "https://partner.pcloud.com/dl/win64", "wingetId": "pCloudAG.pCloudDrive", "icon": ICONS.pcloud },
-        "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.14.5/Obsidian-1.14.5.exe", "icon": ICONS.obsidian },
+        "obsidian": { "id": "obsidian", "name": "Obsidian", "description": "Write notes on your computer and connect related ideas using links between them.", "url": "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.15.0/Obsidian-1.15.0.exe", "icon": ICONS.obsidian },
         "marktext": { "id": "marktext", "name": "MarkText", "description": "Read and edit Markdown files with clean, live formatting instead of raw syntax.", "url": "https://github.com/marktext/marktext/releases/download/v0.23.0/marktext-win-x64-0.23.0-setup.exe", "wingetId": "MarkText.MarkText", "icon": ICONS.marktext },
         "claude-desktop": { "id": "claude-desktop", "name": "Claude Desktop", "description": "Ask AI to draft or revise text, summarize documents, and explain unfamiliar topics.", "url": "https://downloads.claude.ai/releases/win32/ClaudeSetup.exe", "icon": ICONS.claude },
         "chatgpt-desktop": { "id": "chatgpt-desktop", "name": "ChatGPT Desktop", "description": "Use ChatGPT on Windows to work with conversations, projects, files, and AI-powered coding tools.", "url": "https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi", "wingetId": "9PLM9XGG6VKS", "wingetSource": "msstore", "icon": ICONS.chatgpt },
         "hermes-agent": { "id": "hermes-agent", "name": "Hermes Agent", "description": "Automate tasks with an AI agent that remembers context, uses tools, and improves from experience.", "url": "https://hermes-assets.nousresearch.com/releases/win32/stable/stable.appinstaller", "autoInstaller": "hermes-appinstaller", "icon": ICONS.hermes },
         "openclaw": { "id": "openclaw", "name": "OpenClaw", "description": "Connect Windows to an OpenClaw gateway, use native chat, and manage Windows node capabilities.", "url": "https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-x64.exe", "autoInstaller": "openclaw-inno", "icon": ICONS.openclaw },
-        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.2/Bitwarden-Installer-2026.10.2.exe", "icon": ICONS.bitwarden },
+        "bitwarden-desktop": { "id": "bitwarden-desktop", "name": "Bitwarden Desktop", "description": "Store passwords, generate strong ones, and access your logins on different devices.", "url": "https://github.com/bitwarden/clients/releases/download/desktop-v2026.10.3/Bitwarden-Installer-2026.10.3.exe", "icon": ICONS.bitwarden },
         "discord": { "id": "discord", "name": "Discord", "description": "Chat with friends and communities through text, voice, or video, and share your screen.", "url": "https://discord.com/api/download?platform=win", "wingetId": "Discord.Discord", "icon": ICONS.discord },
         "telegram-desktop": { "id": "telegram-desktop", "name": "Telegram Desktop", "description": "Message contacts, join groups and channels, and make calls from Windows.", "url": "https://telegram.org/dl/desktop/win64", "wingetId": "Telegram.TelegramDesktop", "icon": ICONS.telegram },
         "whatsapp-desktop": { "id": "whatsapp-desktop", "name": "WhatsApp Desktop", "description": "Send messages and make voice or video calls from your PC, linked to your phone.", "url": "https://get.microsoft.com/installer/download/9NKSQGP7F2NH", "wingetId": "9NKSQGP7F2NH", "wingetSource": "msstore", "icon": ICONS.whatsapp },
