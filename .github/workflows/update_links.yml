@@ -9,6 +9,7 @@ on:
 jobs:
   update-links:
     runs-on: ubuntu-latest
+    timeout-minutes: 18
     permissions:
       contents: write # Needed to push changes
 
@@ -21,11 +22,15 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Run update script
+      - name: Run updater (continue to validate independent successful changes)
+        id: updater
+        continue-on-error: true
         run: node scripts/update-links.js
         env:
-          # Optional: Add GITHUB_TOKEN if you hit rate limits, though public repos usually have enough quota
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate catalog tests before publishing
+        run: node --test tests/*.test.mjs
 
       - name: Commit and push if changed
         run: |
@@ -41,3 +46,9 @@ jobs:
           else
             echo "No updates found."
           fi
+
+      - name: Report unresolved upstream check errors
+        if: steps.updater.outcome == 'failure'
+        run: |
+          echo "::error::One or more upstream source checks failed; see the updater log. Successful independently validated changes may have been published."
+          exit 1

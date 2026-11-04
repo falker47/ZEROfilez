@@ -28,9 +28,9 @@ export const ITEMS = {
                 "url": "https://github.com/mgba-emu/mgba/releases/download/0.10.5/mGBA-0.10.5-win64-installer.exe"
             },
             "android": {
-                "appId": "it.dbtecno.pizzaboygba.basic",
+                "appId": "it.dbtecno.pizzaboygba",
                 "appName": "Pizza Boy GBA Basic",
-                "url": "https://play.google.com/store/search?q=pizza%20boy%20a&c=apps&hl=it",
+                "url": "https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboygba",
                 "linkType": "store"
             }
         },
@@ -94,10 +94,10 @@ export const ITEMS = {
             "icon": ICONS.psvita,
             "subtext": "Vita3K",
             "pc": {
-                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/windows-latest.zip?time=1769420982148"
+                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/windows-latest.zip"
             },
             "android": {
-                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/android-latest.apk?time=1769420982148"
+                "url": "https://github.com/Vita3K/Vita3K/releases/download/continuous/android-latest.apk"
             }
         },
         "gc_wii": {
@@ -106,7 +106,7 @@ export const ITEMS = {
             "icon": ICONS.wii,
             "subtext": "Dolphin Emulator",
             "pc": {
-                "url": "https://dl.dolphin-emu.org/releases/2609/dolphin-2609-x64.7z"
+                "url": "https://dl.dolphin-emu.org/releases/2609a/dolphin-2609a-x64.7z"
             },
             "android": {
                 "appId": "org.dolphinemu.dolphinemu",
@@ -121,10 +121,10 @@ export const ITEMS = {
             "icon": ICONS.nintendo3ds,
             "subtext": "Azahar",
             "pc": {
-                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.3/azahar-2124.3-windows-msvc.zip"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-windows-msvc-2126.2.zip"
             },
             "android": {
-                "url": "https://github.com/azahar-emu/azahar/releases/download/2124.3/azahar-2124.3-android-googleplay.apk"
+                "url": "https://github.com/azahar-emu/azahar/releases/download/2126.2/azahar-android-googleplay-2126.2.apk"
             }
         },
         "psp": {
@@ -285,7 +285,7 @@ export const ITEMS = {
         "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "description": "Build apps with AI help to write code, fix errors, and run tests.", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.6.0-5526304964083712/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
-        "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },
+        "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.10.8.apk", "icon": ICONS.luckyPatcher },
         "happy-mod": { "id": "happy-mod", "name": "Happy Mod", "url": "https://files.apkdlink.com/happymod/happymod-3.2.6.apk", "icon": ICONS.happyMod },
         "telegram": { "id": "telegram", "name": "Telegram", "url": "https://telegram.org/dl/android/apk", "icon": ICONS.telegram }
     }

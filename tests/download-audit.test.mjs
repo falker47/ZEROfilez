@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { collectCatalogDownloads, inspectDownloadSignature } from '../scripts/audit-download-links.mjs';
+import { collectCatalogDownloads, collectChangedCatalogDownloads, inspectDownloadSignature } from '../scripts/audit-download-links.mjs';
 
 test('live audit covers PC programs, emulator downloads, stores, and alternate installers', () => {
     const catalog = {
@@ -33,4 +33,29 @@ test('live audit validates signatures and rejects HTML returned for a file URL',
     assert.equal(inspectDownloadSignature(Buffer.from('377ABCAF271C', 'hex'), '7z').valid, true);
     assert.equal(inspectDownloadSignature(Buffer.from('<?xml version="1.0"?><AppInstaller/>'), 'appinstaller').valid, true);
     assert.equal(inspectDownloadSignature(Buffer.from('<?xml version="1.0"?><Other/>'), 'appinstaller').valid, false);
+});
+
+test('changed link audit includes new direct URLs and excludes deleted and unrelated sources', () => {
+    const items = {
+        emulation: { gba: { name: 'GBA', pc: { url: 'https://example.org/new.zip' } } },
+        'pc-programs': {
+            app: { name: 'Tool', url: 'https://example.org/tool.exe',
+                installerUrl: 'https://example.org/installer.exe' }
+        },
+        'apk-files': { apk: { name: 'APK', url: 'https://example.org/new.apk' } }
+    };
+    const diff = [
+        '--- a/js/data.js', '+++ b/js/data.js',
+        '- "url": "https://example.org/old.zip"',
+        '+ "url": "https://example.org/new.zip"',
+        '+ "url": "https://example.org/new.apk"',
+        '+ "name": "Tool", "url": "https://example.org/tool.exe", "installerUrl": "https://example.org/installer.exe"',
+        '+ "url": "https://unrelated.example/not-listed.exe"'
+    ].join('\n');
+    assert.deepEqual(collectChangedCatalogDownloads(diff, items).map(row => row.url), [
+        'https://example.org/new.zip',
+        'https://example.org/tool.exe',
+        'https://example.org/installer.exe',
+        'https://example.org/new.apk'
+    ]);
 });
