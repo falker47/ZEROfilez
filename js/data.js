@@ -173,7 +173,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-eee3f0f7c285f2b8aa18fec278a2146c5cd874eb/rpcs3-v0.0.43-20565-eee3f0f7_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-0a30785e060930ab1408fef66bef47a49b294077/rpcs3-v0.0.43-20569-0a30785e_win64_msvc.7z"
             },
             "android": null
         },
@@ -258,7 +258,7 @@ export const ITEMS = {
         "cheat-engine": { "id": "cheat-engine", "name": "Cheat Engine", "description": "Find and change values such as health or money in offline single-player games.", "url": "https://d1dj9aohuk02ls.cloudfront.net/f/CheatEngine/2129/CheatEngine77.exe", "sha256": "CF0F4B6002555677984233C95856683959BE83A5DEF3DC12175A8296EB22676B", "icon": ICONS.cheatEngine },
 
         // Utilities
-        "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v21.0.0/ShareX-21.0.0-setup-x64.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
+        "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v22.3.0/ShareX-22.3.0-setup-x64.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
         "wiztree": { "id": "wiztree", "name": "WizTree", "description": "See which files and folders take up the most space on your drives.", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
         "powertoys": { "id": "powertoys", "name": "PowerToys", "description": "Arrange windows, change what keyboard keys do, and rename multiple files at once.", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.102.3101/PowerToysUserSetup-0.102.3101.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "description": "Install and update supported programs together without opening each installer one by one.", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
@@ -278,7 +278,7 @@ export const ITEMS = {
 
         // Development
         "visual-studio-code": { "id": "visual-studio-code", "name": "Visual Studio Code", "description": "Write code for websites, apps, and scripts, with tools to find and fix errors.", "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable", "wingetId": "Microsoft.VisualStudioCode", "icon": ICONS.visualStudioCode },
-        "notepad-plus-plus": { "id": "notepad-plus-plus", "name": "Notepad++", "description": "Write and edit text files, scripts, and code in many programming languages.", "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.8.1/npp.8.9.8.1.Installer.x64.exe", "wingetId": "Notepad++.Notepad++", "icon": ICONS.notepadPlusPlus },
+        "notepad-plus-plus": { "id": "notepad-plus-plus", "name": "Notepad++", "description": "Write and edit text files, scripts, and code in many programming languages.", "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.9/npp.8.9.9.Installer.x64.exe", "wingetId": "Notepad++.Notepad++", "icon": ICONS.notepadPlusPlus },
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools. The installer enables guided future updates; the portable version needs no installation.", "url": "https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe", "installerUrl": "https://github.com/falker47/Panacea/releases/latest/download/PanaceaSetup.exe", "icon": ICONS.panacea },
