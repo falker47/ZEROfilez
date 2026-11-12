@@ -103,7 +103,8 @@ export const ITEMS = {
         "gc_wii": {
             "id": "gc_wii",
             "name": "GameCube & Wii",
-            "icon": ICONS.wii,
+            "icon": ICONS.gamecube,
+            "secondaryIcon": ICONS.wii,
             "subtext": "Dolphin Emulator",
             "pc": {
                 "url": "https://dl.dolphin-emu.org/releases/2609/dolphin-2609-x64.7z"
@@ -190,7 +191,7 @@ export const ITEMS = {
         "xenia": {
             "id": "xenia",
             "name": "Xbox 360",
-            "icon": ICONS.xbox,
+            "icon": ICONS.xbox360,
             "subtext": "Xenia",
             "pc": {
                 "url": "https://github.com/xenia-project/release-builds-windows/releases/latest/download/xenia_master.zip"
@@ -236,7 +237,7 @@ export const ITEMS = {
         "gba-hackrom-tools": {
             "id": "gba-hackrom-tools",
             "name": "HackROM Tools Pack",
-            "icon": ICONS.tools,
+            "icon": ICONS.hackRomTools,
             "subtext": "Pokemon Hack Rom Tools GBA",
             "pc": {
                 "url": "https://github.com/falker47/FileStorage/raw/main/GBA_HackROM_Toolz%5BZEROfilezRepack%5D.zip"

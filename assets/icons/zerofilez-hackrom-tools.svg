@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64" role="img" aria-label="HackROM Tools Pack icon concept: retro game cartridge with an editable circuit chip">
+  <title>HackROM Tools Pack — icon concept</title>
+  <path d="M17 8h30c3 0 5 2 5 5v35c0 3-2 5-5 5H17c-3 0-5-2-5-5V13c0-3 2-5 5-5z" fill="#242729" stroke="#F1EFEB" stroke-width="2.75" stroke-linejoin="round"/>
+  <path d="M13.5 17.5h37" stroke="#FF5500" stroke-width="3.5"/>
+  <path d="M18 20v21h28V20z" fill="#101417" stroke="#485154" stroke-width="1"/>
+  <path d="M26 24h12v12H26z" fill="#FF5500" stroke="#FF7D40" stroke-width="1.2"/>
+  <path d="M29 28l-2.7 2 2.7 2m6-4 2.7 2-2.7 2" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 21v3m4-3v3M30 36v3m4-3v3M23 28h3m-3 4h3m12-4h3m-3 4h3" stroke="#FF7733" stroke-width="1.7" stroke-linecap="round"/>
+  <path d="M19 46h26" stroke="#F1EFEB" stroke-width="2.1" stroke-linecap="round" opacity=".85"/>
+</svg>

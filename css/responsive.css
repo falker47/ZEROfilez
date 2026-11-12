@@ -1,11 +1,11 @@
 /* Responsive */
 @media (max-width: 768px) {
   .container {
-    padding: 8px;
+    padding: 10px 10px 0;
   }
 
   header {
-    padding: 6px 12px;
+    padding: 12px;
     margin-bottom: 10px;
   }
 
@@ -32,7 +32,7 @@
 
   section {
     padding: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
 
   section h2 {
@@ -41,62 +41,8 @@
     padding-bottom: 4px;
   }
 
-  /* Mobile: mantieni layout orizzontale ma ridimensionato */
-  .key-section .input-group,
-  .package-section .input-group {
-    flex-direction: row;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .key-section .input-group input,
-  .package-section .input-group input {
-    width: 100%;
-    max-width: 60%;
-    min-width: 40%;
-    font-size: 0.9em;
-    padding: 6px 8px;
-  }
-
-  /* Mobile: status sulla stessa riga ma più piccolo */
-  .key-section .status,
-  .package-section .status {
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 6px; /* mobile spacing on the right */
-    font-size: 0.7em;
-    padding: 4px 6px;
-    flex-shrink: 0;
-    width: 24ch; /* compact fixed width on mobile */
-    max-width: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* Ensure input aligns cleanly with the right edge */
-  .key-section .input-group input,
-  .package-section .input-group input {
-    margin-right: 0;
-  }
-
-  /* Mobile: input-row nella files-section */
-  #filesSection .input-row {
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0 auto;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-  }
-
   #filesSection .input-icon {
     font-size: 1.2em;
-  }
-
-  #filesSection .input-row input#searchInput {
-    width: 90%;
-    box-sizing: border-box;
   }
 
   /* Mobile: files list fixed via variable */
@@ -166,7 +112,7 @@
 /* Mobile molto piccolo */
 @media (max-width: 480px) {
   .container {
-    padding: 6px;
+    padding: 8px 8px 0;
   }
 
   header h1 {
@@ -181,49 +127,12 @@
     padding: 8px;
   }
 
-  /* Mobile molto piccolo: padding ancora più ridotto per key e package */
-  .key-section,
-  .package-section {
-    padding: 1px 8px;
-  }
-
   section h2 {
     font-size: 1em;
   }
 
-  /* Schermi molto piccoli: input ancora più compatto */
-  .key-section .input-group input,
-  .package-section .input-group input {
-    max-width: 55%;
-    min-width: 35%;
-    font-size: 0.8em;
-    padding: 4px 6px;
-  }
-
-  .key-section .status,
-  .package-section .status {
-    font-size: 0.65em;
-    padding: 3px 4px;
-    max-width: 40%;
-  }
-
-  /* Mobile molto piccolo: input-row ancora più compatto */
-  #filesSection .input-row {
-    gap: 4px;
-    width: 100%;
-    margin: 0 auto;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-  }
-
   #filesSection .input-row .input-icon {
     font-size: 1em;
-  }
-
-  #filesSection .input-row input#searchInput {
-    font-size: 0.9em;
-    padding: 6px 8px;
   }
 
   .files-list {
@@ -286,29 +195,17 @@
     gap: 6px;
   }
 
-  .main-tab-btn {
-    padding: 10px 16px;
-    font-size: 0.9em;
-    max-width: none;
-  }
-
   .files-grid {
     grid-template-columns: 1fr;
     gap: 8px;
-    max-height: 65vh;
     height: auto;
     padding: 2px;
   }
 
   .file-card {
-    height: 80px;
+    height: auto;
     padding: 10px;
     gap: 10px;
-  }
-
-  .file-icon {
-    font-size: 1.5em;
-    width: 30px;
   }
 
   .file-card .file-info h3 {
@@ -320,15 +217,12 @@
   }
 
   .file-card .download-btn {
-    padding: 6px 12px;
-    font-size: 0.9em;
-    min-width: 70px;
+    min-width: 42px;
   }
 
   .dual-buttons .download-btn {
-    min-width: 50px;
-    padding: 6px 8px;
-    font-size: 0.85em;
+    min-width: 38px;
+    padding: 5px 6px;
   }
 
   .category-tabs {
@@ -351,27 +245,16 @@
 }
 
 @media (max-width: 480px) {
-  .main-tab-btn {
-    padding: 8px 12px;
-    font-size: 0.8em;
-  }
-
   .files-grid {
     grid-template-columns: 1fr;
-    max-height: 60vh;
     gap: 6px;
     padding: 1px;
   }
 
   .file-card {
-    height: 75px;
+    min-height: 67px;
     padding: 8px;
     gap: 8px;
-  }
-
-  .file-icon {
-    font-size: 1.3em;
-    width: 25px;
   }
 
   .file-card .file-info h3 {
@@ -383,15 +266,12 @@
   }
 
   .file-card .download-btn {
-    padding: 6px 10px;
-    font-size: 0.85em;
-    min-width: 60px;
+    min-width: 42px;
   }
 
   .dual-buttons .download-btn {
-    min-width: 45px;
-    padding: 5px 8px;
-    font-size: 0.8em;
+    min-width: 36px;
+    padding: 4px 5px;
   }
 
   .downloads-section {
@@ -440,16 +320,11 @@
   }
 
   #pcProgramsToolbar .pc-search-container .input-row {
-    width: 95%;
     height: auto;
-    margin: 0 auto 6px auto;
-    justify-content: center;
   }
 
   #pcProgramsToolbar #pcSearchInput {
-    flex: initial;
-    width: auto;
-    height: auto;
+    min-height: 44px;
   }
 
   #pcProgramsToolbar .pc-setup-entry {
@@ -502,7 +377,7 @@
   .setup-launch-icon {
     width: 28px;
     height: 28px;
-    border-radius: 8px;
+    border-radius: var(--radius-control);
   }
 
   .setup-entry-kicker {
@@ -511,7 +386,7 @@
 
   #pcProgramsToolbar .pc-setup-single-label {
     display: block;
-    font-size: 0.68em;
+    font-size: .75rem;
     white-space: normal;
   }
 
@@ -593,4 +468,57 @@
   .setup-manual-row {
     min-height: 32px;
   }
+}
+
+@media (max-width: 768px) {
+  .main-tab-btn {
+    padding: 7px 8px;
+    min-height: 48px;
+    gap: 5px;
+    font-size: .82rem;
+  }
+
+  .main-tab-arrow { display: none; }
+
+  #emulation-list .files-grid { grid-template-columns: minmax(0, 1fr); }
+
+  #pc-programs-list { max-height: none; }
+
+  .panacea-featured-card:not(.panacea-setup-featured) .panacea-featured-actions {
+    padding: 8px;
+  }
+
+  .key-section,
+  .package-section { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  .main-tab-btn {
+    flex-wrap: wrap;
+    column-gap: 5px;
+    row-gap: 3px;
+  }
+
+  .main-tab-btn span:not(.main-tab-index):not(.main-tab-arrow) {
+    flex-basis: 100%;
+  }
+
+  .file-icon {
+    flex-basis: 43px;
+    width: 43px;
+    height: 43px;
+    padding: 3px;
+  }
+
+  .file-card .file-info h3,
+  .file-card .file-info p {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.22;
+  }
+
+  .file-item .file-info,
+  .file-item .file-actions { flex: 1 1 auto; }
+
+  .file-item .file-actions { overflow: visible; }
 }
