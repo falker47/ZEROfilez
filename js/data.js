@@ -173,7 +173,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-fd027c99b8824e9a9b6f5b2d5ae33f9202e29da3/rpcs3-v0.0.43-20581-fd027c99_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-9b8974d32e73c897a5fcd6bdf69413ca7e436b01/rpcs3-v0.0.43-20583-9b8974d3_win64_msvc.7z"
             },
             "android": null
         },
@@ -278,7 +278,7 @@ export const ITEMS = {
 
         // Development
         "visual-studio-code": { "id": "visual-studio-code", "name": "Visual Studio Code", "description": "Write code for websites, apps, and scripts, with tools to find and fix errors.", "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable", "wingetId": "Microsoft.VisualStudioCode", "icon": ICONS.visualStudioCode },
-        "notepad-plus-plus": { "id": "notepad-plus-plus", "name": "Notepad++", "description": "Write and edit text files, scripts, and code in many programming languages.", "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.9/npp.8.9.9.Installer.x64.exe", "wingetId": "Notepad++.Notepad++", "icon": ICONS.notepadPlusPlus },
+        "notepad-plus-plus": { "id": "notepad-plus-plus", "name": "Notepad++", "description": "Write and edit text files, scripts, and code in many programming languages.", "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.9.1/npp.8.9.9.1.Installer.x64.exe", "wingetId": "Notepad++.Notepad++", "icon": ICONS.notepadPlusPlus },
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools. The installer enables guided future updates; the portable version needs no installation.", "url": "https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe", "installerUrl": "https://github.com/falker47/Panacea/releases/latest/download/PanaceaSetup.exe", "icon": ICONS.panacea },
