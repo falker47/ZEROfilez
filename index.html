@@ -18,22 +18,18 @@
             <p id="mainSubtitle">Download useful files for free</p>
           </div>
           <div class="toggle-section">
-            <span class="toggle-icon-left"
-              ><img
-                data-icon="download"
-                alt="Startup"
-                style="width: 1.2em; height: 1.2em"
-            /></span>
+            <span class="toggle-label toggle-label-startup">
+              <span class="toggle-icon-left"><img data-icon="download" alt="" width="14" height="14" /></span>
+              Quick Startup
+            </span>
             <label class="toggle-switch">
-              <input type="checkbox" id="modeToggle" />
+              <input type="checkbox" id="modeToggle" role="switch" aria-label="Personal Vault" />
               <span class="toggle-slider"></span>
             </label>
-            <span class="toggle-icon-right"
-              ><img
-                data-icon="lock"
-                alt="Decryptor"
-                style="width: 1.2em; height: 1.2em"
-            /></span>
+            <span class="toggle-label toggle-label-vault">
+              <span class="toggle-icon-right"><img data-icon="lock" alt="" width="14" height="14" /></span>
+              Personal Vault
+            </span>
           </div>
         </div>
       </header>
@@ -49,7 +45,7 @@
                 <div class="status waiting" id="keyStatus">
                   ⏳ Waiting for key
                 </div>
-                <input type="file" id="userKeyFile" accept=".bin,.key" />
+                <input type="file" id="userKeyFile" aria-label="User Key" accept=".bin,.key" />
               </div>
             </section>
 
@@ -60,7 +56,7 @@
                 <div class="status waiting" id="packageStatus">
                   ⏳ Waiting for package
                 </div>
-                <input type="file" id="packageFile" accept=".enc" />
+                <input type="file" id="packageFile" aria-label="Encrypted Package" accept=".enc" />
               </div>
             </section>
           </div>
@@ -70,10 +66,10 @@
             <h2>📁 Your Files</h2>
             <div class="input-group">
               <div class="input-row">
-                <span class="input-icon" aria-hidden="true">🔎</span>
+                <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="searchInput"
+                  id="searchInput" aria-label="Filter files"
                   placeholder="Type to filter files..."
                 />
               </div>
@@ -102,28 +98,34 @@
           <!-- Main Tabs -->
           <div class="main-tabs">
             <button class="main-tab-btn" data-tab="emulation">
+              <span class="main-tab-index" aria-hidden="true">01</span>
               <img
                 data-icon="emulationTab"
-                alt="Emulation"
+                alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              Emulation
+              <span>Emulation</span>
+              <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
             <button class="main-tab-btn active" data-tab="pc-programs">
+              <span class="main-tab-index" aria-hidden="true">02</span>
               <img
                 data-icon="windows"
-                alt="PC Programs"
+                alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              PC Programs
+              <span>PC Programs</span>
+              <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
             <button class="main-tab-btn" data-tab="apk-files">
+              <span class="main-tab-index" aria-hidden="true">03</span>
               <img
                 data-icon="android"
-                alt="APK Files"
+                alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              APK Files
+              <span>APK Files</span>
+              <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
           </div>
 
@@ -131,10 +133,10 @@
           <section class="downloads-section hidden" id="emulation-tab">
             <div class="input-group search-container">
               <div class="input-row">
-                <span class="input-icon" aria-hidden="true">🔎</span>
+                <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="emulationSearchInput"
+                  id="emulationSearchInput" aria-label="Search emulators"
                   placeholder="Search emulators..."
                 />
               </div>
@@ -149,10 +151,10 @@
             <div class="pc-tools-row" id="pcProgramsToolbar">
               <div class="input-group search-container pc-search-container">
                 <div class="input-row">
-                  <span class="input-icon" aria-hidden="true">🔎</span>
+                  <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                   <input
                     type="text"
-                    id="pcSearchInput"
+                    id="pcSearchInput" aria-label="Search PC programs"
                     placeholder="Search PC programs..."
                   />
                 </div>
@@ -315,10 +317,10 @@
           <section class="downloads-section hidden" id="apk-files-tab">
             <div class="input-group search-container">
               <div class="input-row">
-                <span class="input-icon" aria-hidden="true">🔎</span>
+                <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="apkSearchInput"
+                  id="apkSearchInput" aria-label="Search APK files"
                   placeholder="Search APK files..."
                 />
               </div>

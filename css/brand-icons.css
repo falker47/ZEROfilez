@@ -3,3 +3,16 @@
 .file-icon-img {
   filter: none;
 }
+
+/* GameCube and Wii share the same slot as every other console. */
+.file-icon--pair {
+  padding-inline: 2px;
+  gap: 2px;
+}
+
+.file-icon--pair .file-icon-img {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 100%;
+}

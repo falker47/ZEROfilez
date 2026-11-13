@@ -5,11 +5,13 @@
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-ui);
   background: var(--bg-body);
   min-height: 100vh;
   color: var(--text-main);
-  line-height: 1.6;
+  background-image: var(--technical-grid);
+  background-size: 48px 48px;
+  line-height: 1.5;
 }
 
 /* Utility classes */
@@ -27,4 +29,17 @@ body {
 
 .mt-20 {
   margin-top: 20px;
+}
+
+:where(a, button, input, summary):focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

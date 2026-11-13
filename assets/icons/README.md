@@ -114,11 +114,10 @@ All these assets remain local, and no catalog image reference uses `.ico`.
 - **PKHeX:** the 64 × 64 `icon.png` from the actual
   [kwsch/PKHeX repository](https://github.com/kwsch/PKHeX/blob/master/icon.png)
   (GPL-3.0; see `LICENSE-GPL-3.0.txt`). This identifies PKHeX, rather than a generic save icon.
-- **PMD Save Editor / SkyEditor:** the 64 × 64, 32-bit application image from the
-  [SkyEditor.UI.WPF resource icon](https://github.com/evandixon/SkyEditor.UI.WPF/blob/master/SkyEditor.UI.WPF/Resources/favicon.ico)
-  by Evan Dixon. Converted from the original ICO bitmap to a transparent PNG;
-  original licensing notice in `LICENSE-SKYEDITOR-MIT.txt`. This identifies the desktop
-  package named `SkyEditor.SaveEditor.zip`, not the separate web editor.
+- **PMD Save Editor:** the 64 × 64 embedded PNG frame from the publisher's
+  [PokemonMysteryDungeon-SavEditor favicon](https://github.com/falker47/PokemonMysteryDungeon-SavEditor/blob/main/public/favicon.ico),
+  copied byte for byte, without recoloring or resampling. The older SkyEditor
+  asset and its license remain archived; the catalog now displays the web tool mark.
 - **WinRAR:** the existing familiar stacked-books artwork was preserved. Its
   original indexed-color PNG is now rendered with palette index 0 (white backdrop)
   transparent via a `tRNS` chunk. No logo recoloring or resampling.
@@ -131,5 +130,16 @@ All these assets remain local, and no catalog image reference uses `.ico`.
   the existing Lucide gamepad shape. It represents a catalog category and is not
   an official emblem for any particular emulator.
 
-The five catalog icon references are repository-local; they require no remote
+The catalog icon references are repository-local; they require no remote
 icon service, and third-party software names/marks remain with their owners.
+
+## SIGNAL × GRIDLINE catalog marks
+
+- **GameCube:** [Yoshii Lizcano's GameCube symbol](https://commons.wikimedia.org/wiki/File:Nintendo_GameCube_symbol_logo.svg)
+  (CC0 1.0), a community recreation of the Nintendo mark. It shares one icon
+  slot with the existing, independently attributed Wii wordmark.
+- **Xbox 360:** [Microsoft's Xbox 360 logo as reproduced by CoolKid1993](https://commons.wikimedia.org/wiki/File:Xbox_360_logo.svg)
+  (PD-textlogo; trademark applies). This is a community vector, not a
+  publisher-provided download. Only the SVG prologue was stripped.
+- **HackROM Tools Pack:** original ZEROfilez [cartridge mark](https://drive.google.com/file/d/1rNVVzZvRIouNCYHcalzQsiTTZxL8eTX6/view),
+  the exact SVG supplied in the approved visual brief.

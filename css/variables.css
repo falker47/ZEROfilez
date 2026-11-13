@@ -1,26 +1,38 @@
 :root {
+  color-scheme: dark;
+  --font-ui: "Segoe UI", system-ui, sans-serif;
+  --font-index: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --radius-panel: 4px;
+  --radius-control: 3px;
+  --focus-color: #ffb18a;
+  --accent-ink: #20130d;
+  --signal-surface: #32271f;
+  --signal-border: #80543e;
+  --gridline: #b4d0cb0a;
+  --technical-grid: linear-gradient(to right, var(--gridline) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--gridline) 1px, transparent 1px);
   /* Centralized file list heights */
   --filelist-height-desktop: 280px;
   --filelist-height-mobile: 200px;
-  --startup-card-height-desktop: 90px;
+  --startup-card-height-desktop: 74px;
 
   /* --- Primitives --- */
   --orange-500: #ff5500;
-  --orange-400: #ff7733;
-  --orange-600: #cc4400;
+  --orange-400: #ff8245;
+  --orange-600: #e64d00;
   
-  --gray-900: #1a1a1a; /* Darkest (Body, Card, Inputs) */
-  --gray-850: #222222; /* Hover on darkest */
-  --gray-800: #2d2d2d; /* Surface, Header */
-  --gray-700: #404040; /* Buttons, Dark Borders */
-  --gray-650: #4a4a4a; /* Button Hover */
-  --gray-600: #555555; /* Default Borders */
+  --gray-900: #101516;
+  --gray-850: #273133;
+  --gray-800: #181e20;
+  --gray-700: #283133;
+  --gray-650: #354144;
+  --gray-600: #455357;
   
-  --gray-400: #666666; /* Disabled text, Light borders */
-  --gray-300: #a0a0a0; /* Muted text */
-  --gray-200: #b0b0b0; /* Secondary text */
-  --gray-100: #e0e0e0; /* Main text */
-  --white:    #ffffff;
+  --gray-400: #728085;
+  --gray-300: #a2aeaf;
+  --gray-200: #bbc5c4;
+  --gray-100: #e9eeed;
+  --white: #f5f6f3;
 
   /* --- Semantic Tokens --- */
   
@@ -37,16 +49,16 @@
   --bg-hover:     var(--gray-850);
   
   --bg-body:      var(--bg-base);
-  --bg-card:      var(--bg-base);
-  --bg-input:     var(--bg-base);
-  --bg-footer:    var(--bg-base);
-  --bg-header:    var(--bg-surface);
+  --bg-card: #20282a;
+  --bg-input: #121819;
+  --bg-footer: transparent;
+  --bg-header: #161d1f;
 
   /* Buttons */
   --bg-button:          var(--gray-700);
   --bg-button-hover:    var(--gray-650);
-  --bg-button-active:   #353535; /* Keep unique active state if needed, or map to primitive */
-  --bg-button-disabled: #2a2a2a;
+  --bg-button-active: #313d40;
+  --bg-button-disabled: #252d2e;
 
   /* Text */
   --text-main:      var(--gray-100);
@@ -59,8 +71,8 @@
   /* Borders */
   --border-default: var(--gray-600);
   --border-light:   var(--gray-400);
-  --border-dark:    var(--gray-700);
-  --border-card:    #2f2f2f; /* Specific card border slightly distinct */
+  --border-dark: #344145;
+  --border-card: #3b494c;
   --border-header:  var(--border-dark);
   --border-darker:  #333333;
 
@@ -82,15 +94,15 @@
   --status-waiting-border: var(--border-default);
 
   /* Platform/Brand Colors */
-  --btn-pc-bg: #2d4a6b;
-  --btn-pc-border: #3a5a7a;
-  --btn-pc-hover-bg: #3a5a7a;
-  --btn-pc-hover-border: #4a6a8a;
+  --btn-pc-bg: #22313a;
+  --btn-pc-border: #49626e;
+  --btn-pc-hover-bg: #324650;
+  --btn-pc-hover-border: #638091;
 
-  --btn-android-bg: #2d5a2d;
-  --btn-android-border: #3a6a3a;
-  --btn-android-hover-bg: #3a6a3a;
-  --btn-android-hover-border: #4a7a4a;
+  --btn-android-bg: #22352e;
+  --btn-android-border: #486956;
+  --btn-android-hover-bg: #304a3e;
+  --btn-android-hover-border: #628773;
   
   --brand-github-bg: #24292e;
   --brand-github-text: #f6f8fa;
@@ -98,8 +110,8 @@
   --brand-gdrive-text: #ffffff;
 
   /* Shadows */
-  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.35);
-  --shadow-card-hover: 0 10px 24px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 8px 20px #080b0c55;
+  --shadow-card-hover: 0 8px 20px #080b0c66;
   --shadow-card-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-inset: inset 0 0 0 1px rgba(255, 255, 255, 0.045);
 }

@@ -960,7 +960,7 @@ export class StartupManager {
 
             const img = document.createElement('img');
             img.src = item.icon;
-            img.alt = item.name;
+            img.alt = '';
             img.className = 'file-icon-img';
 
             img.onerror = function () {
@@ -977,6 +977,19 @@ export class StartupManager {
                 };
             };
             iconContainer.appendChild(img);
+
+            if (isImageIcon(item.secondaryIcon)) {
+                const secondaryIcon = document.createElement('img');
+                secondaryIcon.src = item.secondaryIcon;
+                secondaryIcon.alt = '';
+                secondaryIcon.className = 'file-icon-img';
+                secondaryIcon.addEventListener('error', () => {
+                    secondaryIcon.remove();
+                    iconContainer.classList.remove('file-icon--pair');
+                }, { once: true });
+                iconContainer.classList.add('file-icon--pair');
+                iconContainer.appendChild(secondaryIcon);
+            }
         } else {
             iconContainer.innerHTML = item.icon || `<img src="${ICONS.emulationTab}" class="file-icon-img" alt="Emulation">`;
         }

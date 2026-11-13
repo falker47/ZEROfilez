@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ICONS, isImageIcon } from '../js/icons.js';
+import { ITEMS } from '../js/data.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -101,7 +103,7 @@ test('the converted ICO logos are real PNGs with decodable pixel data', async ()
 
 test('catalog corrections retain distinctive editor brands and transparent WinRAR', async () => {
   assert.equal(ICONS.pkhex, 'assets/icons/official-pkhex.png');
-  assert.equal(ICONS.pmdSaveEditor, 'assets/icons/official-skyeditor.png');
+  assert.equal(ICONS.pmdSaveEditor, 'assets/icons/official-pmd-save-editor.png');
   assert.notEqual(ICONS.pkhex, ICONS.pmdSaveEditor);
   assert.equal(ICONS.emulationTab, 'assets/icons/emulation-controller-color.svg');
   assert.equal(ICONS.libreoffice, 'assets/icons/brand-libreoffice-color.svg');
@@ -124,4 +126,28 @@ test('catalog corrections retain distinctive editor brands and transparent WinRA
     if (type === 'IEND') break;
   }
   assert.ok(transparentBackground, 'WinRAR background must be transparent');
+});
+
+test('emulation cards resolve to console marks and original tool identities', async () => {
+  const catalog = ITEMS.emulation;
+  assert.deepEqual(
+    [catalog.gc_wii.icon, catalog.gc_wii.secondaryIcon],
+    [ICONS.gamecube, ICONS.wii]
+  );
+  assert.notEqual(catalog.gc_wii.icon, catalog.gc_wii.secondaryIcon);
+  assert.equal(catalog.xemu.icon, ICONS.xbox);
+  assert.equal(catalog.xenia.icon, ICONS.xbox360);
+  assert.notEqual(catalog.xemu.icon, catalog.xenia.icon);
+  assert.equal(catalog.retroarch.icon, ICONS.retroArch);
+  assert.equal(catalog['gba-hackrom-tools'].icon, ICONS.hackRomTools);
+  assert.match(await readFile(path.join(root, ICONS.hackRomTools), 'utf8'), /HackROM Tools Pack.*icon concept/);
+
+  const pmd = await readFile(path.join(root, catalog['pmd-save-editor'].icon));
+  assert.equal(pmd.readUInt32BE(16), 64);
+  assert.equal(pmd.readUInt32BE(20), 64);
+  assert.equal(
+    createHash('sha256').update(pmd).digest('hex'),
+    'c70ca9a4fc721b32dd320cda22664bdb5e426d15b95379a699484a5cbc222aae',
+    'PMD must use the unchanged 64 px PNG frame from the publisher ICO'
+  );
 });

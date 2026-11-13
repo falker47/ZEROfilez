@@ -1,28 +1,36 @@
 .container {
-  max-width: 1200px; /* Increased width for better horizontal space utilization */
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 12px;
+  padding: 16px clamp(12px, 2.3vw, 30px) 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 header {
-  margin-bottom: 12px;
+  position: relative;
+  margin-bottom: 14px;
+  padding: 18px 20px;
   background: var(--bg-header);
-  padding: 8px 12px;
-  border-radius: 8px;
   border: 1px solid var(--border-header);
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-panel);
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  inset: auto auto -1px -1px;
+  width: clamp(50px, 10%, 108px);
+  height: 2px;
+  background: var(--accent-color);
 }
 
 .header-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  min-height: 76px;
   position: relative;
 }
 
@@ -33,18 +41,17 @@ header {
 
 .toggle-section {
   position: absolute;
-  right: 16px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
 .toggle-icon-left,
 .toggle-icon-right {
-  font-size: 1.2em;
-  transition: opacity 0.3s ease;
+  transition: opacity 150ms ease;
   user-select: none;
   display: flex;
   align-items: center;
@@ -60,16 +67,9 @@ header {
 }
 
 header h1 {
-  font-size: 2.3em; /* slightly larger for emphasis */
   color: var(--text-heading);
-  margin-bottom: 2px; /* tighter spacing to subtitle */
-  font-weight: 600; /* stronger weight for prominence */
-  letter-spacing: 0.3px;
-  line-height: 1.1; /* reduce vertical height */
-  white-space: nowrap; /* keep on one line */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 6px;
+  line-height: 1;
 }
 
 
@@ -83,7 +83,7 @@ header h1 {
 
 #mainTitle .brand-wordmark {
   display: block;
-  width: 300px;
+  width: 316px;
   max-width: 68vw;
   height: auto;
   flex: 0 1 auto;
@@ -91,9 +91,9 @@ header h1 {
 
 
 header p {
-  font-size: 1.05em; /* slightly smaller */
+  font-size: .875rem;
   color: var(--text-secondary);
-  font-weight: 300;
+  line-height: 1.4;
 }
 
 #mainSubtitle .mode-label {
@@ -120,6 +120,11 @@ main {
   gap: 12px;
 }
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .header-content { flex-direction: column; }
+  .toggle-section { position: static; transform: none; }
+}
+
 @media (max-width: 768px) {
   .row.two-col {
     grid-template-columns: 1fr;
@@ -128,9 +133,9 @@ main {
 
 /* Footer */
 footer {
-  margin-top: 20px;
-  padding: 12px 0;
-  text-align: center;
+  margin-top: 16px;
+  padding: 13px 0;
+  text-align: right;
   border-top: 1px solid var(--border-dark);
   background: var(--bg-footer);
 }
@@ -138,11 +143,11 @@ footer {
 footer p {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.9em;
+  font: 500 .75rem/1.45 var(--font-index);
 }
 
 footer a {
-  color: var(--accent-color);
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.3s ease;
 }
