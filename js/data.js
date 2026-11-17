@@ -174,7 +174,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-8d6b42e78adae5cc4685b45ecf2f370273e91810/rpcs3-v0.0.43-20606-8d6b42e7_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-fb6737b1c8306ceeccb53b7fa051acfc9e641cd7/rpcs3-v0.0.43-20607-fb6737b1_win64_msvc.7z"
             },
             "android": null
         },
@@ -260,7 +260,7 @@ export const ITEMS = {
 
         // Utilities
         "sharex": { "id": "sharex", "name": "ShareX", "description": "Take screenshots, add arrows or text, and record your screen to save or share.", "url": "https://github.com/ShareX/ShareX/releases/download/v22.4.0/ShareX-22.4.0-setup-x64.exe", "wingetId": "ShareX.ShareX", "icon": ICONS.sharex },
-        "wiztree": { "id": "wiztree", "name": "WizTree", "description": "See which files and folders take up the most space on your drives.", "url": "https://diskanalyzer.com/files/wiztree_4_33_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
+        "wiztree": { "id": "wiztree", "name": "WizTree", "description": "See which files and folders take up the most space on your drives.", "url": "https://diskanalyzer.com/files/wiztree_4_34_setup.exe", "wingetId": "AntibodySoftware.WizTree", "icon": ICONS.wiztree },
         "powertoys": { "id": "powertoys", "name": "PowerToys", "description": "Arrange windows, change what keyboard keys do, and rename multiple files at once.", "url": "https://github.com/microsoft/PowerToys/releases/download/v0.102.3101/PowerToysUserSetup-0.102.3101.0-x64.exe", "wingetId": "Microsoft.PowerToys", "icon": ICONS.powertoys },
         "patch-my-pc": { "id": "patch-my-pc", "name": "Patch My PC", "description": "Install and update supported programs together without opening each installer one by one.", "url": "https://patchmypc.com/freeupdater/PatchMyPC.exe", "wingetId": "PatchMyPC.PatchMyPC", "icon": ICONS.patchmypc },
         "everything": { "id": "everything", "name": "Everything", "description": "Find files and folders by name, with matching results appearing as you type.", "url": "https://www.voidtools.com/Everything-1.4.1.1032.x64-Setup.exe", "wingetId": "voidtools.Everything", "icon": ICONS.everything },
