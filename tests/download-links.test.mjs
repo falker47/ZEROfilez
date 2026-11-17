@@ -25,7 +25,7 @@ const STABLE_PC_URLS = new Map([
     ['revo-uninstaller', 'https://download.revouninstaller.com/download/revosetup.exe'],
     ['patch-my-pc', 'https://patchmypc.com/freeupdater/PatchMyPC.exe'],
     ['pcloud', 'https://partner.pcloud.com/dl/win64'],
-    ['claude-desktop', 'https://downloads.claude.ai/releases/win32/ClaudeSetup.exe'],
+    ['claude-desktop', 'https://claude.ai/api/desktop/win32/x64/setup/latest/redirect'],
     ['chatgpt-desktop', 'https://get.microsoft.com/installer/download/9PLM9XGG6VKS?cid=website_cta_psi'],
     ['discord', 'https://discord.com/api/download?platform=win'],
     ['telegram-desktop', 'https://telegram.org/dl/desktop/win64'],
@@ -76,9 +76,16 @@ test('Panacea offers stable installer and portable links without release-number 
     assert.ok(!PROGRAMS.some(rule => rule.name === 'Panacea'));
 });
 
+test('Claude Desktop uses the publisher Windows x64 latest-setup redirect', () => {
+    const claude = ITEMS['pc-programs']['claude-desktop'];
+    assert.equal(claude.url, 'https://claude.ai/api/desktop/win32/x64/setup/latest/redirect');
+    assert.equal(new URL(claude.url).hostname, 'claude.ai');
+    assert.equal(claude.linkType, undefined);
+});
+
 test('PC download actions are direct files or verified stable binary resolvers, never masked landing pages', () => {
     const resolvers = new Set(['brave-browser', 'mozilla-firefox', 'pcloud',
-        'discord', 'telegram-desktop', 'chatgpt-desktop',
+        'discord', 'telegram-desktop', 'chatgpt-desktop', 'claude-desktop',
         'whatsapp-desktop', 'visual-studio-code']);
     const websiteOnly = new Set();
     for (const item of Object.values(ITEMS['pc-programs'])) {
