@@ -174,7 +174,7 @@ export const ITEMS = {
             "icon": ICONS.ps3,
             "subtext": "RPCS3",
             "pc": {
-                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-0ebb63697666a54b44a4de69ef222c4ecee0001a/rpcs3-v0.0.43-20623-0ebb6369_win64_msvc.7z"
+                "url": "https://github.com/RPCS3/rpcs3-binaries-win/releases/download/build-1808e241d7b1bfb1c521e392b4c51a7d5494e9ca/rpcs3-v0.0.43-20640-1808e241_win64_msvc.7z"
             },
             "android": null
         },
@@ -283,7 +283,7 @@ export const ITEMS = {
 
         // Custom
         "panacea": { "id": "panacea", "name": "Panacea", "description": "Clear temporary files, check memory and disk usage, and run Windows repair tools. The installer enables guided future updates; the portable version needs no installation.", "url": "https://github.com/falker47/Panacea/releases/latest/download/Panacea.exe", "installerUrl": "https://github.com/falker47/Panacea/releases/latest/download/PanaceaSetup.exe", "icon": ICONS.panacea },
-        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "description": "Build apps with AI help to write code, fix errors, and run tests.", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.7.0-4507555968450560/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
+        "antigravity": { "id": "antigravity", "name": "Antigravity IDE", "description": "Build apps with AI help to write code, fix errors, and run tests.", "url": "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.8.0-6733682917113856/windows-x64/Antigravity%20IDE.exe", "icon": ICONS.antigravity }
     },
     "apk-files": {
         "lucky-patcher": { "id": "lucky-patcher", "name": "Lucky Patcher", "url": "https://chelpus.com/download/LuckyPatchers.com_Official_Installer_12.0.2.apk", "icon": ICONS.luckyPatcher },
