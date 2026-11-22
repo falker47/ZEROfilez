@@ -1,33 +1,35 @@
+import { t } from './i18n.js';
+
 /** Download variants for a catalog item. Normal items retain a single download. */
 export function getDownloadChoices(item) {
     if (!item?.url) return [];
     if (item.linkType === 'website') {
-        return [{ kind: 'website', label: 'Official website', url: item.url,
-            ariaLabel: `Visit ${item.name} official download page`, hint: 'Open the publisher website; this is not a direct file download' }];
+        return [{ kind: 'website', label: t('download.officialWebsite'), url: item.url,
+            ariaLabel: t('download.visitAria', { name: item.name }), hint: t('download.websiteHint') }];
     }
     if (!item.installerUrl) {
         return [{
             kind: 'default',
-            label: 'Download',
+            label: t('download.label'),
             url: item.url,
-            ariaLabel: `Download ${item.name}`,
-            hint: 'Download'
+            ariaLabel: t('download.aria', { name: item.name }),
+            hint: t('download.label')
         }];
     }
     return [
         {
             kind: 'install',
-            label: 'Install',
+            label: t('download.install'),
             url: item.installerUrl,
-            ariaLabel: `Install ${item.name} (recommended; enables future guided updates)`,
-            hint: 'Recommended: Windows installer with Start Menu shortcut and guided future updates'
+            ariaLabel: t('download.installAria', { name: item.name }),
+            hint: t('download.installHint')
         },
         {
             kind: 'portable',
-            label: 'Portable',
+            label: t('download.portable'),
             url: item.url,
-            ariaLabel: `Download ${item.name} portable (no installation; future updates are manual)`,
-            hint: 'Portable EXE: no installation; future updates require manual download'
+            ariaLabel: t('download.portableAria', { name: item.name }),
+            hint: t('download.portableHint')
         }
     ];
 }

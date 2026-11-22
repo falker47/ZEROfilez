@@ -5,6 +5,7 @@ import { generateCommandSetup, isAutomaticSetupItem } from './windows-setup.js';
 import { getFeaturedPcProgram, groupPcPrograms } from './pc-categories.js';
 import { addZeroFilezSelection, getZeroFilezSelection } from './pc-selection.js';
 import { getDownloadChoices } from './download-options.js';
+import { categoryLabel, itemDescription, itemName, itemSubtext, t } from './i18n.js';
 
 export class StartupManager {
     constructor() {
@@ -38,6 +39,25 @@ export class StartupManager {
         this.initializeSearch();
         this.initializeWindowsSetup();
         this.initializeProgramInfoPopover();
+    }
+
+    // Re-render everything built in JavaScript, keeping searches, selections and the open step.
+    refreshLanguage() {
+        this.hideProgramInfoPopover();
+        this.renderAllSections();
+        for (const [inputId, dataKey, containerId] of [
+            ['emulationSearchInput', 'emulation', 'emulation-list'],
+            ['apkSearchInput', 'apk-files', 'apk-files-list']
+        ]) {
+            const query = document.getElementById(inputId)?.value.toLowerCase() || '';
+            if (query) this.filterSection(dataKey, containerId, query);
+        }
+        if (this.setupBuilderOpen) {
+            this.setSetupStep(this.setupStep);
+        } else {
+            this.renderSetupSelection();
+            this.updateSetupSelectionCount();
+        }
     }
 
     initializeProgramInfoPopover() {
@@ -118,8 +138,8 @@ export class StartupManager {
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'program-info-btn icon-only-btn';
-        button.dataset.description = item.description;
-        button.setAttribute('aria-label', `About ${item.name}`);
+        button.dataset.description = itemDescription(item);
+        button.setAttribute('aria-label', t('catalog.about', { name: item.name }));
         button.setAttribute('aria-expanded', 'false');
         button.innerHTML = `<img src="${ICONS.info}" alt="" aria-hidden="true">`;
 
@@ -291,7 +311,7 @@ export class StartupManager {
     getSetupItemLabel(item) {
         if (item.id !== 'panacea') return item.name;
         const variant = this.getPanaceaVariant();
-        return `${item.name} — ${variant === 'install' ? 'Install' : 'Portable'}`;
+        return `${item.name} — ${variant === 'install' ? t('download.install') : t('download.portable')}`;
     }
 
     createPanaceaFeaturedCard(item, mode = 'catalog') {
@@ -315,16 +335,16 @@ export class StartupManager {
         copy.className = 'panacea-featured-copy';
         const eyebrow = document.createElement('span');
         eyebrow.className = 'panacea-featured-eyebrow';
-        eyebrow.textContent = 'FEATURED';
+        eyebrow.textContent = t('featured.eyebrow');
         const title = document.createElement('h3');
         title.id = titleId;
         title.textContent = item.name;
         const tagline = document.createElement('p');
         tagline.className = 'panacea-featured-tagline';
-        tagline.textContent = 'Windows maintenance, simplified.';
+        tagline.textContent = t('featured.tagline');
         const description = document.createElement('p');
         description.className = 'panacea-featured-description';
-        description.textContent = 'Cleanup, monitoring and repair tools in one place.';
+        description.textContent = t('featured.description');
         copy.appendChild(eyebrow);
         copy.appendChild(title);
         copy.appendChild(tagline);
@@ -343,8 +363,8 @@ export class StartupManager {
             details.target = '_blank';
             details.rel = 'noopener noreferrer';
             details.className = 'panacea-details-link';
-            details.textContent = 'Details';
-            details.setAttribute('aria-label', 'Panacea details on GitHub');
+            details.textContent = t('featured.details');
+            details.setAttribute('aria-label', t('featured.detailsAria'));
             actions.appendChild(details);
             card.appendChild(actions);
             return card;
@@ -357,14 +377,14 @@ export class StartupManager {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         const includeText = document.createElement('span');
-        includeText.textContent = 'Include Panacea in setup';
+        includeText.textContent = t('featured.include');
         include.appendChild(checkbox);
         include.appendChild(includeText);
 
         const variantGroup = document.createElement('fieldset');
         variantGroup.className = 'panacea-variant-group';
         const legend = document.createElement('legend');
-        legend.textContent = 'Package';
+        legend.textContent = t('featured.package');
         variantGroup.appendChild(legend);
         const radios = [];
         for (const choice of getDownloadChoices(item)) {
@@ -375,7 +395,7 @@ export class StartupManager {
             radio.name = 'panacea-variant';
             radio.value = choice.kind;
             const labelText = document.createElement('span');
-            labelText.textContent = choice.kind === 'install' ? 'Install · Recommended' : 'Portable';
+            labelText.textContent = choice.kind === 'install' ? t('featured.installRecommended') : t('download.portable');
             label.appendChild(radio);
             label.appendChild(labelText);
             variantGroup.appendChild(label);
@@ -389,7 +409,7 @@ export class StartupManager {
 
         const note = document.createElement('p');
         note.className = 'panacea-manual-note';
-        note.textContent = 'Manual download · Not a WinGet package';
+        note.textContent = t('featured.manualNote');
         controls.appendChild(include);
         controls.appendChild(variantGroup);
         controls.appendChild(note);
@@ -432,10 +452,10 @@ export class StartupManager {
             heading.className = 'setup-category-heading';
 
             const title = document.createElement('h4');
-            title.textContent = group.label;
+            title.textContent = categoryLabel(group.label);
 
             const count = document.createElement('span');
-            count.textContent = `${items.length} program${items.length === 1 ? '' : 's'}`;
+            count.textContent = t('catalog.programCount', { count: items.length });
 
             heading.appendChild(title);
             heading.appendChild(count);
@@ -461,7 +481,7 @@ export class StartupManager {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = this.selectedSetupItems.has(item.id);
-        checkbox.setAttribute('aria-label', `Select ${item.name}`);
+        checkbox.setAttribute('aria-label', t('setup.selectItem', { name: item.name }));
 
         const iconDiv = document.createElement('div');
         iconDiv.className = 'setup-program-icon';
@@ -491,7 +511,7 @@ export class StartupManager {
 
         const badge = document.createElement('span');
         badge.className = `setup-type-badge ${isAutomaticSetupItem(item) ? 'automatic' : 'manual'}`;
-        badge.textContent = isAutomaticSetupItem(item) ? 'Auto' : 'Manual';
+        badge.textContent = isAutomaticSetupItem(item) ? t('setup.badgeAuto') : t('setup.badgeManual');
 
         checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
@@ -517,7 +537,7 @@ export class StartupManager {
         const nextButton = document.getElementById('setupStep1Next');
         const clearButton = document.getElementById('clearSetupSelection');
 
-        if (countLabel) countLabel.textContent = `${count} selected`;
+        if (countLabel) countLabel.textContent = t('setup.selectedCount', { count });
         if (nextButton) nextButton.disabled = count === 0;
         if (clearButton) clearButton.disabled = count === 0;
 
@@ -530,19 +550,19 @@ export class StartupManager {
         if (presetButton) {
             presetButton.disabled = remaining === 0;
             presetButton.setAttribute('aria-label', remaining === 0
-                ? 'ZEROfilez Selection applied'
-                : `Add ${remaining} recommended apps with ZEROfilez Selection`);
+                ? t('setup.presetApplied')
+                : t('setup.presetAdd', { count: remaining }));
         }
         if (presetAction) {
             presetAction.textContent = recommended.length === 0
-                ? 'Unavailable'
-                : remaining === 0 ? 'Selected' : `Select ${remaining} app${remaining === 1 ? '' : 's'}`;
+                ? t('setup.presetUnavailable')
+                : remaining === 0 ? t('setup.presetSelected') : t('setup.presetSelect', { count: remaining });
         }
         if (presetStatus) {
             presetStatus.textContent = recommended.length === 0
-                ? 'No recommended apps available'
-                : remaining === 0 ? `${recommended.length} recommended apps selected`
-                    : `${recommended.length} recommended · ${included} selected`;
+                ? t('setup.presetNone')
+                : remaining === 0 ? t('setup.presetAllSelected', { count: recommended.length })
+                    : t('setup.presetPartial', { total: recommended.length, included });
         }
     }
 
@@ -564,10 +584,10 @@ export class StartupManager {
 
         if (automaticCount) automaticCount.textContent = String(automatic.length);
         if (manualCount) manualCount.textContent = String(manual.length);
-        if (total) total.textContent = `${all.length} total · ${automatic.length} auto · ${manual.length} manual`;
+        if (total) total.textContent = t('setup.reviewTotal', { total: all.length, automatic: automatic.length, manual: manual.length });
 
-        this.renderSetupNameList('setupReviewAutomaticList', automatic, 'None');
-        this.renderSetupNameList('setupReviewManualList', manual, 'None');
+        this.renderSetupNameList('setupReviewAutomaticList', automatic, t('setup.none'));
+        this.renderSetupNameList('setupReviewManualList', manual, t('setup.none'));
     }
 
     renderSetupNameList(containerId, items, emptyMessage) {
@@ -599,8 +619,8 @@ export class StartupManager {
 
         if (summary) {
             summary.textContent = automatic.length > 0
-                ? `${automatic.length} auto · ${manual.length} manual`
-                : `${all.length} manual`;
+                ? t('setup.summaryMixed', { automatic: automatic.length, manual: manual.length })
+                : t('setup.summaryManual', { count: all.length });
         }
 
         this.generatedSetupScript = '';
@@ -658,8 +678,8 @@ export class StartupManager {
             button.type = 'button';
             button.className = 'ui-icon-button';
             button.innerHTML = `<img src="${item.linkType === 'website' ? ICONS.web : ICONS.download}" alt="">`;
-            button.setAttribute('aria-label', item.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name}`);
-            button.title = item.linkType === 'website' ? 'Official download page' : 'Download';
+            button.setAttribute('aria-label', item.linkType === 'website' ? t('download.visitAria', { name: item.name }) : t('download.aria', { name: item.name }));
+            button.title = item.linkType === 'website' ? t('download.officialPage') : t('download.label');
             button.disabled = !item.url;
             button.addEventListener('click', (event) => this.handleSimpleDownload(event.currentTarget, item));
 
@@ -669,9 +689,9 @@ export class StartupManager {
                 const choice = choices.find(option => option.kind === this.getPanaceaVariant());
                 if (choice) {
                     const download = this.createDownloadChoiceButton(item, choice);
-                    download.textContent = 'Download';
+                    download.textContent = t('download.label');
                     download.classList.add('setup-panacea-download');
-                    download.setAttribute('aria-label', `Download ${this.getSetupItemLabel(item)}`);
+                    download.setAttribute('aria-label', t('download.aria', { name: this.getSetupItemLabel(item) }));
                     row.appendChild(download);
                 }
             } else {
@@ -696,9 +716,9 @@ export class StartupManager {
                     throw new Error('Copy command was rejected.');
                 }
             }
-            this.setWindowsSetupStatus('Setup copied to the clipboard.');
+            this.setWindowsSetupStatus(t('setup.copied'));
         } catch {
-            this.setWindowsSetupStatus('Copy failed. Open Technical details and copy the setup manually.');
+            this.setWindowsSetupStatus(t('setup.copyFailed'));
         }
     }
 
@@ -717,7 +737,7 @@ export class StartupManager {
         link.remove();
         URL.revokeObjectURL(url);
 
-        this.setWindowsSetupStatus('Setup file downloaded.');
+        this.setWindowsSetupStatus(t('setup.downloaded'));
     }
 
     setWindowsSetupStatus(message) {
@@ -845,7 +865,7 @@ export class StartupManager {
             const empty = document.createElement('p');
             empty.className = 'no-results';
             empty.setAttribute('role', 'status');
-            empty.textContent = 'No results found.';
+            empty.textContent = t('search.noResults');
             container.appendChild(empty);
             return;
         }
@@ -860,11 +880,11 @@ export class StartupManager {
 
             const title = document.createElement('h3');
             title.id = `pc-category-${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-            title.textContent = group.label;
+            title.textContent = categoryLabel(group.label);
             category.setAttribute('aria-labelledby', title.id);
 
             const count = document.createElement('span');
-            count.textContent = `${group.items.length} program${group.items.length === 1 ? '' : 's'}`;
+            count.textContent = t('catalog.programCount', { count: group.items.length });
 
             headingRow.appendChild(title);
             headingRow.appendChild(count);
@@ -895,7 +915,9 @@ export class StartupManager {
         if (!grid) return;
 
         const items = this.data[dataKey] || [];
-        const filteredItems = items.filter(item => item.name.toLowerCase().includes(query));
+        const filteredItems = items.filter(item =>
+            [item.name, itemName(item), item.subtext || '', itemSubtext(item)]
+                .some(value => value.toLowerCase().includes(query)));
         this.renderGridItems(grid, filteredItems, dataKey);
     }
 
@@ -903,7 +925,8 @@ export class StartupManager {
         container.innerHTML = '';
 
         if (items.length === 0) {
-            container.innerHTML = '<div class="no-results" style="grid-column: 1 / -1; text-align: center; color: #a0a0a0; padding: 20px;">No results found.</div>';
+            container.innerHTML = '<div class="no-results" style="grid-column: 1 / -1; text-align: center; color: #a0a0a0; padding: 20px;"></div>';
+            container.firstElementChild?.append(t('search.noResults'));
             return;
         }
 
@@ -920,8 +943,8 @@ export class StartupManager {
         container.innerHTML = `
             <div class="coming-soon-placeholder">
                 <div class="coming-soon-icon">🚧</div>
-                <h2>Coming Soon</h2>
-                <p>${dataKey.replace('-', ' ').toUpperCase()} section is under development</p>
+                <h2>${t('empty.title')}</h2>
+                <p>${t('empty.body', { section: dataKey.replace('-', ' ').toUpperCase() })}</p>
             </div>`;
     }
 
@@ -939,12 +962,13 @@ export class StartupManager {
         const card = document.createElement('div');
         card.className = 'file-card';
 
-        const subtextHtml = item.subtext ? item.subtext.split('\n').map(line => `<p>${line}</p>`).join('') : '';
+        const subtext = itemSubtext(item);
+        const subtextHtml = subtext ? subtext.split('\n').map(line => `<p>${line}</p>`).join('') : '';
 
         card.innerHTML = `
             <div class="file-icon"></div>
             <div class="file-info">
-                <h3>${item.name}</h3>
+                <h3>${itemName(item)}</h3>
                 ${subtextHtml}
             </div>
             <div class="dual-buttons">
@@ -1015,12 +1039,12 @@ export class StartupManager {
             setupSelector = document.createElement('label');
             setupSelector.className = 'setup-selector';
             setupSelector.hidden = !this.setupSelectionMode;
-            setupSelector.title = `Select ${item.name} for Windows setup`;
+            setupSelector.title = t('catalog.selectForSetup', { name: item.name });
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = this.selectedSetupItems.has(item.id);
-            checkbox.setAttribute('aria-label', `Select ${item.name} for Windows setup`);
+            checkbox.setAttribute('aria-label', t('catalog.selectForSetup', { name: item.name }));
 
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
@@ -1103,7 +1127,7 @@ export class StartupManager {
 
             const hint = document.createElement('p');
             hint.className = 'download-choice-hint';
-            hint.textContent = 'Install recommended · Portable available';
+            hint.textContent = t('catalog.multiHint');
             infoDiv.appendChild(hint);
 
             for (const choice of downloadChoices) {
@@ -1113,8 +1137,8 @@ export class StartupManager {
             const btn = document.createElement('button');
             btn.className = `download-btn ${type}-btn icon-only-btn`;
             btn.innerHTML = `<img src="${item.linkType === 'website' ? ICONS.web : ICONS.download}" alt="" aria-hidden="true" style="width: 1.2em; height: 1.2em;">`;
-            btn.setAttribute('aria-label', item.linkType === 'website' ? `Visit ${item.name} official download page` : `Download ${item.name}`);
-            btn.title = item.linkType === 'website' ? 'Official download page' : 'Download';
+            btn.setAttribute('aria-label', item.linkType === 'website' ? t('download.visitAria', { name: item.name }) : t('download.aria', { name: item.name }));
+            btn.title = item.linkType === 'website' ? t('download.officialPage') : t('download.label');
             btn.addEventListener('click', (e) => this.handleSimpleDownload(e.currentTarget, item));
             btnDiv.appendChild(btn);
         }
@@ -1132,11 +1156,11 @@ export class StartupManager {
         const websiteOnly = data?.linkType === 'website';
         const storeLink = data?.linkType === 'store';
         const linkLabel = websiteOnly
-            ? `Visit ${item.name} official download page`
+            ? t('download.visitAria', { name: itemName(item) })
             : storeLink
-                ? `${data.appId ? 'Open' : 'Search'} ${item.name} in Google Play`
-                : `Download ${item.name} for ${platform}`;
-        const title = websiteOnly ? 'Official website' : storeLink ? 'Google Play' : 'Download';
+                ? t(data.appId ? 'download.openPlay' : 'download.searchPlay', { name: itemName(item) })
+                : t('download.forPlatform', { name: itemName(item), platform });
+        const title = websiteOnly ? t('download.officialWebsite') : storeLink ? 'Google Play' : t('download.label');
         // Use icons instead of text.
         const iconSrc = websiteOnly ? ICONS.web : platform === 'pc' ? ICONS.windows :
             platform === 'web' ? ICONS.web :
@@ -1170,7 +1194,7 @@ export class StartupManager {
             this.resetButton(button, 1000);
         } else {
             this.resetButton(button, 1500);
-            alert(`No download URL configured for ${item.name}`);
+            alert(t('download.noUrl', { name: item.name }));
         }
     }
 
@@ -1184,7 +1208,7 @@ export class StartupManager {
             this.resetButton(button, 1000);
         } else {
             this.resetButton(button, 1500);
-            alert(`No download URL configured for ${item.name}`);
+            alert(t('download.noUrl', { name: item.name }));
         }
     }
 
@@ -1210,7 +1234,7 @@ export class StartupManager {
             }, 1000);
 
         } else if (isIOS) {
-            alert(`📱 Per scaricare ${appName}, cerca "${appName}" nell'App Store di Apple.`);
+            alert(t('download.ios', { name: appName }));
         } else {
             window.open(`https://play.google.com/store/apps/details?id=${appId}`, '_blank', 'noopener,noreferrer');
         }

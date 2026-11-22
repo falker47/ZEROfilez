@@ -49,6 +49,13 @@ header::after {
   gap: 9px;
 }
 
+.header-content > .language {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .toggle-icon-left,
 .toggle-icon-right {
   transition: opacity 150ms ease;

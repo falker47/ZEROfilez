@@ -276,7 +276,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.match(indexHtml, /Set up multiple programs in a few clicks/);
     assert.doesNotMatch(indexHtml, /New PC · Set up multiple programs/);
     assert.doesNotMatch(indexHtml, /<span class="setup-entry-kicker">Windows setup<\/span>/);
-    assert.match(indexHtml, /<h2>PC Setup<\/h2>/);
+    assert.match(indexHtml, /<h2[^>]*>PC Setup<\/h2>/);
     assert.match(indexHtml, /data-setup-step="1"/);
     assert.match(indexHtml, /data-setup-step="2"/);
     assert.match(indexHtml, /data-setup-step="3"/);
@@ -289,7 +289,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.doesNotMatch(indexHtml, />→<\/button>/);
     assert.doesNotMatch(indexHtml, />←<\/button>/);
     assert.doesNotMatch(indexHtml, />✓<\/button>/);
-    assert.match(indexHtml, /<summary>Details<\/summary>/);
+    assert.match(indexHtml, /<summary[^>]*>Details<\/summary>/);
     assert.doesNotMatch(indexHtml, /Review selection<\/button>/);
     assert.doesNotMatch(indexHtml, /Download Windows setup/);
     assert.doesNotMatch(indexHtml, /Copy file contents/);
@@ -315,7 +315,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.match(sectionsCss, /#pc-programs-list \.pc-program-category-heading/);
     assert.match(sectionsCss, /#pc-programs-list \.pc-program-grid/);
     assert.match(startupJs, /groupPcPrograms/);
-    assert.match(startupJs, /badge\.textContent = isAutomaticSetupItem\(item\) \? 'Auto' : 'Manual'/);
+    assert.match(startupJs, /badge\.textContent = isAutomaticSetupItem\(item\) \? t\('setup\.badgeAuto'\) : t\('setup\.badgeManual'\)/);
     assert.match(startupJs, /generateCommandSetup\(automatic\)/);
     assert.match(startupJs, /setupManualDownloads/);
     assert.match(startupJs, /ZEROfilez-Windows-Setup\.cmd/);

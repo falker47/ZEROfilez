@@ -522,3 +522,22 @@
 
   .file-item .file-actions { overflow: visible; }
 }
+
+/* Narrow headers: title on its own line, mode toggle and language side by side. */
+@media (max-width: 1024px) {
+  .header-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 18px;
+  }
+
+  .title-section {
+    flex-basis: 100%;
+  }
+
+  .header-content > .language {
+    position: static;
+    transform: none;
+  }
+}
