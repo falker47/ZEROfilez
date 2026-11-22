@@ -114,6 +114,12 @@ To use Personal Vault with another archive, its generator must produce data comp
 
 Personal Vault is not a backup service, a key-recovery service, or a general-purpose file encryption tool. Losing the necessary key or encrypted data may make the archive unrecoverable.
 
+## Languages
+
+The interface is available in English and Italian, using the flag buttons in the header (the same switcher as [falker47.github.io](https://falker47.github.io/)). The language is chosen in this order: a `?lang=it` or `?lang=en` parameter in the link, a choice saved earlier on this site or the main site, then the browser language.
+
+Interface text and Italian program descriptions live in [`js/i18n.js`](js/i18n.js). Catalog entries in `js/data.js` stay in English; a new program without an Italian description shows its English one.
+
 ## Running ZEROfilez locally
 
 The application uses JavaScript modules, so it should be served over HTTP rather than opened directly through a `file://` URL.
@@ -204,6 +210,7 @@ These are curated archives, not continuously discovered upstream releases. Their
 | [`index.html`](index.html) | Main interface and both application modes |
 | [`styles.css`](styles.css), [`css/`](css/) | Shared styling, components, layouts, and responsive design |
 | [`js/main.js`](js/main.js) | Application initialization and mode switching |
+| [`js/i18n.js`](js/i18n.js) | English and Italian interface text, language detection, and the language switcher |
 | [`js/startup.js`](js/startup.js) | Quick Startup catalog, searches, downloads, and PC Setup interface |
 | [`js/data.js`](js/data.js), [`js/array.js`](js/array.js) | Software catalog and display ordering |
 | [`js/pc-categories.js`](js/pc-categories.js), [`js/pc-selection.js`](js/pc-selection.js) | Program categories and recommended setup preset |

@@ -1,3 +1,5 @@
+import { allTranslations, categoryLabel, itemDescription } from './i18n.js';
+
 // One canonical catalog item can have a featured placement without a second data entry.
 export const FEATURED_PC_ID = 'panacea';
 
@@ -16,8 +18,12 @@ export function getFeaturedPcProgram(programs, query = '') {
     const item = programs.find(program => program.id === FEATURED_PC_ID);
     if (!item) return null;
     const term = String(query).trim().toLowerCase();
-    const searchable = ['Featured', 'Essentials', 'Windows maintenance, simplified.',
-        'Cleanup, monitoring and repair tools in one place.', item.name, item.description || ''];
+    // English and Italian copy both match, so a search works whatever the interface language.
+    const searchable = [
+        ...allTranslations('featured.keyword'), ...allTranslations('category.Essentials'),
+        ...allTranslations('featured.tagline'), ...allTranslations('featured.description'),
+        item.name, item.description || '', itemDescription(item)
+    ];
     return !term || searchable.some(value => value.toLowerCase().includes(term)) ? item : null;
 }
 
@@ -29,9 +35,8 @@ export function groupPcPrograms(programs, query = '') {
     const term = String(query).trim().toLowerCase();
     const matches = (item, label) =>
         !term ||
-        label.toLowerCase().includes(term) ||
-        item.name.toLowerCase().includes(term) ||
-        (item.description || '').toLowerCase().includes(term);
+        [label, categoryLabel(label), item.name, item.description || '', itemDescription(item)]
+            .some(value => value.toLowerCase().includes(term));
 
     const groups = PC_PROGRAM_CATEGORIES.map(group => {
         const members = [];

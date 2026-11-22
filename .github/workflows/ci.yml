@@ -24,6 +24,7 @@ jobs:
           node --check js/pc-selection.js
           node --check js/startup.js
           node --check js/main.js
+          node --check js/i18n.js
           node --check scripts/update-links.js
 
       - name: Run tests

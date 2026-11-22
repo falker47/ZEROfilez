@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 
 // Embedded key che deve essere sostituita con quella generata
 const EMBEDDED_KEY_B64 = "cibwPVciXDNtJaKPnSA2nNpIsY1ExGTuuGEyuBrNbWI=";
@@ -9,7 +11,45 @@ export class CloudDecryptor {
         this.userKey = null;
         this.kek = null;
         this.packages = null;
+        // Status texts are kept as render functions so a language switch can redraw them.
+        this.keyStatusState = { render: () => t('vault.keyWaiting'), type: 'waiting' };
+        this.packageStatusState = { render: () => t('vault.packageWaiting'), type: 'waiting' };
+        this.downloadInfoRender = () => t('vault.localOnly');
         this.initializeEventListeners();
+        this.refreshLanguage();
+    }
+
+    refreshLanguage() {
+        if (typeof document === 'undefined') return;
+        if (document.getElementById('keyStatus')) {
+            this.updateKeyStatus(this.keyStatusState.render(), this.keyStatusState.type);
+        }
+        if (document.getElementById('packageStatus')) {
+            this.updatePackageStatus(this.packageStatusState.render(), this.packageStatusState.type);
+        }
+        if (document.getElementById('downloadInfo')) {
+            this.updateDownloadInfo(this.downloadInfoRender());
+        }
+        if (this.kek && this.packages && !document.querySelector('#filesList .download-btn:disabled')) {
+            this.displayFiles();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput?.value) this.applySearchFilter(searchInput.value);
+        }
+    }
+
+    setKeyStatus(render, type) {
+        this.keyStatusState = { render, type };
+        this.updateKeyStatus(render(), type);
+    }
+
+    setPackageStatus(render, type) {
+        this.packageStatusState = { render, type };
+        this.updatePackageStatus(render(), type);
+    }
+
+    setDownloadInfo(render) {
+        this.downloadInfoRender = render;
+        this.updateDownloadInfo(render());
     }
 
     initializeEventListeners() {
@@ -59,9 +99,9 @@ export class CloudDecryptor {
             this.kek = await this.deriveKEK(userKeyBytes, EMBEDDED_KEY_B64);
 
 
-            this.updateKeyStatus('✅ Key OK, KEK OK', 'success');
+            this.setKeyStatus(() => t('vault.keyOk'), 'success');
         } catch (error) {
-            this.updateKeyStatus(`❌ Error loading user key: ${error.message}`, 'error');
+            this.setKeyStatus(() => t('vault.keyError', { message: error.message }), 'error');
             this.kek = null;
         }
     }
@@ -70,12 +110,12 @@ export class CloudDecryptor {
         if (!file) return;
 
         if (!this.kek) {
-            this.updatePackageStatus('❌ Load the key first', 'error');
+            this.setPackageStatus(() => t('vault.loadKeyFirst'), 'error');
             return;
         }
 
         try {
-            this.updatePackageStatus('🔄 Decrypting package...', 'info');
+            this.setPackageStatus(() => t('vault.decrypting'), 'info');
 
             const arrayBuffer = await file.arrayBuffer();
             const encryptedData = new Uint8Array(arrayBuffer);
@@ -85,12 +125,12 @@ export class CloudDecryptor {
             const packagesJson = JSON.parse(new TextDecoder().decode(decryptedData));
 
             this.packages = packagesJson;
-            this.updatePackageStatus('✅ Package decrypted!', 'success');
+            this.setPackageStatus(() => t('vault.decrypted'), 'success');
             this.displayFiles();
 
         } catch (error) {
             console.error('Detailed error:', error);
-            this.updatePackageStatus(`❌ Package decryption error: ${error.message}`, 'error');
+            this.setPackageStatus(() => t('vault.decryptError', { message: error.message }), 'error');
             this.packages = null;
         }
     }
@@ -246,7 +286,7 @@ export class CloudDecryptor {
         try {
             // Show download section
             this.showDownloadSection();
-            this.updateDownloadInfo(this.buildDownloadMessage('⬇️ Downloading: ', fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
+            this.setDownloadInfo(() => this.buildDownloadMessage(t('vault.downloadingPrefix'), fileInfo.originalName, DOWNLOAD_INFO_MAX_LEN));
 
             // Determine URL for hosting
             let downloadUrl = fileInfo.url;
@@ -280,7 +320,7 @@ export class CloudDecryptor {
             this.downloadFile(decryptedData, fileInfo.originalName);
 
             this.updateProgress(100);
-            this.updateDownloadInfo(`✅ File downloaded: ${fileInfo.originalName}`);
+            this.setDownloadInfo(() => t('vault.fileDownloaded', { name: fileInfo.originalName }));
             // footer removed
 
             // Mantieni visibile la sezione download, resetta dopo 2 secondi
@@ -290,7 +330,7 @@ export class CloudDecryptor {
             }, 2000);
 
         } catch (error) {
-            this.updateDownloadInfo(`❌ Error: ${error.message}`);
+            this.setDownloadInfo(() => `${t('vault.error')}: ${error.message}`);
             // footer removed
             throw error;
         }
@@ -435,7 +475,8 @@ export class CloudDecryptor {
         });
 
         if (fileIds.length === 0) {
-            filesList.innerHTML = '<p class="text-center">No files found in the package</p>';
+            filesList.innerHTML = '<p class="text-center"></p>';
+            filesList.firstElementChild.textContent = t('vault.noFiles');
             return;
         }
 
@@ -509,20 +550,20 @@ export class CloudDecryptor {
 
         const downloadBtn = document.createElement('button');
         downloadBtn.className = 'download-btn';
-        downloadBtn.textContent = 'Download';
+        downloadBtn.textContent = t('vault.download');
         downloadBtn.addEventListener('click', async () => {
             downloadBtn.disabled = true;
-            downloadBtn.textContent = 'Downloading...';
+            downloadBtn.textContent = t('vault.downloading');
 
             try {
                 await this.downloadAndDecryptFile(fileInfo.id);
             } catch (error) {
                 console.error('Download error:', error);
-                downloadBtn.textContent = '❌ Error';
+                downloadBtn.textContent = t('vault.error');
             } finally {
                 setTimeout(() => {
                     downloadBtn.disabled = false;
-                    downloadBtn.textContent = 'Download';
+                    downloadBtn.textContent = t('vault.download');
                 }, 3000);
             }
         });
@@ -602,7 +643,8 @@ export class CloudDecryptor {
         this.updateProgress(0);
         const info = document.getElementById('downloadInfo');
         if (info) {
-            info.textContent = '🔒 Encryption happens locally in your browser. No data is sent to any server.';
+            this.downloadInfoRender = () => t('vault.localOnly');
+            info.textContent = this.downloadInfoRender();
         }
         // title removed
     }

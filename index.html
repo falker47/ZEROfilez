@@ -17,18 +17,22 @@
             <h1 id="mainTitle"><img class="brand-wordmark" src="assets/zerofilez-wordmark.svg" alt="ZEROfilez"></h1>
             <p id="mainSubtitle">Download useful files for free</p>
           </div>
+          <nav class="language" aria-label="Language" data-i18n-aria-label="language.label" hidden>
+            <button type="button" data-lang="it" aria-label="Italiano" aria-pressed="false"><img class="lang-flag" src="assets/flag-it.png" width="24" height="16" alt="" aria-hidden="true"></button>
+            <button type="button" data-lang="en" aria-label="English" aria-pressed="true"><img class="lang-flag" src="assets/flag-en.png" width="24" height="16" alt="" aria-hidden="true"></button>
+          </nav>
           <div class="toggle-section">
             <span class="toggle-label toggle-label-startup">
               <span class="toggle-icon-left"><img data-icon="download" alt="" width="14" height="14" /></span>
-              Quick Startup
+              <span data-i18n="toggle.startup">Quick Startup</span>
             </span>
             <label class="toggle-switch">
-              <input type="checkbox" id="modeToggle" role="switch" aria-label="Personal Vault" />
+              <input type="checkbox" id="modeToggle" role="switch" aria-label="Personal Vault" data-i18n-aria-label="toggle.vault" />
               <span class="toggle-slider"></span>
             </label>
             <span class="toggle-label toggle-label-vault">
               <span class="toggle-icon-right"><img data-icon="lock" alt="" width="14" height="14" /></span>
-              Personal Vault
+              <span data-i18n="toggle.vault">Personal Vault</span>
             </span>
           </div>
         </div>
@@ -40,37 +44,38 @@
           <div class="row two-col">
             <!-- User Key Section -->
             <section class="key-section">
-              <h2>🔑 User Key</h2>
+              <h2 data-i18n="vault.keyTitle">🔑 User Key</h2>
               <div class="input-group">
                 <div class="status waiting" id="keyStatus">
                   ⏳ Waiting for key
                 </div>
-                <input type="file" id="userKeyFile" aria-label="User Key" accept=".bin,.key" />
+                <input type="file" id="userKeyFile" aria-label="User Key" data-i18n-aria-label="vault.keyInput" accept=".bin,.key" />
               </div>
             </section>
 
             <!-- Package Section -->
             <section class="package-section">
-              <h2>📦 Encrypted Package</h2>
+              <h2 data-i18n="vault.packageTitle">📦 Encrypted Package</h2>
               <div class="input-group">
                 <div class="status waiting" id="packageStatus">
                   ⏳ Waiting for package
                 </div>
-                <input type="file" id="packageFile" aria-label="Encrypted Package" accept=".enc" />
+                <input type="file" id="packageFile" aria-label="Encrypted Package" data-i18n-aria-label="vault.packageInput" accept=".enc" />
               </div>
             </section>
           </div>
 
           <!-- File List Section -->
           <section class="files-section" id="filesSection">
-            <h2>📁 Your Files</h2>
+            <h2 data-i18n="vault.filesTitle">📁 Your Files</h2>
             <div class="input-group">
               <div class="input-row">
                 <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="searchInput" aria-label="Filter files"
+                  id="searchInput" aria-label="Filter files" data-i18n-aria-label="vault.filter"
                   placeholder="Type to filter files..."
+                  data-i18n-placeholder="vault.filterPlaceholder"
                 />
               </div>
             </div>
@@ -78,6 +83,7 @@
               class="files-list"
               id="filesList"
               data-placeholder="No files to show yet. Upload an encrypted package to see your files."
+              data-i18n-placeholder-attr="vault.filesPlaceholder"
             ></div>
           </section>
 
@@ -104,7 +110,7 @@
                 alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              <span>Emulation</span>
+              <span data-i18n="tab.emulation">Emulation</span>
               <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
             <button class="main-tab-btn active" data-tab="pc-programs">
@@ -114,7 +120,7 @@
                 alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              <span>PC Programs</span>
+              <span data-i18n="tab.pcPrograms">PC Programs</span>
               <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
             <button class="main-tab-btn" data-tab="apk-files">
@@ -124,7 +130,7 @@
                 alt=""
                 style="width: 1.2em; height: 1.2em"
               />
-              <span>APK Files</span>
+              <span data-i18n="tab.apkFiles">APK Files</span>
               <span class="main-tab-arrow" aria-hidden="true">↗</span>
             </button>
           </div>
@@ -136,8 +142,9 @@
                 <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="emulationSearchInput" aria-label="Search emulators"
+                  id="emulationSearchInput" aria-label="Search emulators" data-i18n-aria-label="search.emulation"
                   placeholder="Search emulators..."
+                  data-i18n-placeholder="search.emulationPlaceholder"
                 />
               </div>
             </div>
@@ -154,8 +161,9 @@
                   <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                   <input
                     type="text"
-                    id="pcSearchInput" aria-label="Search PC programs"
+                    id="pcSearchInput" aria-label="Search PC programs" data-i18n-aria-label="search.pc"
                     placeholder="Search PC programs..."
+                    data-i18n-placeholder="search.pcPlaceholder"
                   />
                 </div>
               </div>
@@ -165,10 +173,10 @@
                   <img data-icon="setup" alt="" />
                 </div>
                 <div class="pc-setup-entry-copy">
-                  <p class="pc-setup-single-label">Set up multiple programs in a few clicks</p>
+                  <p class="pc-setup-single-label" data-i18n="setup.entry">Set up multiple programs in a few clicks</p>
                 </div>
                 <button type="button" class="ui-button ui-button--primary" id="startWindowsSetup">
-                  <span>Build</span>
+                  <span data-i18n="setup.build">Build</span>
                   <img class="ui-button__icon" data-icon="arrowRight" alt="" />
                 </button>
               </div>
@@ -182,18 +190,18 @@
                   </div>
                   <div>
                     <span class="setup-entry-kicker">Windows</span>
-                    <h2>PC Setup</h2>
+                    <h2 data-i18n="setup.title">PC Setup</h2>
                   </div>
                 </div>
-                <button type="button" class="ui-icon-button" id="exitWindowsSetup" aria-label="Exit setup" title="Exit">
+                <button type="button" class="ui-icon-button" id="exitWindowsSetup" aria-label="Exit setup" title="Exit" data-i18n-aria-label="setup.exit" data-i18n-title="setup.exitTitle">
                   <img data-icon="close" alt="" />
                 </button>
               </div>
 
-              <div class="setup-stepper setup-segmented" aria-label="Setup progress">
-                <span class="setup-step-indicator active" data-step-indicator="1"><strong>1</strong><span>Choose</span></span>
-                <span class="setup-step-indicator" data-step-indicator="2"><strong>2</strong><span>Review</span></span>
-                <span class="setup-step-indicator" data-step-indicator="3"><strong>3</strong><span>Install</span></span>
+              <div class="setup-stepper setup-segmented" aria-label="Setup progress" data-i18n-aria-label="setup.progress">
+                <span class="setup-step-indicator active" data-step-indicator="1"><strong>1</strong><span data-i18n="setup.stepChoose">Choose</span></span>
+                <span class="setup-step-indicator" data-step-indicator="2"><strong>2</strong><span data-i18n="setup.stepReview">Review</span></span>
+                <span class="setup-step-indicator" data-step-indicator="3"><strong>3</strong><span data-i18n="setup.stepInstall">Install</span></span>
               </div>
 
               <div class="setup-step" data-setup-step="1">
@@ -203,7 +211,7 @@
                       <img data-icon="setup" alt="" />
                     </span>
                     <span class="setup-preset-copy">
-                      <strong>ZEROfilez Selection</strong>
+                      <strong data-i18n="setup.selectionName">ZEROfilez Selection</strong>
                       <small id="zeroFilezSelectionStatus" aria-live="polite">7 recommended apps</small>
                     </span>
                     <button type="button" class="ui-button ui-button--primary setup-preset-button"
@@ -214,11 +222,11 @@
                   <div id="setupBuilderSelectionList"></div>
                 </div>
                 <div class="setup-step-footer">
-                  <button type="button" class="ui-icon-button" id="clearSetupSelection" aria-label="Clear selection" title="Clear">
+                  <button type="button" class="ui-icon-button" id="clearSetupSelection" aria-label="Clear selection" title="Clear" data-i18n-aria-label="setup.clear" data-i18n-title="setup.clearTitle">
                     <img data-icon="reset" alt="" />
                   </button>
                   <span id="setupSelectionCount" aria-live="polite">0 selected</span>
-                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep1Next" aria-label="Review selection" title="Next" disabled>
+                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep1Next" aria-label="Review selection" title="Next" data-i18n-aria-label="setup.reviewSelection" data-i18n-title="setup.next" disabled>
                     <img data-icon="arrowRight" alt="" />
                   </button>
                 </div>
@@ -230,25 +238,25 @@
                     <div class="setup-review-card">
                       <div class="setup-review-head">
                         <span class="setup-review-number" id="setupAutomaticCount">0</span>
-                        <h4>Automatic</h4>
+                        <h4 data-i18n="setup.automatic">Automatic</h4>
                       </div>
                       <div class="setup-review-list" id="setupReviewAutomaticList"></div>
                     </div>
                     <div class="setup-review-card">
                       <div class="setup-review-head">
                         <span class="setup-review-number" id="setupManualCount">0</span>
-                        <h4>Manual</h4>
+                        <h4 data-i18n="setup.manual">Manual</h4>
                       </div>
                       <div class="setup-review-list" id="setupReviewManualList"></div>
                     </div>
                   </div>
                 </div>
                 <div class="setup-step-footer">
-                  <button type="button" class="ui-icon-button" id="setupStep2Back" aria-label="Back to program selection" title="Back">
+                  <button type="button" class="ui-icon-button" id="setupStep2Back" aria-label="Back to program selection" title="Back" data-i18n-aria-label="setup.backToSelection" data-i18n-title="setup.back">
                     <img data-icon="arrowLeft" alt="" />
                   </button>
                   <span id="setupReviewTotal"></span>
-                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep2Next" aria-label="Create setup" title="Next">
+                  <button type="button" class="ui-icon-button ui-icon-button--primary" id="setupStep2Next" aria-label="Create setup" title="Next" data-i18n-aria-label="setup.create" data-i18n-title="setup.next">
                     <img data-icon="arrowRight" alt="" />
                   </button>
                 </div>
@@ -258,7 +266,7 @@
                 <div class="setup-step-body" id="setupInstallBody">
                   <div class="setup-ready-card">
                     <div class="setup-ready-head">
-                      <h3>Ready</h3>
+                      <h3 data-i18n="setup.ready">Ready</h3>
                       <span id="setupReadySummary"></span>
                     </div>
 
@@ -266,43 +274,41 @@
                       <div class="setup-ready-actions">
                         <button type="button" class="ui-button ui-button--primary" id="downloadSetupScript">
                           <img class="ui-button__icon" data-icon="download" alt="" />
-                          <span>Download</span>
+                          <span data-i18n="setup.download">Download</span>
                         </button>
                         <button type="button" class="ui-button" id="copySetupScript">
                           <img class="ui-button__icon" data-icon="copy" alt="" />
-                          <span>Copy</span>
+                          <span data-i18n="setup.copy">Copy</span>
                         </button>
                       </div>
-                      <p class="setup-run-note">Double-click the <code>.cmd</code>. It stays open if something fails.</p>
+                      <p class="setup-run-note" data-i18n-html="setup.runNote">Double-click the <code>.cmd</code>. It stays open if something fails.</p>
                       <details class="setup-technical-details" id="setupTechnicalDetails">
-                        <summary>Details</summary>
-                        <p>Generated locally with verified WinGet package IDs and the official Hermes PowerShell installer, if selected.</p>
-                        <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup"></textarea>
+                        <summary data-i18n="setup.details">Details</summary>
+                        <p data-i18n="setup.detailsBody">Generated locally with verified WinGet package IDs and the official Hermes PowerShell installer, if selected.</p>
+                        <textarea id="setupScriptPreview" readonly spellcheck="false" aria-label="Generated Windows command setup" data-i18n-aria-label="setup.scriptPreview"></textarea>
                       </details>
                     </div>
 
-                    <div class="setup-no-automatic hidden" id="setupNoAutomatic">
-                      Manual downloads only. No setup file is needed.
-                    </div>
+                    <div class="setup-no-automatic hidden" id="setupNoAutomatic" data-i18n="setup.noAutomatic">Manual downloads only. No setup file is needed.</div>
 
                     <span id="windowsSetupStatus" aria-live="polite"></span>
                   </div>
 
                   <div class="setup-manual-card hidden" id="setupManualSection">
                     <div class="setup-ready-head">
-                      <h3>Manual</h3>
-                      <span>Download separately</span>
+                      <h3 data-i18n="setup.manual">Manual</h3>
+                      <span data-i18n="setup.downloadSeparately">Download separately</span>
                     </div>
                     <div class="setup-manual-downloads" id="setupManualDownloads"></div>
                   </div>
                 </div>
 
                 <div class="setup-step-footer">
-                  <button type="button" class="ui-icon-button" id="setupStep3Back" aria-label="Back to review" title="Back">
+                  <button type="button" class="ui-icon-button" id="setupStep3Back" aria-label="Back to review" title="Back" data-i18n-aria-label="setup.backToReview" data-i18n-title="setup.back">
                     <img data-icon="arrowLeft" alt="" />
                   </button>
                   <span></span>
-                  <button type="button" class="ui-icon-button ui-icon-button--success" id="finishWindowsSetup" aria-label="Finish setup" title="Done">
+                  <button type="button" class="ui-icon-button ui-icon-button--success" id="finishWindowsSetup" aria-label="Finish setup" title="Done" data-i18n-aria-label="setup.finish" data-i18n-title="setup.done">
                     <img data-icon="check" alt="" />
                   </button>
                 </div>
@@ -320,8 +326,9 @@
                 <span class="input-icon" aria-hidden="true"><img data-icon="search" alt="" /></span>
                 <input
                   type="text"
-                  id="apkSearchInput" aria-label="Search APK files"
+                  id="apkSearchInput" aria-label="Search APK files" data-i18n-aria-label="search.apk"
                   placeholder="Search APK files..."
+                  data-i18n-placeholder="search.apkPlaceholder"
                 />
               </div>
             </div>

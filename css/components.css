@@ -433,3 +433,65 @@
   border-color: var(--status-success-border);
   background: var(--status-success-bg);
 }
+
+/* Language switcher: same control as falker47.github.io (44px flag buttons,
+   dimmed until hovered or active), drawn with ZEROfilez tokens. */
+.language {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.language[hidden] {
+  display: none;
+}
+
+.language button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--border-dark);
+  border-radius: 10px;
+  background: var(--bg-input);
+  opacity: .65;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+
+.language button:hover {
+  opacity: 1;
+  border-color: var(--border-default);
+}
+
+.language button[aria-pressed="true"] {
+  opacity: 1;
+  background: var(--signal-surface);
+  border-color: var(--signal-border);
+  box-shadow: var(--shadow-inset);
+}
+
+.language button:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 3px;
+}
+
+.lang-flag {
+  display: block;
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #ffffff38;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .language button {
+    transition: none;
+  }
+}
