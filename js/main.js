@@ -81,12 +81,12 @@ class App {
             toggleIconLeft.style.opacity = '0.4';
             toggleIconRight.style.opacity = '1';
         } else {
-            // Switch to Quick Startup
+            // Switch to Download
             cloudDecryptorPage.classList.add('hidden');
             quickStartupPage.classList.remove('hidden');
             mainTitle.innerHTML = '<img class="brand-wordmark" src="assets/zerofilez-wordmark.svg" alt="ZEROfilez">';
             mainSubtitle.textContent = t('header.subtitle');
-            // Highlight left icon (Quick Startup)
+            // Highlight left icon (Download)
             toggleIconLeft.style.opacity = '1';
             toggleIconRight.style.opacity = '0.4';
         }

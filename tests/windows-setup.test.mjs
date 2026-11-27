@@ -322,7 +322,7 @@ test('PC setup builder exposes a compact component-based three-step flow', async
     assert.doesNotMatch(startupJs, /ZEROfilez-Windows-Setup\.ps1/);
 });
 
-test('Personal Vault and normal startup entry points remain wired', async () => {
+test('Vault and Download entry points remain wired', async () => {
     const [indexHtml, mainJs, startupJs] = await Promise.all([
         readFile(new URL('../index.html', import.meta.url), 'utf8'),
         readFile(new URL('../js/main.js', import.meta.url), 'utf8'),

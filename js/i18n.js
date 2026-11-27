@@ -17,8 +17,8 @@ const STRINGS = {
         'header.subtitle': 'Download useful files for free',
         'header.vaultMode': 'Cloud Decryptor',
         'header.vaultSubtitle': 'Secure system to manage encrypted files',
-        'toggle.startup': 'Quick Startup',
-        'toggle.vault': 'Personal Vault',
+        'toggle.startup': 'Download',
+        'toggle.vault': 'Vault',
 
         'vault.keyTitle': '🔑 User Key',
         'vault.keyInput': 'User Key',
@@ -156,8 +156,8 @@ const STRINGS = {
         'header.subtitle': 'Scarica gratis file utili',
         'header.vaultMode': 'Cloud Decryptor',
         'header.vaultSubtitle': 'Sistema sicuro per gestire file criptati',
-        'toggle.startup': 'Avvio rapido',
-        'toggle.vault': 'Archivio personale',
+        'toggle.startup': 'Download',
+        'toggle.vault': 'Vault',
 
         'vault.keyTitle': '🔑 Chiave utente',
         'vault.keyInput': 'Chiave utente',
