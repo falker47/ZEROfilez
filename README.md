@@ -4,16 +4,16 @@
 
 It brings together two features that grew from the same idea: making frequently repeated technical tasks easier to manage.
 
-- **Quick Startup** provides a curated software catalog, direct download links, and a Windows setup builder.
-- **Personal Vault** lets you decrypt and download files from a compatible encrypted archive using a local key.
+- **Download** provides a curated software catalog, direct download links, and a Windows setup builder.
+- **Vault** lets you decrypt and download files from a compatible encrypted archive using a local key.
 
 The interface runs as a static website using HTML, CSS, and JavaScript. It does not require an application server or an npm build step.
 
 **[Open ZEROfilez](https://falker47.github.io/ZEROfilez/)**
 
-## Quick Startup
+## Download
 
-Quick Startup organizes software into three searchable sections:
+Download organizes software into three searchable sections:
 
 | Section | Contents |
 |---|---|
@@ -77,13 +77,13 @@ Panacea is deliberately excluded from the automatically executed Windows setup c
 
 For checksums, release notes, installation requirements, and safety guidance, consult the [Panacea repository](https://github.com/falker47/Panacea) and its [stable releases](https://github.com/falker47/Panacea/releases/latest). Its downloadable Windows binaries are not currently Authenticode-signed; published SHA-256 checksums are not equivalent to a verified publisher signature.
 
-## Personal Vault
+## Vault
 
-Personal Vault is a browser interface for reading a compatible encrypted file archive. It is intended for users who already possess the encrypted package, the corresponding key, and access to the encrypted files.
+Vault is a browser interface for reading a compatible encrypted file archive. It is intended for users who already possess the encrypted package, the corresponding key, and access to the encrypted files.
 
 ### How to use it
 
-1. Switch from Quick Startup to **Personal Vault** using the toggle at the top of the page.
+1. Switch from Download to **Vault** using the toggle at the top of the page.
 2. Select your `user.key` file in **User Key**.
 3. Select the compatible `packages.json.enc` file in **Encrypted Package**.
 4. Once the index has been decrypted, browse or search the available files.
@@ -110,9 +110,9 @@ The constant embedded in the JavaScript source is public and should not be treat
 
 **The public repository contains the decryptor, not the archive generator.** The personal scripts used to prepare and encrypt the author's archives are not distributed here.
 
-To use Personal Vault with another archive, its generator must produce data compatible with the format implemented by the frontend. Arbitrary encrypted files or unrelated backup formats cannot be opened simply by renaming them.
+To use Vault with another archive, its generator must produce data compatible with the format implemented by the frontend. Arbitrary encrypted files or unrelated backup formats cannot be opened simply by renaming them.
 
-Personal Vault is not a backup service, a key-recovery service, or a general-purpose file encryption tool. Losing the necessary key or encrypted data may make the archive unrecoverable.
+Vault is not a backup service, a key-recovery service, or a general-purpose file encryption tool. Losing the necessary key or encrypted data may make the archive unrecoverable.
 
 ## Languages
 
@@ -143,7 +143,7 @@ Then open:
 
 No `npm install` or compilation step is required to run the website.
 
-A modern browser with JavaScript module and Web Crypto support is needed. Personal Vault's cryptographic operations require a secure browser context, such as HTTPS or localhost.
+A modern browser with JavaScript module and Web Crypto support is needed. Vault's cryptographic operations require a secure browser context, such as HTTPS or localhost.
 
 The same static files can be hosted on services such as GitHub Pages.
 
@@ -211,12 +211,12 @@ These are curated archives, not continuously discovered upstream releases. Their
 | [`styles.css`](styles.css), [`css/`](css/) | Shared styling, components, layouts, and responsive design |
 | [`js/main.js`](js/main.js) | Application initialization and mode switching |
 | [`js/i18n.js`](js/i18n.js) | English and Italian interface text, language detection, and the language switcher |
-| [`js/startup.js`](js/startup.js) | Quick Startup catalog, searches, downloads, and PC Setup interface |
+| [`js/startup.js`](js/startup.js) | Download catalog, searches, downloads, and PC Setup interface |
 | [`js/data.js`](js/data.js), [`js/array.js`](js/array.js) | Software catalog and display ordering |
 | [`js/pc-categories.js`](js/pc-categories.js), [`js/pc-selection.js`](js/pc-selection.js) | Program categories and recommended setup preset |
 | [`js/windows-setup.js`](js/windows-setup.js) | Windows command generation and supported installation methods |
 | [`js/download-options.js`](js/download-options.js) | Download variants, including Panacea editions |
-| [`js/decryptor.js`](js/decryptor.js) | Personal Vault key handling, index decryption, and file retrieval |
+| [`js/decryptor.js`](js/decryptor.js) | Vault key handling, index decryption, and file retrieval |
 | [`js/icons.js`](js/icons.js), [`assets/`](assets/) | Locally hosted application icons and other artwork |
 | [`scripts/`](scripts/) | Catalog maintenance, link audits, and setup-generation helpers |
 | [`tests/`](tests/) | Node.js regression tests |
@@ -244,7 +244,7 @@ node --test tests/*.test.mjs
 
 There is also a separate [PKHeX build and release workflow](.github/workflows/pkhex-release.yml), which validates its generated artifacts and associated release information.
 
-These automated checks are useful regression evidence, but they are not a full security audit. In particular, the existing tests do not provide end-to-end validation of Personal Vault with independently generated archives, and an isolated Windows runner cannot establish compatibility with every user's machine.
+These automated checks are useful regression evidence, but they are not a full security audit. In particular, the existing tests do not provide end-to-end validation of Vault with independently generated archives, and an isolated Windows runner cannot establish compatibility with every user's machine.
 
 Workflow status and logs are available under [GitHub Actions](https://github.com/falker47/ZEROfilez/actions).
 
@@ -252,7 +252,7 @@ Workflow status and logs are available under [GitHub Actions](https://github.com
 
 ZEROfilez is designed to minimize infrastructure, but operating without an application backend does not eliminate every security or privacy concern.
 
-**Personal Vault**
+**Vault**
 
 - Keep `user.key` private, protected, and backed up separately.
 - Do not publish the key, decrypted index, or plaintext files.
@@ -290,7 +290,7 @@ ZEROfilez began during the COVID-19 lockdown, when I was frequently helping frie
 
 The same installation questions kept coming up, so I started turning individual explanations into reusable tutorials and organized download resources. Over time, that effort developed into a small community project.
 
-Today's ZEROfilez retains that original purpose while extending it beyond emulation. Quick Startup helps people find and install useful software, while Personal Vault reflects a separate personal file-management workflow.
+Today's ZEROfilez retains that original purpose while extending it beyond emulation. The Download section helps people find and install useful software, while Vault reflects a separate personal file-management workflow.
 
 Both features follow the same practical motivation: make recurring technical tasks easier to repeat and maintain.
 

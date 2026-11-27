@@ -41,7 +41,7 @@ header::after {
 
 .toggle-section {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -51,7 +51,7 @@ header::after {
 
 .header-content > .language {
   position: absolute;
-  left: 0;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -142,7 +142,7 @@ main {
 footer {
   margin-top: 16px;
   padding: 13px 0;
-  text-align: right;
+  text-align: center;
   border-top: 1px solid var(--border-dark);
   background: var(--bg-footer);
 }
